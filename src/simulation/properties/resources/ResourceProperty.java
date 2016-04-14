@@ -6,7 +6,7 @@ package simulation.properties.resources;
 /**
  * The different properties defined in resources.def
  * 
- * @author Aurèle Camps
+ * @author CAMPS Aurèle
  */
 public enum ResourceProperty 
 {

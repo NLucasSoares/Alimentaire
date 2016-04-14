@@ -3,7 +3,7 @@ package simulation.properties.diets;
 /**
  * The different property defined in a diet
  * 
- * @author Aurele Camps
+ * @author CAMPS Aurèle
  */
 
 public enum DietProperty

@@ -1,7 +1,5 @@
 package simulation.world.environment.hexagonalMap;
 
-import java.security.InvalidParameterException;
-
 import simulation.math.hexagon.HexagonEdge;
 import simulation.math.point.Point;
 import simulation.world.environment.Map;

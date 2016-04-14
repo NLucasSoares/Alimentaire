@@ -3,8 +3,7 @@ package simulation.properties.biomes;
 /**
  * 	The different properties defined in biomes.def
  * 
- * 	@author
- * 		Aurï¿½le Camps
+ * 	@author CAMPS Aurèle
  */
 public enum BiomeProperty
 {

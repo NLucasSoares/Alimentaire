@@ -16,7 +16,7 @@ import simulation.world.environment.biome.resource.field.FieldResource;
 /**
  * The class use to load resources properties
  * 
- * @author Aurele Camps
+ * @author CAMPS Aurèle
  */
 
 public class LoadingResources 

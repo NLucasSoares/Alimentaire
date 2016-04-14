@@ -13,9 +13,9 @@ import simulation.properties.LoadingProperties;
 import simulation.world.environment.climate.weather.Weather;
 
 /**
- * The class use to load weathers properties
+ * The class used to load weathers properties
  * 
- * @author Aurele Camps
+ * @author CAMPS Aurèle
  */
 
 public class LoadingWeather 

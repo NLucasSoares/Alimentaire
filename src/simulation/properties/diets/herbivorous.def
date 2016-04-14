@@ -1,4 +1,4 @@
 diet.name=herbivorous
-diet.numberOfToleratedResource=2
-diet.toleratedResources={plant,water}
+diet.numberOfToleratedResource=1
+diet.toleratedResources={plant}
 diet.type=herbivorous

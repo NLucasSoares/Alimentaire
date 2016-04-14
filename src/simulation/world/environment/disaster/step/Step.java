@@ -1,19 +1,25 @@
 package simulation.world.environment.disaster.step;
 
 /**
- * Step
- * 
- * 
- * @author acamps
+ * Step of a disaster
+ *
+ * @author CAMPS Aurèle
  */
-
 public class Step
-{
+{	
 	/**
 	 * Duration of one step of a disaster.
 	 */
 	private int duration;
 
+	/**
+	 * Construct the step
+	 */
+	public Step( )
+	{
+		
+	}
+	
 	/**
 	 * @return the duration
 	 */
@@ -21,6 +27,7 @@ public class Step
 	{
 		return duration;
 	}
+	
 	
 
 }

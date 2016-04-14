@@ -6,8 +6,7 @@ import simulation.world.environment.biome.resource.ResourceBasis;
  * The field resources are determined by water, protein, nitrogen,
  * 	carbon and more..
  * 
- * @author
-		Aurele Camps
+ * @author CAMPS Aurèle
  */
 
 public class FieldResource extends ResourceBasis

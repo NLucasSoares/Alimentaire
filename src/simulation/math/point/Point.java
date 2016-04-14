@@ -1,12 +1,13 @@
 package simulation.math.point;
 
 /**
- * Point. Refers to a particular location .
+ * A point
  * 
- * @author Clément Thévin
+ * @author SOARES Lucas
  * 
  */
-public class Point<T> {
+public class Point<T>
+{
 	/**
 	 * The x and y coordinates
 	 */
@@ -17,11 +18,13 @@ public class Point<T> {
 	 * Construct the point
 	 * 
 	 * @param x
-	 *            The initial x
+	 *		The initial x
 	 * @param y
-	 *            The initial y
+	 *		The initial y
 	 */
-	public Point(T x, T y) {
+	public Point( T x,
+		T y )
+	{
 		this.x = x;
 		this.y = y;
 	}
@@ -29,37 +32,42 @@ public class Point<T> {
 	/**
 	 * @return x
 	 */
-	public T getX() {
+	public T getX( )
+	{
 		return this.x;
 	}
 
 	/**
 	 * @param x
-	 *            The x to set
+	 *		The x to set
 	 */
-	public void setX(T x) {
+	public void setX( T x )
+	{
 		this.x = x;
 	}
 
 	/**
 	 * @return y
 	 */
-	public T getY() {
+	public T getY( )
+	{
 		return this.y;
 	}
 
 	/**
 	 * @param y
-	 *            The y to set
+	 *		The y to set
 	 */
-	public void setY(T y) {
+	public void setY( T y )
+	{
 		this.y = y;
 	}
 
 	/**
-	 * @return String value of object
+	 * @return the object description
 	 */
-	public String toString() {
+	public String toString( )
+	{
 		return "xy<"
 			+ this.x.getClass().getTypeName()
 			+ ">("

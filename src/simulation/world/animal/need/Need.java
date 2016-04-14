@@ -1,75 +1,50 @@
 package simulation.world.animal.need;
 
 /**
- * The needs of a particular species. Represented by integers to state how much
- * of each resource an animal of this species need.
+ * The needs of a particular species.
  * 
- * @author Clément Thévin
- * 
+ * @author SOARES Lucas 
  */
-public class Need {
-
+public class Need
+{
+	/**
+	 * The protein needed by specie
+	 */
 	private int protein;
+	
+	/**
+	 * The water needed by specie
+	 */
 	private int water;
-	private int calories;
 
-	public Need( int protein, int water, int calories )
+	/**
+	 * Construct the need
+	 * 
+	 * @param protein
+	 * 		The protein quantity needed by specie
+	 * @param water
+	 * 		The water needed by specie
+	 */
+	public Need( int protein,
+		int water )
 	{
 		this.protein = protein;
 		this.water = water;
-		this.calories = calories;
 	}
 
-	public int getProtein()
+	/**
+	 * @return the protein needed
+	 */
+	public int getProtein( )
 	{
 		return protein;
 	}
 
-	public int getWater()
+	/**
+	 * @return the water needed
+	 */
+	public int getWater( )
 	{
 		return water;
-	}
-
-	public int getCalories()
-	{
-		return calories;
-	}
-
-	public int getNeedAttribute(int index)
-	{
-		int ret;
-		switch (index) {
-		case 0:
-			ret = protein;
-			break;
-		case 1:
-			ret = water;
-			break;
-		case 2:
-			ret = calories;
-			break;
-		default:
-			ret = -1;
-		}
-		return ret;
-	}
-
-	public int getNeedAttribute(String att)
-	{
-		int ret;
-		switch (att) {
-		case "protein":
-			ret = protein;
-			break;
-		case "water":
-			ret = water;
-			break;
-		case "calories":
-			ret = calories;
-			break;
-		default:
-			ret = -1;
-		}
-		return ret;
 	}
 }

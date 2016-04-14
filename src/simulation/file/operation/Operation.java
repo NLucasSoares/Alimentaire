@@ -14,6 +14,11 @@ public class Operation
 {
 	/**
 	 * 	Is file existing?
+	 * 
+	 * @param file
+	 * 		The file name
+	 * 
+	 * @return is file existing
 	 */
 	public static boolean isFileExist( String file )
 	{

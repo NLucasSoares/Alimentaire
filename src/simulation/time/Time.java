@@ -3,8 +3,7 @@ package simulation.time;
 /**
  *	Time gesture
  *
- *	@author
- *		Lucas Soares
+ *	@author SOARES Lucas
  */
 public class Time
 {

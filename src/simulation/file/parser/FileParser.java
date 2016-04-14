@@ -32,6 +32,8 @@ public class FileParser
 	 * 	@param properties
 	 * 		The properties to be known by
 	 * 	the parser
+	 * @param separator
+	 * 		The separator in the file
 	 * 
 	 * 	@throws java.security.InvalidParameterException
 	 * 		Parameter error
@@ -50,6 +52,11 @@ public class FileParser
 	
 	/**
 	 * Parse a file
+	 * 
+	 * @param file
+	 * 		The file name to parse
+	 *
+	 * @return the parsing results
 	 */
 	public ParsedProperty[ ] parseFile( String file ) throws java.io.FileNotFoundException,
 		IOException
@@ -67,6 +74,14 @@ public class FileParser
 		return pp;
 	}
 	
+	/**
+	 * Parse a file
+	 * 
+	 * @param br
+	 * 		The buffer reader on a file to parse
+	 * 
+	 * @return the parsing results
+	 */
 	public ParsedProperty[ ] parseFile( java.io.BufferedReader br ) throws IOException
 	{
 		// Line
@@ -99,6 +114,11 @@ public class FileParser
 	
 	/**
 	 * Parse a line
+	 * 
+	 * @param line
+	 * 		The line to parse
+	 * 
+	 * @return the parsing results
 	 */
 	private ParsedProperty parseLine( String line ) throws UnknownPropertyException
 	{

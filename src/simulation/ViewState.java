@@ -6,7 +6,7 @@ import simulation.world.environment.Map;
 /**
  * The actual view state of the world
  * 
- * @author Lucas SOARES
+ * @author SOARES Lucas
  */
 public class ViewState
 {
@@ -35,6 +35,9 @@ public class ViewState
 
 	/**
 	 * Construct the viewState
+	 * 
+	 * @param centerMap
+	 * 		The map at the center of world
 	 */
 	public ViewState( Map centerMap )
 	{
@@ -64,7 +67,8 @@ public class ViewState
 	}
 
 	/**
-	 * @param selectedMap the selectedMap to set
+	 * @param selectedMap
+	 * 		the selected map to set
 	 */
 	public void setSelectedMap( Map selectedMap )
 	{
@@ -80,7 +84,8 @@ public class ViewState
 	}
 
 	/**
-	 * @param zoomLevel the zoomLevel to set
+	 * @param zoomLevel
+	 * 		the zoom level to set
 	 */
 	public void setZoomLevel( int zoomLevel )
 	{
@@ -96,7 +101,8 @@ public class ViewState
 	}
 
 	/**
-	 * @param position the position to set
+	 * @param position
+	 * 		the position to set
 	 */
 	public void setScrollPosition( Point<Integer> scrollPosition )
 	{

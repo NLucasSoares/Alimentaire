@@ -6,11 +6,26 @@ import simulation.world.animal.need.Need;
 /**
  * The class used for carnivorous animals
  * 
- * @author acamps
+ * @author CAMPS Aurèle
  */
-
-public class Carnivorous extends AbstractAnimal {
-
+public class Carnivorous extends AbstractAnimal
+{
+	/**
+	 * Construct a Carnivorous Animal
+	 * 
+	 * @param name
+	 * 		The name of the animal
+	 * @param weight
+	 * 		The weight of the animal
+	 * @param size
+	 * 		The size of the animal
+	 * @param agility
+	 * 		The agility of the animal
+	 * @param diet
+	 * 		The diet of the animal
+	 * @param needDefinition
+	 * 		The need of the animal
+	 */
 	public Carnivorous( String name,
 		int weight,
 		int size,
@@ -25,5 +40,4 @@ public class Carnivorous extends AbstractAnimal {
 			diet,
 			needDefinition );
 	}
-
 }

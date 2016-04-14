@@ -6,56 +6,86 @@ import simulation.world.animal.group.mortalityRate.MortalityRate;
 import simulation.world.animal.species.state.AnimalState;
 
 /**
- * The current state of a particular group of animals. Includes a number of
- * animals, mortality rate and table of current animal states.
+ * The current state of a group of animals.
  * 
- * @author Clément Thévin
- * 
+ * @author SOARES Lucas
  */
-public class GroupState {
-
+public class GroupState
+{
+	/**
+	 * The maximum number of fellows
+	 */
 	private int maximumFellowNumber;
-	private int[] deadAnimalsOverLastTurns;
+	
+	/**
+	 * The last count of animals
+	 */
+	private int[ ] lastAnimalCount;
+	
+	/**
+	 * The mortality rate
+	 */
 	private MortalityRate mortalityRate;
-	private ArrayList<AnimalState> animalStates;
+	
+	/**
+	 * The state of animals
+	 */
+	private ArrayList<AnimalState> animalState;
 
-	public GroupState(int maximumFellowNumber) {
-		this.deadAnimalsOverLastTurns = new int[simulation.constant.SimulationConstant.LAST_TURNS];
-		this.mortalityRate = new MortalityRate();
-		this.animalStates = new ArrayList<AnimalState>();
+	/**
+	 * Construct the group state
+	 * 
+	 * @param maximumFellowNumber
+	 * 		The maximum fellow number
+	 */
+	public GroupState( int maximumFellowNumber )
+	{
+		this.lastAnimalCount = new int [ simulation.constant.SimulationConstant.LAST_TURNS ];
+		this.mortalityRate = new MortalityRate( );
+		this.animalState = new ArrayList<AnimalState>( );
 		this.maximumFellowNumber = maximumFellowNumber;
 	}
 
-	public int getMaximumFellowNumber() {
+	/**
+	 * @return the maximum fellow number
+	 */
+	public int getMaximumFellowNumber( )
+	{
 		return maximumFellowNumber;
 	}
 
-	public void setMaximumFellowNumber(int maximumFellowNumber) {
+	/**
+	 * Set the maximum fellow number
+	 * 
+	 * @param maximumFellowNumber
+	 *		The maximum fellow number
+	 */
+	public void setMaximumFellowNumber( int maximumFellowNumber )
+	{
 		this.maximumFellowNumber = maximumFellowNumber;
 	}
 
-	public int[] getDeadAnimalsOverLastTurns() {
-		return deadAnimalsOverLastTurns;
+	/**
+	 * @return the historical of animal count
+	 */
+	public int[ ] getLastAnimalCount( )
+	{
+		return lastAnimalCount;
 	}
 
-	public void setDeadAnimalsOverLastTurns(int[] deadAnimalsOverLastTurns) {
-		this.deadAnimalsOverLastTurns = deadAnimalsOverLastTurns;
-	}
-
-	public MortalityRate getMortalityRate() {
+	/**
+	 * @return the mortality rate
+	 */
+	public MortalityRate getMortalityRate( )
+	{
 		return mortalityRate;
 	}
 
-	public void setMortalityRate(MortalityRate mortalityRate) {
-		this.mortalityRate = mortalityRate;
+	/**
+	 * @return the animal state
+	 */
+	public ArrayList<AnimalState> getAnimalState( )
+	{
+		return animalState;
 	}
-
-	public ArrayList<AnimalState> getAnimalStates() {
-		return animalStates;
-	}
-
-	public void setAnimalState(ArrayList<AnimalState> animalStates) {
-		this.animalStates = animalStates;
-	}
-
 }

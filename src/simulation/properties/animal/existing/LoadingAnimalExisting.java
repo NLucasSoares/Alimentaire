@@ -148,8 +148,7 @@ public class LoadingAnimalExisting
 							agilityProperty,
 							database.getDiet( dietProperty ),
 							new Need( needProteinProperty,
-								needWaterProperty,
-								needCaloriesProperty ) );
+								needWaterProperty ) );
 							
 						break;
 					case DIET_TYPE_HERBIVOROUS:

@@ -15,7 +15,7 @@ import simulation.world.environment.climate.Climate;
 /**
  * The class use to load climates properties
  * 
- * @author Aurèle Camps
+ * @author CAMPS Aurèle
  */
 public class LoadingClimates
 {

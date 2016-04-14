@@ -3,16 +3,12 @@ package simulation.world.environment.climate;
 import simulation.world.environment.climate.weather.Weather;
 
 /**
- * 		Climate
+ * 	The climate is determined by a name, a temperature and
+ * 	a default weather. It will be different depending on 
+ * 	which biome it will be used.
  * 
- * 		The climate is determined by a name, a temperature and
- * 		a default weather. It will be different depending on 
- * 		which biome it will be used.
- * 
- * 		@author
- * 			 Aurèle Camps
+ * 	@author CAMPS Aurèle
  */
-
 public class Climate
 {
 	/**
@@ -38,7 +34,7 @@ public class Climate
 	 */
 	public Climate ( String name,
 			int temperatureProperty,
-			Weather defaultWeather)
+			Weather defaultWeather )
 	{
 		this.name = name;
 		this.temperature = temperatureProperty;
@@ -48,7 +44,7 @@ public class Climate
 	/**
 	 * @return the name
 	 */
-	public String getName()
+	public String getName( )
 	{
 		return name;
 	}
@@ -56,7 +52,7 @@ public class Climate
 	/**
 	 * @return the temperature
 	 */
-	public int getTemperature()
+	public int getTemperature( )
 	{
 		return temperature;
 	}
@@ -64,7 +60,7 @@ public class Climate
 	/**
 	 * @return the defaultWeather
 	 */
-	public Weather getDefaultWeather()
+	public Weather getDefaultWeather( )
 	{
 		return defaultWeather;
 	}

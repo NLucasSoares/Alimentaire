@@ -3,10 +3,11 @@ package simulation.world.environment;
 import simulation.math.hexagon.HexagonEdge;
 import simulation.math.point.Point;
 import simulation.world.environment.biome.Biome;
-import simulation.world.environment.climate.Climate;
 
 /**
  * A hexagonal piece of the world
+ * 
+ * @author SOARES Lucas
  */
 public class Map
 {

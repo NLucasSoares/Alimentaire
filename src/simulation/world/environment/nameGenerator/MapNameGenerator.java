@@ -22,7 +22,7 @@ public class MapNameGenerator
 	private static int MAP_NAME_GENERATOR_MAX_LENGTH = 12;
 	
 	/**
-	 * Generate a random name
+	 * @return a random name
 	 */
 	public static String generate( )
 	{
@@ -47,6 +47,11 @@ public class MapNameGenerator
 	
 	/**
 	 * Automate rules
+	 * 
+	 * @param previus
+	 * 		The previus letter
+	 * 
+	 * @return a random char based on previus character
 	 */
 	private static char generateChar( char previous )
 	{
@@ -72,6 +77,9 @@ public class MapNameGenerator
 		}
 	}
 	
+	/**
+	 * @return a random char
+	 */
 	private static char generateChar( )
 	{
 		return (char)( 'a' + ( Math.random( ) * ( 'z' - 'a' ) ) );

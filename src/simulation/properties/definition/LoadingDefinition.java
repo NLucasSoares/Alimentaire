@@ -1,5 +1,6 @@
 package simulation.properties.definition;
 
-public class LoadingDefinition {
+public class LoadingDefinition
+{
 
 }

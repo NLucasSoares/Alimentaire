@@ -3,14 +3,25 @@ package simulation.world.animal.diet;
 import java.security.InvalidParameterException;
 
 /**
+ * The type of diet
  * 
- * @author acamps
+ * @author CAMPS Aurèle
  */
 public enum DietType
 {
+	/**
+	 * Carnivorous diet
+	 */
 	DIET_TYPE_CARNIVOROUS,
+	
+	/**
+	 * Herbivorous diet
+	 */
 	DIET_TYPE_HERBIVOROUS;
 	
+	/**
+	 * Name of diet type
+	 */
 	public static final String[ ] DIET_PROPERTY=
 	{
 		"carnivorous",
@@ -19,6 +30,11 @@ public enum DietType
 	
 	/**
 	 * Get name from type
+	 * 
+	 * @param dt
+	 * 		The diet type
+	 * 
+	 * @return the name
 	 */
 	public static  String getName( DietType dt )
 	{
@@ -27,6 +43,13 @@ public enum DietType
 	
 	/**
 	 * Get type from name
+	 * 
+	 * @param name
+	 * 		The name of the type
+	 * 
+	 * @return the enumerated type
+	 * 
+	 * @throws InvalidParameterException
 	 */
 	public static DietType getType( String name ) throws InvalidParameterException
 	{

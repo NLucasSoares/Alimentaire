@@ -4,55 +4,62 @@ import simulation.world.animal.diet.Diet;
 import simulation.world.animal.need.Need;
 
 /**
- * Abstract class from which every type of animal is created.
+ * An animal definition
  * 
- * @author Clément Thévin
- * 
+ * @author SOARES Lucas
  */
-public abstract class AbstractAnimal {
+public abstract class AbstractAnimal
+{
 	/**
-	 * Name of the species of course.
+	 * The name
 	 */
 	private String name;
 
 	/**
-	 * Weight. Yeah. That was obvious. Affects predators' ability to hunt and
-	 * kill this animal.
+	 * The weight
 	 */
 	private int weight;
 
 	/**
-	 * Size. Yeah, that, too, was obvious. Affects capabilities of this animal
-	 * to reach food, for example.
+	 * The size of animal, for need calculation
 	 */
 	private int size;
 
 	/**
-	 * *cough cough* We shall do something about this one.
+	 * The ability of animal
 	 */
 	private int agility;
 
 	/**
-	 * What this animal can and cannot eat. Ask a zebra to eat a lion, without
-	 * this table, it'll just do so ! Now with the table, it will first check if
-	 * it has the right to, then say "no sir, I cannot do that" or
-	 * "yes sir, I will" accordingly. Genius, right ?
+	 * The diet of an animal
 	 */
 	private Diet diet;
 
 	/**
-	 * Picture to be displayed in order to identify this animal.
+	 * 
 	 */
 	// private IMAGE charset;
 
 	/**
-	 * What this animal basically needs to avoid diying from anything. Except
-	 * predators and aging of course.
+	 * The needs of the animal
 	 */
 	private Need needDefinition;
 	
 	/**
 	 * Construct Animal
+	 * 
+	 * @param name
+	 * 		The name of the animal
+	 * @param weight
+	 * 		The weight of the animal
+	 * @param size
+	 * 		The size of the animal
+	 * @param agility
+	 * 		The agility of the animal
+	 * @param diet
+	 * 		The diet of the animal
+	 * @param needDefinition
+	 * 		The need of the animal
 	 */
 	public AbstractAnimal( String name,
 		int weight,
@@ -64,33 +71,51 @@ public abstract class AbstractAnimal {
 		
 	}
 
+	/**
+	 * @return the name of the animal
+	 */
 	public String getName( )
 	{
 		return name;
 	}
 	
+	/**
+	 * @return the weight of the animal
+	 */
 	public int getWeight( )
 	{
 		return weight;
 	}
 	
+	/**
+	 * @return the size of the animal
+	 */
 	public int getSize( )
 	{
 		return size;
 	}
 	
+	/**
+	 * @return the agility of the animal
+	 */
 	public int getAgility( )
 	{
 		return agility;
 	}
 	
+	/**
+	 * @return the diet of the animal
+	 */
 	public Diet getDiet( )
 	{
 		return diet;
 	}
 
-	public Need getNeedDefinition() {
+	/**
+	 * @return the need definition of the animal
+	 */
+	public Need getNeedDefinition()
+	{
 		return needDefinition;
 	}
-
 }

@@ -15,8 +15,7 @@ import simulation.world.environment.biome.nearBiome.NearBiomes;
 /**
  *	The class use to load biomes properties
  * 
- *	@author
- * 		Aurele Camps
+ *	@author CAMPS Aurèle
  */
 
 public class LoadingBiomes

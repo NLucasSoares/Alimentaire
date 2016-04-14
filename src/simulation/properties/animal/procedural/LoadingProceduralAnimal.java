@@ -1,5 +1,6 @@
 package simulation.properties.animal.procedural;
 
-public class LoadingProceduralAnimal {
+public class LoadingProceduralAnimal
+{
 
 }

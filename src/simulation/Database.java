@@ -18,6 +18,13 @@ import simulation.world.environment.climate.Climate;
 import simulation.world.environment.climate.weather.Weather;
 import simulation.world.environment.disaster.Disaster;
 
+/**
+ * The database of the simulation, which
+ * contains all the informations needed
+ * to simulate world
+ * 
+ * @author SOARES Lucas
+ */
 public class Database {
 	/**
 	 * Animals

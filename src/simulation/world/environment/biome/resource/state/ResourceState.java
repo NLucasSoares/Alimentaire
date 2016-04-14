@@ -14,6 +14,8 @@ public class ResourceState extends ResourceBasis
 	 * 
 	 * @param nitrogenQuantity
 	 * 		The initial nitrogen quantity
+	 * @param proteinQuantity
+	 * 		The initial protein quantity
 	 */
 	public ResourceState( int nitrogenQuantity,
 		int proteinQuantity )

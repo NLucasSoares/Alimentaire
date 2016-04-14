@@ -14,7 +14,7 @@ import simulation.world.animal.diet.DietType;
 /**
  * The class use to load diets properties
  * 
- * @author Aurele Camps
+ * @author CAMPS Aurèle
  */
 
 public class LoadingDiets 

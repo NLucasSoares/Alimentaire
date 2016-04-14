@@ -1,5 +1,10 @@
 package simulation.world.environment.biome.resource;
 
+/**
+ * The basis resource used in simulation
+ *
+ * @author SOARES Lucas
+ */
 public class ResourceBasis
 {
 	/**
@@ -14,6 +19,11 @@ public class ResourceBasis
 	
 	/**
 	 * Construct the resource
+	 * 
+	 * @param nitrogenQuantity
+	 * 		The quantity of nitrogen at start
+	 * @param proteinQuantity
+	 * 		The quantity of protein at start
 	 */
 	public ResourceBasis( int nitrogenQuantity,
 		int proteinQuantity )

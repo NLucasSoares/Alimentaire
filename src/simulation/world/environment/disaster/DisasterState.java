@@ -6,7 +6,7 @@ package simulation.world.environment.disaster;
  * The state of the disaster is composed by a start round and by the type of
  * disaster occurring.
  * 
- * @author acamps
+ * @author CAMPS Aurèle
  */
 
 public class DisasterState

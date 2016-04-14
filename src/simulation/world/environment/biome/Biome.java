@@ -10,13 +10,10 @@ import simulation.world.environment.biome.nearBiome.NearBiomes;
 import simulation.world.environment.climate.Climate;
 
 /**
- *	Biome
+ *	A biome definition. It is determined by a name and a climate.
+ *	Every biome will have a	different image.
  * 
- *	A biome is determined by a name and a climate. Every biome will have a
- *	different image.
- * 
- *		@author
- *			Aurèle Camps
+ *	@author CAMPS Aurèle
  */
 
 public class Biome

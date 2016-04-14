@@ -5,26 +5,34 @@ import simulation.world.environment.disaster.step.Step;
 /**
  * Disaster
  * 
- * The time of the disaster.
+ * The description of a disaster.
  * 
- * @author acamps
+ * @author CAMPS Aurèle
  */
-public class Disaster {
-	
+public class Disaster
+{
 	/**
 	 * When the disaster will start.
 	 */
-	private int[] stepTime;
+	private int[ ] stepTime;
 	
 	/**
 	 * One step of the disaster.
 	 */
-	private Step[] step;
+	private Step[ ] step;
 
+	/**
+	 * Construct the disaster
+	 */
+	public Disaster( )
+	{
+		
+	}
+	
 	/**
 	 * @return the stepTime
 	 */
-	public int[] getStepTime()
+	public int[ ] getStepTime()
 	{
 		return stepTime;
 	}
@@ -32,7 +40,7 @@ public class Disaster {
 	/**
 	 * @return the step
 	 */
-	public Step[] getStep()
+	public Step[ ] getStep()
 	{
 		return step;
 	}

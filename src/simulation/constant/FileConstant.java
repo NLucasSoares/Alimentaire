@@ -5,7 +5,8 @@ package simulation.constant;
  * 
  * @author Lucas SOARES
  */
-public class FileConstant {
+public class FileConstant
+{
 	/**
 	 * The separator used in the definition files.
 	 */

@@ -59,7 +59,7 @@ public class Rectangle
 	}
 	
 	/**
-	 * Construct the rectangle
+	 * Construct an empty rectangle
 	 */
 	public Rectangle( )
 	{

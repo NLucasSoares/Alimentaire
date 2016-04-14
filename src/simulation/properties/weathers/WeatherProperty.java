@@ -3,7 +3,7 @@ package simulation.properties.weathers;
 /**
  * The different properties defined in weather.def
  * 
- * @author Aurèle Camps
+ * @author CAMPS Aurèle
  */
 
 public enum WeatherProperty

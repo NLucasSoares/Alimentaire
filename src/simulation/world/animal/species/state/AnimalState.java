@@ -1,18 +1,14 @@
 package simulation.world.animal.species.state;
 
-import java.util.ArrayList;
-
-import simulation.constant.MathConstant;
-import simulation.constant.SimulationConstant;
 import simulation.math.point.Point;
 import simulation.world.animal.group.Group;
 import simulation.world.animal.need.state.NeedState;
+import simulation.world.animal.species.AbstractAnimal;
 
 /**
  * Current state of a given animal.
  * 
- * @author Clément Thévin
- * 
+ * @author SOARES Lucas 
  */
 public class AnimalState {
 
@@ -29,19 +25,35 @@ public class AnimalState {
 	/**
 	 * Current position of this animal on the world grid.
 	 */
-	private simulation.math.point.Point<Integer> position;
+	private Point<Integer> position;
 	
 	/**
-	 * The birth date
+	 * The birth date (in turns)
 	 */
 	private int birthDate;
 
 	/**
-	 * The influence level
+	 * Construct the animal state
+	 * 
+	 * @param groupReference
+	 * 		The callback to the group
+	 * @param animal
+	 * 		The animal definition
+	 * @param currentTurn
+	 * 		The current turn of simulation
+	 * 
 	 */
-	private int influenceLevel;
-
-	public AnimalState(Group groupReference,
-			NeedState needState, simulation.math.point.Point<Integer> position) {
+	public AnimalState( Group groupReference,
+		AbstractAnimal animal,
+		int currentTurn )
+	{
+		// Save
+		this.groupReference = groupReference;
+		
+		// Init
+		this.needState = new NeedState( animal.getNeedDefinition( ) );
+		this.position = new Point<Integer>( 0,
+			0 );
+		this.birthDate = currentTurn;
 	}
 }

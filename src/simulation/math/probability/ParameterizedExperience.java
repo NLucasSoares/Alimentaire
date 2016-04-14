@@ -1,5 +1,11 @@
 package simulation.math.probability;
 
+/**
+ * A parametrized experience, which return
+ * a specified arrayed object given at start
+ * 
+ * @author SOARES Lucas
+ */
 public class ParameterizedExperience<T> extends Experience
 {
 	/**

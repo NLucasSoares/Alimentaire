@@ -3,6 +3,8 @@ package simulation.time;
 /**
  * 	An object isn't ready because
  * 	delay time didn't passed
+ * 
+ * @author SOARES Lucas
  */
 public class NotReadyException extends Exception
 {

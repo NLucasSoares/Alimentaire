@@ -1,8 +1,6 @@
 package simulation.world.environment.disaster;
 
 /**
- * Disaster Type
- * 
  * Disaster Type is an enumeration that list all the kind of disaster which can
  * be present while the Simulation is running.
  * 
@@ -10,9 +8,8 @@ package simulation.world.environment.disaster;
  * are. In exchange, corpses of dead animals and destroyed resources will
  * fertilized the ground.
  * 
- * @author acamps
+ * @author CAMPS Aurèle
  */
-
 public enum DisasterType
 {
 

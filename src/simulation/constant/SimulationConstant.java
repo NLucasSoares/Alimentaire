@@ -1,5 +1,14 @@
 package simulation.constant;
 
-public class SimulationConstant {
-	public static final int LAST_TURNS = 3;
+/**
+ * The constants used by the simulation
+ * 
+ * @author SOARES Lucas
+ */
+public class SimulationConstant
+{
+	/**
+	 * Last turns historical depth
+	 */
+	public static final int LAST_TURNS = 5;
 }

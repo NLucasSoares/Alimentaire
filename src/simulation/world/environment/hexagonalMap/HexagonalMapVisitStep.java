@@ -1,7 +1,6 @@
 package simulation.world.environment.hexagonalMap;
 
 import simulation.math.hexagon.HexagonEdge;
-import simulation.math.point.Point;
 
 /**
  * The different step of a visit in a
