@@ -1,0 +1,85 @@
+ETAPES du programme
+
+1ère ETAPE
+Chargement le fichier INI
+	=> Resolution
+	=> Volume (Son/Musique(s))
+
+Charger les fichiers de propriétés
+	=> Configuration:
+		- resources.def
+			ex: (FORET: 90% arbre, 10% eau)
+		- diets.det
+				-> Nom du régime
+				-> Liste des ressources tolérées dans l'alimentation
+
+		- animalsAlreadyExisting.def
+				-> Régime alimentaire
+				-> Taille
+				-> Poids
+				-> Charset
+		- proceduralAnimals.def
+			ex: CARNIVORE doit être plus rapide que les HERBIVORES...
+				-> Poids min/max
+				-> Taille min/max
+				-> Charset (image animal)
+				-> Régime
+				-> Température d'acclimatation
+				-> Espérance de vie (exprimé en jours)
+		- weathers.def
+				-> Nombre de météo existantes
+				-> Nom de chaque météo
+		- meteo1.def/meteo2.def...
+				-> Nom
+				-> Quantité d'eau
+				-> Changement température
+				-> Ensoleillement
+		- climates.def
+				-> Nom
+				-> Température
+				-> Météo par défaut
+		- biomes.def
+				-> Nom
+				-> Tileset
+				-> Climat
+				-> Propriétés du sol
+		- definition.def:
+				-> Fréquence à laquelle l'animal doit se nourrir suivant ses besoins
+				-> Fréquence des catastrophes (0 aucune, sinon entre 1 et 1000000~)
+
+2ème ETAPE
+Menu
+	=> Nouvelle partie
+		-> Nom du monde
+		-> Définition des paramètres de début de partie
+	=> Charger partie
+		-> Nom du monde à charger (affichage de la liste de la/des sauvegarde(s))
+	=> Options
+		-> Résolution
+		-> Volumes
+	=> Quitter
+		-> Ferme le programme
+
+3ème ETAPE
+Simulation
+
+	=> Affichage
+		-> Minimap (haut gauche) située sur la map centrale au début
+			=> Permet de visualiser, au moyen
+		-> Graphiques/tableaux de données sur la droite
+		-> 
+
+
+
+
+new World( "Test",
+						new simulation.world.Configuration( 15,
+							true,
+							100,
+							foodies.database.getBiomeFromName( "taiga" ),
+							new ResourceDistribution( ) ),
+						foodies.database,
+						foodies.window )
+
+
+

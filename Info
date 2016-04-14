@@ -1,0 +1,59 @@
+Vitesse :
+	Normale
+	1 seconde = 1 tour<=>3 jours
+
+	Rapide (x2)
+	500ms = 1 tour<=>3jours
+
+	Très rapide (x4)
+	250ms = 1 tour<=>3jours
+
+	Ultra rapide
+	500ms = 10 tours => probablement pas utile
+
+	Saut
+	saut de x tours dans le futur
+	pas d'animation / actualisation /etc. avant la fin des calculs
+	=> pas très esthétique, à voir
+
+
+
+Migration:
+
+	Rajouter compteur de morts, si taux > x% sur Y tours, tentative
+	de migration.
+	
+	ET/OU
+	
+	Evaluer les ressources (nourriture, eau, chaleur etc.) et 
+	prédateurs présents, et déterminer un taux de mortalité ?
+	De sorte que si taux précédent << taux calculé, changement
+	d'environnement (avec "<<" = "très inférieur", quelque
+	chose comme "10 << 25").
+
+AGE:
+	Exprimé en jours.
+
+
+CATASTROPHES:
+	-Incendie : Diminution des ressources (type arbre, herbe etc..), augmentation à terme des minéraux
+	-Déluge : 40 jours et 40 nuits de pluie, création d'un pnj secondaire "Noé" qui sauvera un couple de chaque espèce.
+	-Astéroïde : Tue des espèces ( en masse ), apporte de nouvelles ressources ( dont la kryptonite ), baisse de la température 
+	-Pluie acide : Appauvrit / Pourrit les sols.
+
+Agilité:
+
+	Carnivore: 
+		-Chasse (augmente le taux de mortalité des proies)
+				
+	Herbivore:
+		-Fuite (augmente le taux de survie des proies / diminue le taux de mortalité)
+		
+	Commun:
+		-Vitesse de déplacement (mdr)
+		
+Besoin: 
+	-Faim
+	-Soif
+	-Température requise pour éviter l'hypothermie/l'hyperthermie
+	-

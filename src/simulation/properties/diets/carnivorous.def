@@ -1,0 +1,4 @@
+diet.name=carnivorous
+diet.numberOfToleratedResource=2
+diet.toleratedResources={meat,water}
+diet.type=carnivorous

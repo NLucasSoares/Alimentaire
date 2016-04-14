@@ -1,0 +1,4 @@
+diet.name=herbivorous
+diet.numberOfToleratedResource=2
+diet.toleratedResources={plant,water}
+diet.type=herbivorous

@@ -1,0 +1,5 @@
+biome.name=forest
+biome.tileset=forestHexagon.png
+biome.climate=oceanic
+biome.aroundAllowedBiomes={plain}
+biome.aroundBiomesProbability={100}

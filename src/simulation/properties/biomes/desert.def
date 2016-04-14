@@ -1,0 +1,5 @@
+biome.name=desert
+biome.tileset=desertHexagon.png
+biome.climate=arid
+biome.aroundAllowedBiomes={plain}
+biome.aroundBiomesProbability={100}

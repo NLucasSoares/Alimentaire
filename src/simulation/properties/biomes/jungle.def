@@ -1,0 +1,5 @@
+biome.name=jungle
+biome.tileset=jungleHexagon.png
+biome.climate=tropical
+biome.aroundAllowedBiomes={forest,savanna}
+biome.aroundBiomesProbability={20,80}

@@ -1,0 +1,5 @@
+biome.name=snow plain
+biome.tileset=snowPlainHexagon.png
+biome.climate=polar
+biome.aroundAllowedBiomes={taiga,plain}
+biome.aroundBiomesProbability={60,40}

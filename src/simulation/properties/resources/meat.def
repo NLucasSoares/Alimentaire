@@ -1,0 +1,6 @@
+resource.name=meat
+resource.protein=10
+resource.water=0
+resource.nitrogen=0
+resource.sugar=2
+resource.carbon=0

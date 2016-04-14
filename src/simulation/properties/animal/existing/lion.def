@@ -1,0 +1,9 @@
+animal.name=lion
+animal.weight=20
+animal.size=90
+animal.agility=75
+animal.diet=carnivorous
+
+animal.need.water=1000
+animal.need.protein=1000
+animal.need.calories=1000

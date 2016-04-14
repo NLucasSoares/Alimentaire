@@ -1,0 +1,23 @@
+package art;
+
+/**
+ * The list of art in the simulation
+ * 
+ * @author
+ * 		Lucas SOARES
+ */
+public enum ArtList
+{
+	ART_BACKGROUND_SPLIT,
+	ART_COW_SPLIT,
+	ART_LION_SPLIT,
+	ART_TREE_SPLIT,
+	ART_DESERT_HEXAGON,
+	ART_FOREST_HEXAGON,
+	ART_JUNGLE_HEXAGON,
+	ART_PLAIN_HEXAGON,
+	ART_SAVANNA_HEXAGON,
+	ART_SNOW_PLAIN_HEXAGON,
+	ART_TAIGA_HEXAGON,
+	ART_WATER_HEXAGON;
+}

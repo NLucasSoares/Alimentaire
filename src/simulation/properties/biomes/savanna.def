@@ -1,0 +1,5 @@
+biome.name=savanna
+biome.tileset=savannaHexagon.png
+biome.climate=polar
+biome.aroundAllowedBiomes={jungle,plain}
+biome.aroundBiomesProbability={60,40}

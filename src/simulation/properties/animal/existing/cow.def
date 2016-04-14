@@ -1,0 +1,9 @@
+animal.name=cow
+animal.weight=30
+animal.size=120
+animal.agility=3
+animal.diet=herbivorous
+
+animal.need.water=1000
+animal.need.protein=200
+animal.need.calories=300

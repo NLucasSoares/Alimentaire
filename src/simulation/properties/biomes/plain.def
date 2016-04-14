@@ -1,0 +1,5 @@
+biome.name=plain
+biome.tileset=plainHexagon.png
+biome.climate=oceanic
+biome.aroundAllowedBiomes={water,forest}
+biome.aroundBiomesProbability={20,80}

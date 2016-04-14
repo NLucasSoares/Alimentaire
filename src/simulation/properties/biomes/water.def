@@ -1,0 +1,5 @@
+biome.name=water
+biome.tileset=waterHexagon.png
+biome.climate=oceanic
+biome.aroundAllowedBiomes={forest,plain}
+biome.aroundBiomesProbability={50,50}
