@@ -3,6 +3,9 @@ package simulation.gui.panels.menus.main;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
@@ -11,6 +14,7 @@ import simulation.gui.object.RectangleButton;
 import simulation.gui.panels.Panel;
 import simulation.gui.panels.menus.main.action.MouseAction;
 import simulation.gui.panels.menus.main.properties.ButtonProperty;
+import simulation.gui.panels.menus.split.ScrollingBackground;
 import simulation.math.point.Point;
 
 /**
@@ -32,6 +36,10 @@ public class MainMenu extends Panel
 	private static final int WIDTH_BUTTON = 300;
 	private static final int HEIGHT_BUTTON = 50;
 	private static final String MAIN_TITLE = "Alimentary Chain";
+	private static final String MAIN_SUBTITLE = "Ecosystem Simulation";
+
+	private static final ImageObserver observer = null;
+	
 	
 	/**
 	 * Mouse action listener
@@ -55,14 +63,18 @@ public class MainMenu extends Panel
 	 * Is launched?
 	 */
 	public boolean isContinue;
+
+
 	
 	/**
 	 * Construct the panel
+	 * @throws  java.io.IOException 
 	 */
 	public MainMenu( )
 	{
 		// Init
 		this.isContinue = true;
+		
 		
 		// Create mouse listener
 		this.mouseAction = new MouseAction( this );
@@ -114,23 +126,56 @@ public class MainMenu extends Panel
 	
 	public void paint( Graphics g )
 	{
-		g.setColor( Color.BLACK );
-		g.fillRect( 0,
-			0,
-			super.getWidth( ),
-			super.getHeight( ) );
+		// Panel Background
+		try
+		{
+			g.drawImage( art.Art.getArtImage( art.ArtList.ART_BACKGROUND_SPLIT ), 
+					0, 
+					0, 
+					super.getWidth( ), 
+					super.getHeight( ),  
+					observer );	
+		} 
+		catch (IOException e)
+		{
+			System.out.println("Image doesn't exist");
+		}
+		
+		// String color
 		g.setColor(Color.WHITE);
 
+
+	//Title
+		// Change font
 		g.setFont( new java.awt.Font( "Trebuchet MS",
-				java.awt.Font.BOLD,
-				30 ) );
+			java.awt.Font.BOLD,
+			40 ) );
+		// Blit title
 		g.drawString( MAIN_TITLE,
 				super.getWidth( ) / 2 - g.getFontMetrics( ).stringWidth( MAIN_TITLE ) / 2,
-				80 );
+				60 );
+		
+	// Subtitle
+		// Change font
+		g.setFont( new java.awt.Font( "Trebuchet MS",
+			java.awt.Font.ITALIC,
+			30 ) );
+		// Blit subtitle
+		g.drawString( MAIN_SUBTITLE,
+			super.getWidth( ) / 2 - g.getFontMetrics( ).stringWidth( MAIN_SUBTITLE ) / 2,
+			100 );
+		
+	// Buttons
+		
+		// Change font
+		g.setFont( new java.awt.Font("Time New Roman",
+				java.awt.Font.PLAIN,
+				25 ) );
+		// Buttons
 		for(int index=0; index < 4; index++)
 		{
 			buttons[index].blit( g );
-			g.setColor(Color.RED);
+			g.setColor(Color.BLACK);
 			g.drawString(ButtonProperty.BUTTON_NAME[index],
 					super.getWidth( ) / 2 - g.getFontMetrics().stringWidth(ButtonProperty.BUTTON_NAME[index]) / 2,
 					buttons[ index ].getPosition().getY( ) + ( buttons[ index ].getSize( ).getY( ) / 2 ) + ( g.getFontMetrics().getDescent() / 2 ) );

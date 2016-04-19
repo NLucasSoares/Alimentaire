@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.InvalidParameterException;
 
 import simulation.gui.panels.menus.main.MainMenu;
+import simulation.gui.panels.menus.option.OptionMenu;
 import simulation.gui.panels.menus.split.SplitMenu;
 
 /**
@@ -38,6 +39,7 @@ public class PanelRepository
 					this.panels[ pd.ordinal( ) ] = new MainMenu( );
 					break;
 				case PANEL_OPTIONS_MENU:
+					this.panels[ pd.ordinal( ) ] = new OptionMenu( );
 					break;
 					
 				default:

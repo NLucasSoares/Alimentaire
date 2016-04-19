@@ -96,7 +96,7 @@ public class Foodies
 					case RETURN_CODE_NEW:
 						//foodies.window.switchPanel( PanelDefinition.PANEL_NEW_MENU );
 						foodies.world = new World( "Test",
-								new simulation.world.Configuration( 15,
+								new simulation.world.Configuration( 20,
 									true,
 									100,
 									foodies.database.getBiomeFromName( "jungle" ) ),

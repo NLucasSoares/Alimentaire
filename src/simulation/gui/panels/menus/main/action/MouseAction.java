@@ -5,6 +5,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import simulation.gui.panels.menus.main.MainMenu;
+import simulation.gui.panels.menus.option.OptionMenu;
 
 public class MouseAction implements MouseListener, MouseMotionListener
 {
@@ -12,6 +13,8 @@ public class MouseAction implements MouseListener, MouseMotionListener
 	 * Main menu
 	 */
 	private MainMenu mainMenu;
+	
+	private OptionMenu optionMenu;
 
 	
 	/**
@@ -20,6 +23,11 @@ public class MouseAction implements MouseListener, MouseMotionListener
 	public MouseAction( MainMenu m )
 	{
 		this.mainMenu = m;
+	}
+
+	public MouseAction(OptionMenu optionMenu)
+	{
+		this.optionMenu = optionMenu;
 	}
 
 	@Override
