@@ -154,7 +154,7 @@ public class SplitMenu extends Panel
 				// Blit
 					g.drawString( SPLIT_TITLE,
 						super.getWidth( ) / 2 - g.getFontMetrics( ).stringWidth( SPLIT_TITLE ) / 2,
-						80 );
+						60 );
 			// Instruction
 				// Change font
 					g.setFont( new java.awt.Font( "Trebuchet MS",
@@ -163,7 +163,7 @@ public class SplitMenu extends Panel
 				// Blit
 					g.drawString( SPLIT_INSTRUCTION,
 						super.getWidth( ) / 2 - g.getFontMetrics( ).stringWidth( SPLIT_INSTRUCTION ) / 2,
-						120 );
+						100 );
 	}
 
 	public void update( java.awt.Graphics g )
