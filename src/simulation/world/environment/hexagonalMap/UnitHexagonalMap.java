@@ -10,11 +10,6 @@ import simulation.world.environment.Map;
 public class UnitHexagonalMap extends Hexagon
 {
 	/**
-	 * The radius unit for a hexagon
-	 */
-	public static final double HEXAGON_UNIT_PAINT_RADIUS = 15.0;
-	
-	/**
 	 * Construct the unit hexagonal map
 	 * 
 	 * @param radius

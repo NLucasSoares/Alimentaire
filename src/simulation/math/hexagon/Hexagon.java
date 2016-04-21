@@ -14,7 +14,7 @@ public class Hexagon
 	/**
 	 * The radius of the hexagon
 	 */
-	private double radius;
+	private double verticalDiameter;
 	
 	/**
 	 * The height of the hexagon
@@ -50,13 +50,53 @@ public class Hexagon
 	 * @param radius
 	 * 		The radius of the hexagon
 	 */
-	public Hexagon( double radius )
+	public Hexagon( double verticalDiameter )
 	{
 		// Save
-		this.radius = radius;
+		this.verticalDiameter = verticalDiameter;
 
 		// Calculate the constants
 		this.calculateConstants( );
+	}
+	
+	/**
+	 * Calculate height for a given vertical diameter
+	 * 
+	 * @param verticalDiameter
+	 * 		The vertical diameter
+	 * 
+	 * @return the height
+	 */
+	public static double calculateHeight( double verticalDiameter )
+	{
+		return verticalDiameter;
+	}
+	
+	/**
+	 * Calculate width for a given vertical diameter
+	 * (2*R*sqrt(3)/2)
+	 * 
+	 * @param verticalDiameter
+	 * 		The vertical diameter
+	 * 
+	 * @return the width
+	 */
+	public static double calculateWidth( double verticalDiameter )
+	{
+		return Math.sqrt( 3.0d ) * ( verticalDiameter / 2.0d );
+	}
+	
+	/**
+	 * Calculate side for a given vertical diameter
+	 * 
+	 * @param verticalDiameter
+	 * 		The vertical diameter
+	 * 
+	 * @return the side
+	 */
+	public static double calculateSide( double verticalDiameter )
+	{
+		return (3.0d / 2.0d) * ( verticalDiameter / 2.0d );
 	}
 	
 	/**
@@ -65,13 +105,13 @@ public class Hexagon
 	private void calculateConstants( )
 	{
 		// Height
-		this.heightConstant = 2.0d * this.radius;
+		this.heightConstant = Hexagon.calculateHeight( this.verticalDiameter );
 
 		// Width (2*R*sqrt(3)/2)
-		this.widthConstant = Math.sqrt( 3.0d ) * this.radius;
+		this.widthConstant = Hexagon.calculateWidth( this.verticalDiameter );
 		
 		// Side
-		this.sideConstant = (3.0d / 2.0d) * this.radius;
+		this.sideConstant = Hexagon.calculateSide( this.verticalDiameter );
 		
 		// Hexagons on the edges
 		for( HexagonEdge he : HexagonEdge.values( ) )
@@ -113,8 +153,7 @@ public class Hexagon
 			case HEXAGONE_EDGE_UP_RIGHT:
 				return new PointDouble( this.widthConstant / 2.0d,
 						-( this.heightConstant - this.sideConstant ) - this.heightConstant / 2.0d );
-			
-				
+
 			default:
 				return new PointDouble( 0.0d,
 					0.0d );
@@ -166,17 +205,9 @@ public class Hexagon
 	/**
 	 * @return the radius
 	 */
-	public double getRadius( )
+	public double getVerticalDiameter( )
 	{
-		return radius;
-	}
-
-	/**
-	 * @param radius the radius to set
-	 */
-	public void setRadius( double radius )
-	{
-		this.radius = radius;
+		return verticalDiameter;
 	}
 
 	/**

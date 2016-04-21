@@ -10,12 +10,12 @@ public class ResourceBasis
 	/**
 	 * A quantity of nitrogen
 	 */
-	private int nitrogenQuantity;
+	private double nitrogenQuantity;
 	
 	/**
 	 * A quantity of protein
 	 */
-	private int proteinQuantity;
+	private double proteinQuantity;
 	
 	/**
 	 * Construct the resource
@@ -25,8 +25,8 @@ public class ResourceBasis
 	 * @param proteinQuantity
 	 * 		The quantity of protein at start
 	 */
-	public ResourceBasis( int nitrogenQuantity,
-		int proteinQuantity )
+	public ResourceBasis( double nitrogenQuantity,
+		double proteinQuantity )
 	{
 		// Save
 		this.nitrogenQuantity = nitrogenQuantity;
@@ -36,7 +36,7 @@ public class ResourceBasis
 	/**
 	 * @return the nitrogen quantity
 	 */
-	public int getNitrogenQuantity( )
+	public double getNitrogenQuantity( )
 	{
 		return nitrogenQuantity;
 	}
@@ -44,7 +44,7 @@ public class ResourceBasis
 	/**
 	 * @return the protein quantity
 	 */
-	public int getProteinQuantity( )
+	public double getProteinQuantity( )
 	{
 		return proteinQuantity;
 	}
@@ -55,7 +55,7 @@ public class ResourceBasis
 	 * @param nitrogen
 	 * 		the nitrogen to add
 	 */
-	public void addNitrogen( int nitrogen )
+	public void addNitrogen( double nitrogen )
 	{
 		this.nitrogenQuantity += nitrogen;
 	}
@@ -66,9 +66,18 @@ public class ResourceBasis
 	 * @param nitrogen
 	 * 		The nitrogen to consume
 	 */
-	public void consumeNitrogen( int nitrogen )
+	public void consumeNitrogen( double nitrogen ) throws NoMoreResourceException
 	{
-		this.nitrogenQuantity -= nitrogen;
+		if( this.nitrogenQuantity - nitrogen < 0 )
+		{
+			// To zero
+			this.nitrogenQuantity = 0;
+			
+			// Exception
+			throw new NoMoreResourceException( );
+		}
+		else
+			this.nitrogenQuantity -= nitrogen;
 	}
 	
 	/**
@@ -77,7 +86,7 @@ public class ResourceBasis
 	 * @param protein
 	 * 		the protein to add
 	 */
-	public void addProtein( int protein )
+	public void addProtein( double protein )
 	{
 		this.proteinQuantity += protein;
 	}
@@ -88,8 +97,17 @@ public class ResourceBasis
 	 * @param protein
 	 * 		The protein to consume
 	 */
-	public void consumeProtein( int protein )
+	public void consumeProtein( double protein ) throws NoMoreResourceException
 	{
-		this.proteinQuantity -= protein;
+		if( this.proteinQuantity - protein < 0 )
+		{
+			// To zero
+			this.proteinQuantity = 0;
+			
+			// Exception
+			throw new NoMoreResourceException( );
+		}
+		else
+			this.proteinQuantity -= protein;
 	}
 }

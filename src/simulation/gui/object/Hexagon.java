@@ -28,10 +28,10 @@ public class Hexagon extends simulation.math.hexagon.Hexagon
 	/**
 	 * Construct the hexagon
 	 */
-	public Hexagon( double radius )
+	public Hexagon( double verticalDiameter )
 	{
 		// Parent constructor
-		super( radius );
+		super( verticalDiameter );
 		
 		// Create position
 		this.position = new Point<Double>( 0.0d,
@@ -185,11 +185,32 @@ public class Hexagon extends simulation.math.hexagon.Hexagon
 	
 	/**
 	 * Is position inside polygon?
+	 * 
+	 * @param x
+	 * 		The x coordinate
+	 * @param y
+	 * 		The y coordinate
+	 * 
+	 * @return true if inside, false instead
 	 */
 	public boolean isContaining( int x,
 		int y )
 	{
 		return this.polygon.contains( x,
 			y );
+	}
+	
+	/**
+	 * Is position inside polygon?
+	 * 
+	 * @param position
+	 * 		The position to consider
+	 * 
+	 * @return true if inside, false instead
+	 */
+	public boolean isContaining( Point<Integer> position )
+	{
+		return this.isContaining( position.getX( ),
+			position.getY( ) );
 	}
 }

@@ -1,27 +1,31 @@
 package simulation.world.plant;
 
+import simulation.math.point.Point;
+import simulation.world.environment.biome.resource.NoMoreResourceException;
+import simulation.world.environment.biome.resource.state.ResourceState;
 import simulation.world.plant.need.Need;
 import simulation.world.plant.need.state.NeedState;
 
 /**
  * Plant Group
  * 
- * 
- * 
- * @author acamps
+ * @author CAMPS Aurèle
  */
 public class PlantGroup
 {
-
 	/**
-	 * The size of the plant ( in height ) of a plant group
+	 * The number of leaves for one stage in plant group
 	 */
-	private int height;
+	private static final int LEAVES_BY_STAGE = 50;
+	
+	/**
+	 * Maximum stage for one plant group
+	 */
+	private static final int MAXIMUM_STAGES = 30;
 
 	/**
 	 * The amount of leaves of a plant group
 	 */
-
 	private int leaves;
 
 	/**
@@ -38,19 +42,49 @@ public class PlantGroup
 	 * The diameter of the plant group
 	 */
 	private int diameter;
+	
+	/**
+	 * Position
+	 */
+	private Point<Integer> position;
 
 	/**
-	 * @return the height
+	 * Construct the plant group
 	 */
-	public int getHeight()
+	public PlantGroup( Point<Integer> position,
+		Need needsDefinition )
 	{
-		return height;
+		// Init
+		this.leaves = 1;
+		this.needsState = new NeedState( );
+		
+		// Save
+		this.position = position;
+		this.needsDefinition = needsDefinition;
+		
+		// Calculate
+			// Diameter
+				this.diameter = this.calculateDiameter( );
+	}
+	
+	/**
+	 * Calculate the diameter
+	 * 
+	 * @return the diameter
+	 */
+	private int calculateDiameter( )
+	{
+		// Result
+		int result = ( this.leaves / 4 ) + 1;
+		
+		// Return
+		return ( result >= MAXIMUM_STAGES ) ? MAXIMUM_STAGES : result;
 	}
 
 	/**
 	 * @return the leaves
 	 */
-	public int getLeaves()
+	public int getLeaves( )
 	{
 		return leaves;
 	}
@@ -58,25 +92,53 @@ public class PlantGroup
 	/**
 	 * @return the needsState
 	 */
-	public NeedState getNeedsState()
+	public NeedState getNeedsState( )
 	{
 		return needsState;
 	}
 
 	/**
-	 * @return the needsDefinition
-	 */
-	public Need getNeedsDefinition()
-	{
-		return needsDefinition;
-	}
-
-	/**
 	 * @return the diameter
 	 */
-	public int getDiameter()
+	public int getDiameter( )
 	{
 		return diameter;
 	}
-
+	
+	/**
+	 * @return the position
+	 */
+	public Point<Integer> getPosition( )
+	{
+		return position;
+	}
+	
+	/**
+	 * Update the plant group
+	 * 
+	 * @param resourceState
+	 * 		The resources state
+	 */
+	public void update( ResourceState resourceState )
+	{
+		// What to be eaten (nitrogen)
+		double nitrogenToBeConsume = this.needsDefinition.getNitrogen( ) / ( ( (double)( MAXIMUM_STAGES * LEAVES_BY_STAGE ) - (double)this.leaves ) + 1 );
+		
+		// Consume
+		try
+		{
+			// Consume
+			resourceState.consumeNitrogen( nitrogenToBeConsume );
+			
+			// One more leave
+			this.leaves++;
+		}
+		catch( NoMoreResourceException e )
+		{
+			this.leaves--;
+		}
+		
+		// Calculate diameter
+		this.diameter = this.calculateDiameter( );
+	}
 }

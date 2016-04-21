@@ -1,6 +1,8 @@
 package simulation.gui.panels.menus.split;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 
 import simulation.constant.Direction;
 import simulation.gui.animation.Animation;
@@ -105,6 +107,10 @@ public class SplitMenu extends Panel
 
 	public void paint( java.awt.Graphics g )
 	{
+		// Anti Aliasing
+		((Graphics2D)g).setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+			RenderingHints.VALUE_ANTIALIAS_ON );
+		
 		// Clean background
 			// Set color to draw
 				g.setColor( new Color( 0x5BA4DB,

@@ -3,6 +3,7 @@ package simulation.world.environment.decomposer;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import simulation.world.environment.biome.resource.NoMoreResourceException;
 import simulation.world.environment.biome.resource.field.FieldResource;
 
 /**
@@ -38,7 +39,14 @@ public class Decomposer
 			else
 			{
 				// Eat
-				fr.consumeProtein( PROTEIN_EATEN );
+				try
+				{
+					fr.consumeProtein( PROTEIN_EATEN );
+				}
+				catch( NoMoreResourceException e )
+				{
+					continue;
+				}
 				
 				// Increase total
 				proteinEaten += PROTEIN_EATEN;

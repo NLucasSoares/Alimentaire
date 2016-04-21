@@ -12,6 +12,14 @@ import simulation.world.environment.biome.Biome;
 public class Map
 {
 	/**
+	 * Size in pixel by size unit
+	 * (real size for one map case,
+	 * instead of HEXAGON_UNIT_PAINT_RADIUS
+	 * which is only for painting)
+	 */
+	public static final int SIZE_PIXEL_BY_SIZE_UNIT = 100;
+	
+	/**
 	 * Map's name
 	 */
 	private String name;

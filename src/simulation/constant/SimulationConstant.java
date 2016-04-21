@@ -8,7 +8,14 @@ package simulation.constant;
 public class SimulationConstant
 {
 	/**
-	 * Last turns historical depth
+	 * Historical depth
 	 */
-	public static final int LAST_TURNS = 5;
+	public final static int LAST_TURNS = 5;
+	
+	/**
+	 * Probability for Plant Spawn
+	 */
+	public final static int[ ] PLANT_SPAWN_PROBABILITY = {
+		1, // Probability on each turn to get plant spawn
+		99 };
 }

@@ -163,11 +163,27 @@ public class World
 	public void drawWorld( Graphics g,
 		JPanel panel )
 	{
-		this.hexagonalMap.drawMap( g,
-			this.state.getViewState( ),
-			this.simulationFrame.getMapContainer( ).getWidth( ),
-			this.simulationFrame.getMapContainer( ).getHeight( ),
-			panel );
+		try
+		{
+			// Lock the semaphore
+			this.semaphore.acquire( );
+			
+			// Draw
+			this.hexagonalMap.drawMap( g,
+				this.state.getViewState( ),
+				this.simulationFrame.getMapContainer( ).getWidth( ),
+				this.simulationFrame.getMapContainer( ).getHeight( ),
+				panel );
+		}
+		catch( InterruptedException e )
+		{
+			
+		}
+		finally
+		{
+			// Unlock the semaphore
+			this.semaphore.release( );
+		}
 	}
 
 	

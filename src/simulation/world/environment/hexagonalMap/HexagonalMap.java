@@ -3,7 +3,11 @@ package simulation.world.environment.hexagonalMap;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.geom.Ellipse2D;
 import java.security.InvalidParameterException;
+import java.util.Iterator;
 
 import javax.swing.JPanel;
 
@@ -18,6 +22,7 @@ import simulation.world.Configuration;
 import simulation.world.environment.Map;
 import simulation.world.environment.biome.Biome;
 import simulation.world.environment.nameGenerator.MapNameGenerator;
+import simulation.world.plant.PlantGroup;
 
 /**
  * A hexagonal group of map, using axial
@@ -379,11 +384,11 @@ public class HexagonalMap
 		
 		// First hexagon
 			// Create
-				this.hexagons[ 0 ] = new UnitHexagonalMap( (double)viewState.getZoomLevel( ) * UnitHexagonalMap.HEXAGON_UNIT_PAINT_RADIUS,
+				this.hexagons[ 0 ] = new UnitHexagonalMap( (double)viewState.getZoomLevel( ) * Map.SIZE_PIXEL_BY_SIZE_UNIT,
 					hmv.getCurrentMap( ) );
 			// Set position
-				this.hexagons[ 0 ].setPosition( -( (int)this.hexagons[ 0 ].getRadius( ) ) / 2 + width / 2 + viewState.getScrollPosition( ).getX( ),
-						-( (int)this.hexagons[ 0 ].getRadius( ) ) / 2 + height / 2 + viewState.getScrollPosition( ).getY( ) );
+				this.hexagons[ 0 ].setPosition( -( (int)this.hexagons[ 0 ].getVerticalDiameter( ) ) / 2 + width / 2 + viewState.getScrollPosition( ).getX( ),
+						-( (int)this.hexagons[ 0 ].getVerticalDiameter( ) ) / 2 + height / 2 + viewState.getScrollPosition( ).getY( ) );
 			// Set color
 				this.hexagons[ 0 ].setBorderColor( new Color( 0x00FFFFFF,
 					true ) );
@@ -410,7 +415,7 @@ public class HexagonalMap
 					lastCoordinates ) );
 				
 				// Create
-				this.hexagons[ currentMap ] = new UnitHexagonalMap( (double)viewState.getZoomLevel( ) * UnitHexagonalMap.HEXAGON_UNIT_PAINT_RADIUS,
+				this.hexagons[ currentMap ] = new UnitHexagonalMap( (double)viewState.getZoomLevel( ) * Map.SIZE_PIXEL_BY_SIZE_UNIT,
 					hmv.getCurrentMap( ) );
 				
 				// Set color
@@ -452,13 +457,17 @@ public class HexagonalMap
 		int height,
 		JPanel mapContainer )
 	{
+		// Anti Aliasing
+		((Graphics2D)g).setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+			RenderingHints.VALUE_ANTIALIAS_ON );
+				
 		// View point
 		Rectangle viewPoint = new Rectangle( width + (int)this.hexagons[ 0 ].getWidthConstant( ),
 			height + (int)this.hexagons[ 0 ].getHeightConstant( ),
 			0,
 			0 );
 
-		// Draw
+		// Draw map biomes
 		for( int i = 0; i < this.hexagonsCount; i++ )
 		{
 			// Check for position
@@ -486,6 +495,44 @@ public class HexagonalMap
 				// Restore alpha
 				( (Graphics2D)g ).setComposite( java.awt.AlphaComposite.getInstance( java.awt.AlphaComposite.SRC_OVER,
 						1.0f ) );
+			}
+		}
+		
+		// Draw content
+		for( int i = 0; i < this.hexagonsCount; i++ )
+		{
+			// Check for position
+			if( this.hexagons[ i ].getPosition( ).getX( ) >= viewPoint.getPosition( ).getX( ) - this.hexagons[ i ].getWidthConstant( )
+				&& this.hexagons[ i ].getPosition( ).getY( ) >= viewPoint.getPosition( ).getY( ) - this.hexagons[ i ].getHeightConstant( )
+				&& this.hexagons[ i ].getPosition( ).getX( ) + this.hexagons[ i ].getWidthConstant( ) <= viewPoint.getPosition( ).getX( )  + viewPoint.getSize( ).getX( ) 
+				&& this.hexagons[ i ].getPosition( ).getY( ) + this.hexagons[ i ].getHeightConstant( ) <= viewPoint.getPosition( ).getY( ) + viewPoint.getSize( ).getY( ) )
+			{				
+				// Plant group
+				for( Iterator<PlantGroup> it = this.hexagons[ i ].getMap( ).getState( ).getPlantGroup( ); it.hasNext( ); )
+				{
+					// Get plant group
+					PlantGroup pg = it.next( );
+					
+					// Construct circle
+						// Calculate
+							double ellipseSize = ( ( (double)pg.getDiameter( ) / 2.0d ) * (double)viewState.getZoomLevel( ) );
+							double x = ( ( (double)pg.getPosition( ).getX( ) * viewState.getZoomLevel( ) ) + this.hexagons[ i ].getPosition( ).getX( ) ) - ( ellipseSize / 2.0d );
+							double y = ( ( (double)pg.getPosition( ).getY( ) * viewState.getZoomLevel( ) ) + this.hexagons[ i ].getPosition( ).getY( ) ) - ( ellipseSize / 2.0d );
+						// Create
+							Shape ellipse = new Ellipse2D.Double( x,
+								y,
+								ellipseSize,
+								ellipseSize );
+						// Fill
+							g.setColor( new Color( 0x00,
+								0xFF,
+								0x00,
+								0x2F ) );
+							((Graphics2D)g).fill( ellipse );							
+						// Draw border
+							g.setColor( Color.WHITE );
+							((Graphics2D)g).draw( ellipse );
+				}
 			}
 		}
 	}

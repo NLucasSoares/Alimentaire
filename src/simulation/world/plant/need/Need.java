@@ -1,75 +1,67 @@
 package simulation.world.plant.need;
 
 /**
- * Need
- * 
  * Define the amount of resources needed by a plant need to survive.
  * 
- * @author acamps
+ * @author CAMPS Aurèle
  */
 public class Need
 {
 	/**
 	 * The amount of water needed.
 	 */
-	private int water;
-
-	/**
-	 * The amount of carbon needed.
-	 */
-	private int carbon;
+	private double water;
 
 	/**
 	 * The amount of nitrogen needed.
 	 */
-	private int nitrogen;
-
-	/**
-	 * The amount of oxygen needed.
-	 */
-	private int oxygen;
+	private double nitrogen;
 
 	/**
 	 * The amount of sunlight needed.
 	 */
-	private int sun;
+	private double sun;
 
+	/**
+	 * Construct the need
+	 * 
+	 * @param water
+	 * 		The water needed
+	 * @param nitrogen
+	 * 		The nitrogen needed
+	 * @param sun
+	 * 		The sun needed
+	 */
+	public Need( double water,
+		double nitrogen,
+		double sun )
+	{
+		// Save
+		this.nitrogen = nitrogen;
+		this.water = water;
+		this.sun = sun;
+	}
+	
 	/**
 	 * @return the water
 	 */
-	public int getWater()
+	public double getWater()
 	{
 		return water;
 	}
 
 	/**
-	 * @return the carbon
-	 */
-	public int getCarbon()
-	{
-		return carbon;
-	}
-
-	/**
 	 * @return the nitrogen
 	 */
-	public int getNitrogen()
+	public double getNitrogen()
 	{
 		return nitrogen;
 	}
 
 	/**
-	 * @return the oxygen
-	 */
-	public int getOxygen()
-	{
-		return oxygen;
-	}
-
-	/**
 	 * @return the sun
 	 */
-	public int getSun()
+	public double getSun()
 	{
 		return sun;
 	}
