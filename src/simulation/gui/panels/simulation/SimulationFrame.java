@@ -200,7 +200,7 @@ public class SimulationFrame
 			// Delay
 			try
 			{
-				Thread.sleep( 8 );
+				Thread.sleep( 16 );
 			}
 			catch( InterruptedException e )
 			{

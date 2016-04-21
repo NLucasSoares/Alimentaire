@@ -15,6 +15,11 @@ import simulation.time.Time;
 public class ScrollingBackground
 {
 	/**
+	 * The background color
+	 */
+	public static final int BACKGROUND_COLOR = 0x5BA4DB;
+	
+	/**
 	 * The background image
 	 */
 	private BufferedImage background;

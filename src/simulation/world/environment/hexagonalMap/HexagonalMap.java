@@ -514,6 +514,8 @@ public class HexagonalMap
 					PlantGroup pg = it.next( );
 					
 					// Construct circle
+					if( pg.getDiameter( ) > 0 )
+					{
 						// Calculate
 							double ellipseSize = ( ( (double)pg.getDiameter( ) / 2.0d ) * (double)viewState.getZoomLevel( ) );
 							double x = ( ( (double)pg.getPosition( ).getX( ) * viewState.getZoomLevel( ) ) + this.hexagons[ i ].getPosition( ).getX( ) ) - ( ellipseSize / 2.0d );
@@ -532,6 +534,7 @@ public class HexagonalMap
 						// Draw border
 							g.setColor( Color.WHITE );
 							((Graphics2D)g).draw( ellipse );
+					}
 				}
 			}
 		}

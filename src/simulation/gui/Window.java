@@ -81,7 +81,21 @@ public class Window extends JFrame
 		
 		// Stop the previous panel
 		if( super.getContentPane( ) instanceof Panel )
+		{
+			// Stop
 			((Panel)super.getContentPane( )).stop( );
+		
+			// Wait for end on the panel
+			while( ((Panel)super.getContentPane( )).isContinue( ) )
+				try
+				{
+					Thread.sleep( 1 );
+				}
+				catch( InterruptedException e )
+				{
+					
+				}
+		}
 		
 		// Change panel
 		super.setContentPane( this.panelRepository.getPanel( pd ) );

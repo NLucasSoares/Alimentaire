@@ -16,7 +16,7 @@ public class PlantGroup
 	/**
 	 * The number of leaves for one stage in plant group
 	 */
-	private static final int LEAVES_BY_STAGE = 50;
+	private static final int LEAVES_BY_STAGE = 5;
 	
 	/**
 	 * Maximum stage for one plant group
@@ -75,7 +75,7 @@ public class PlantGroup
 	private int calculateDiameter( )
 	{
 		// Result
-		int result = ( this.leaves / 4 ) + 1;
+		int result = ( this.leaves / LEAVES_BY_STAGE ) + 1;
 		
 		// Return
 		return ( result >= MAXIMUM_STAGES ) ? MAXIMUM_STAGES : result;
@@ -122,16 +122,17 @@ public class PlantGroup
 	public void update( ResourceState resourceState )
 	{
 		// What to be eaten (nitrogen)
-		double nitrogenToBeConsume = this.needsDefinition.getNitrogen( ) / ( ( (double)( MAXIMUM_STAGES * LEAVES_BY_STAGE ) - (double)this.leaves ) + 1 );
+		double nitrogenToBeConsume = this.needsDefinition.getNitrogen( ) / ( ( (double)( MAXIMUM_STAGES * LEAVES_BY_STAGE ) - (double)this.leaves ) + 1.0d );
 		
 		// Consume
 		try
 		{
 			// Consume
 			resourceState.consumeNitrogen( nitrogenToBeConsume );
-			
-			// One more leave
-			this.leaves++;
+
+			// One more leaf
+			if( this.leaves < MAXIMUM_STAGES * LEAVES_BY_STAGE )
+				this.leaves++;
 		}
 		catch( NoMoreResourceException e )
 		{

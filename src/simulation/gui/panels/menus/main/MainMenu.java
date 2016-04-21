@@ -2,10 +2,9 @@ package simulation.gui.panels.menus.main;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
@@ -16,6 +15,7 @@ import simulation.gui.panels.menus.main.action.MouseAction;
 import simulation.gui.panels.menus.main.properties.ButtonProperty;
 import simulation.gui.panels.menus.split.ScrollingBackground;
 import simulation.math.point.Point;
+import simulation.time.NotReadyException;
 
 /**
  *	The main menu
@@ -37,8 +37,6 @@ public class MainMenu extends Panel
 	private static final int HEIGHT_BUTTON = 50;
 	private static final String MAIN_TITLE = "Alimentary Chain";
 	private static final String MAIN_SUBTITLE = "Ecosystem Simulation";
-
-	private static final ImageObserver observer = null;
 	
 	
 	/**
@@ -46,6 +44,9 @@ public class MainMenu extends Panel
 	 */
 	private MouseAction mouseAction;
 	
+	/**
+	 * Buttons in menu
+	 */
 	private RectangleButton[] buttons;
 	
 	/**
@@ -62,19 +63,25 @@ public class MainMenu extends Panel
 	/**
 	 * Is launched?
 	 */
-	public boolean isContinue;
-
-
+	private boolean isContinue;
+	
+	/**
+	 * Background
+	 */
+	private ScrollingBackground background;
 	
 	/**
 	 * Construct the panel
+	 * 
 	 * @throws  java.io.IOException 
 	 */
-	public MainMenu( )
+	public MainMenu( ScrollingBackground background )
 	{
+		// Save
+		this.background = background;
+		
 		// Init
 		this.isContinue = true;
-		
 		
 		// Create mouse listener
 		this.mouseAction = new MouseAction( this );
@@ -93,7 +100,7 @@ public class MainMenu extends Panel
 		super.addMouseListener( this.mouseAction );
 		super.addMouseMotionListener( this.mouseAction );
 		
-		// Panel focusable
+		// Focusable panel
 		super.setFocusable( true );
 		super.requestFocusInWindow( );
 	}
@@ -109,13 +116,18 @@ public class MainMenu extends Panel
 	
 	public void calculateButtons( )
 	{
-		int changedHeight = 150;
-		for(int index = 0;index<4;index++)
-		{
-			this.buttons[ index ].setPosition( new Point<Integer>( super.getWidth()/2 - (WIDTH_BUTTON/2),
-					changedHeight ) );
+		// The current vertical position
+		int currentVerticalPosition = 150;
 		
-			changedHeight += this.buttons[index].getSize().getY() + 10;
+		// Calculate position
+		for( int index = 0; index < this.buttons.length; index++ )
+		{
+			// Set position
+			this.buttons[ index ].setPosition( new Point<Integer>( super.getWidth( ) / 2 - ( WIDTH_BUTTON / 2 ),
+				currentVerticalPosition ) );
+		
+			// Next button
+			currentVerticalPosition += this.buttons[ index ].getSize().getY( ) + 10;
 		}
 	}
 	
@@ -126,75 +138,91 @@ public class MainMenu extends Panel
 	
 	public void paint( Graphics g )
 	{
+		// Anti Aliasing
+		((Graphics2D)g).setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+			RenderingHints.VALUE_ANTIALIAS_ON );
+				
+		// Clear background
+			// Set color
+				g.setColor( new Color( ScrollingBackground.BACKGROUND_COLOR,
+					false ) );
+			// Fill
+				g.fillRect( 0,
+					0,
+					super.getWidth( ),
+					super.getHeight( ) );
+
 		// Panel Background
-		try
-		{
-			g.drawImage( art.Art.getArtImage( art.ArtList.ART_BACKGROUND_SPLIT ), 
-					0, 
-					0, 
-					super.getWidth( ), 
-					super.getHeight( ),  
-					observer );	
-		} 
-		catch (IOException e)
-		{
-			System.out.println("Image doesn't exist");
-		}
+		this.background.blitBackground( g,
+			super.getWidth( ),
+			super.getHeight( ),
+			this );
 		
 		// String color
-		g.setColor(Color.WHITE);
+		g.setColor( Color.WHITE );
 
 
-	//Title
-		// Change font
-		g.setFont( new java.awt.Font( "Trebuchet MS",
-			java.awt.Font.BOLD,
-			40 ) );
-		// Blit title
-		g.drawString( MAIN_TITLE,
-				super.getWidth( ) / 2 - g.getFontMetrics( ).stringWidth( MAIN_TITLE ) / 2,
-				60 );
-		
-	// Subtitle
-		// Change font
-		g.setFont( new java.awt.Font( "Trebuchet MS",
-			java.awt.Font.ITALIC,
-			30 ) );
-		// Blit subtitle
-		g.drawString( MAIN_SUBTITLE,
-			super.getWidth( ) / 2 - g.getFontMetrics( ).stringWidth( MAIN_SUBTITLE ) / 2,
-			100 );
-		
-	// Buttons
-		
-		// Change font
-		g.setFont( new java.awt.Font("Time New Roman",
-				java.awt.Font.PLAIN,
-				25 ) );
+		// Title
+			// Change font
+				g.setFont( new java.awt.Font( "Trebuchet MS",
+					java.awt.Font.BOLD,
+					40 ) );
+			// Blit title
+				g.drawString( MAIN_TITLE,
+						super.getWidth( ) / 2 - g.getFontMetrics( ).stringWidth( MAIN_TITLE ) / 2,
+						60 );
+			
+		// Subtitle
+			// Change font
+				g.setFont( new java.awt.Font( "Trebuchet MS",
+					java.awt.Font.ITALIC,
+					30 ) );
+			// Blit subtitle
+				g.drawString( MAIN_SUBTITLE,
+					super.getWidth( ) / 2 - g.getFontMetrics( ).stringWidth( MAIN_SUBTITLE ) / 2,
+					100 );
+			
 		// Buttons
-		for(int index=0; index < 4; index++)
+		
+		// Change font
+			g.setFont( new java.awt.Font( "Time New Roman",
+					java.awt.Font.PLAIN,
+					25 ) );
+		// Buttons
+		for( int index = 0; index < buttons.length; index++ )
 		{
-			buttons[index].blit( g );
-			g.setColor(Color.BLACK);
-			g.drawString(ButtonProperty.BUTTON_NAME[index],
-					super.getWidth( ) / 2 - g.getFontMetrics().stringWidth(ButtonProperty.BUTTON_NAME[index]) / 2,
-					buttons[ index ].getPosition().getY( ) + ( buttons[ index ].getSize( ).getY( ) / 2 ) + ( g.getFontMetrics().getDescent() / 2 ) );
+			// Blit shape
+			buttons[ index ].blit( g );
+			
+			// Change color
+			g.setColor( Color.BLACK );
+			
+			// Print text
+			g.drawString( ButtonProperty.BUTTON_NAME[ index ],
+					super.getWidth( ) / 2 - g.getFontMetrics( ).stringWidth( ButtonProperty.BUTTON_NAME[ index ] ) / 2,
+					buttons[ index ].getPosition( ).getY( ) + ( buttons[ index ].getSize( ).getY( ) / 2 ) + ( g.getFontMetrics( ).getDescent( ) / 2 ) );
 		}
 	} 
 	
 	/**
 	 * Update button state
+	 * 
+	 * @param e
+	 * 		The mouse event
 	 */
 	public void updateButton( MouseEvent e )
 	{
-		for(int index=0; index < 4; index++)
+		// Update buttons
+		for( int index = 0; index < buttons.length; index++ )
 		{
-			buttons[index].update( e );
+			// Get current state
+			buttons[ index ].update( e );
 		
-			switch( buttons[index].getButtonState( ) )
+			// Parse result
+			switch( buttons[ index ].getButtonState( ) )
 			{
 				case BUTTON_OVERFLOWN:
-					this.buttons[index].setFilled( true );
+					this.buttons[ index ].setFilled( true );
 					break;
 					
 				case BUTTON_RELEASED:
@@ -236,9 +264,22 @@ public class MainMenu extends Panel
 				// Recalculate buttons
 				calculateButtons( );
 				
+				// Update background
+				try
+				{
+					this.background.update( );
+				}
+				catch( NotReadyException e )
+				{
+					
+				}
+				
 				// Treat buttons
 				for( ButtonProperty bp : ButtonProperty.values( ) )
+					// If clicked
 					if( this.buttons[ bp.ordinal( ) ].getButtonState( ) == ButtonState.BUTTON_PRESSED )
+					{
+						// Parse button action
 						switch( bp )
 						{
 							case BUTTON_NEW_WORLD:
@@ -251,26 +292,31 @@ public class MainMenu extends Panel
 								this.quitMenu( ReturnCode.RETURN_CODE_OPTIONS );
 								break;
 							case BUTTON_QUIT:
-								int quitConfirm = JOptionPane.showConfirmDialog(null,"Do you really want to quit ?","Quit Confirmation",
-										JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-								if( quitConfirm == JOptionPane.YES_OPTION)
-								{
-								System.exit(0);
-								}
+								// Open confirm dialog
+								int quitConfirm = JOptionPane.showConfirmDialog( null,
+										"Do you really want to quit ?",
+										"Quit Confirmation",
+										JOptionPane.YES_NO_OPTION,
+										JOptionPane.QUESTION_MESSAGE );
 								
-								this.buttons[ bp.ordinal( ) ].resetButtonState(); 
-								
+								// Check if yes selected
+								if( quitConfirm == JOptionPane.YES_OPTION )
+									System.exit( 0 ); 
 								break;
 								
 							default:
 								break;
 						}
+						
+						// Reset button state
+						this.buttons[ bp.ordinal( ) ].resetButtonState( );
+					}
 					
 				// Repaint window
 				super.repaint( );
 				
 				// Delay
-				Thread.sleep( 16 );
+				Thread.sleep( Panel.DELAY_BETWEEN_FRAME );
 			}
 			catch( InterruptedException e )
 			{

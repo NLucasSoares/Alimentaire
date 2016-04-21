@@ -88,7 +88,7 @@ public class MapState
 		// The decomposer do their job
 		this.resourceState.addNitrogen( this.decomposer.work( this.fieldResource ) );
 		
-		// The plant update themselves
+		// The plant group update themselves
 		for( Iterator<PlantGroup> it = this.plantGroup.iterator( ); it.hasNext( ); )
 		{
 			// Get the plant group
@@ -129,9 +129,9 @@ public class MapState
 					
 					// Plant
 					this.plantGroup.add( new PlantGroup( position,
-						new Need( 10,
-							10,
-							10 ) ) ); // HAVE TO SEE FOR NEED DETAILS
+						new Need( 1,
+							1,
+							1 ) ) ); // HAVE TO SEE FOR NEED DETAILS
 				}
 	}
 	
