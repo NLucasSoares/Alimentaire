@@ -29,6 +29,9 @@ public class WorldState
 	
 	/**
 	 * Construct the world
+	 * 
+	 * @param world
+	 * 		The world which this state is for
 	 */
 	public WorldState( World world )
 	{
@@ -50,7 +53,7 @@ public class WorldState
 	}
 
 	/**
-	 * @return the animalGroup
+	 * @return the animal group
 	 */
 	public ArrayList<Group> getAnimalGroup( )
 	{

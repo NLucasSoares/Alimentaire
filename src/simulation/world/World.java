@@ -24,8 +24,7 @@ public class World
 	 * Name
 	 */
 	private String name;
-	
-		
+
 	/**
 	 * The hexagonal map
 	 */

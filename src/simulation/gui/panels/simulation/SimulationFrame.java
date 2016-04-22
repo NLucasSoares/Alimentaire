@@ -182,7 +182,7 @@ public class SimulationFrame
 	}
 	
 	/**
-	 * 
+	 * Simulate a world
 	 */
 	public void simulate( World world )
 	{

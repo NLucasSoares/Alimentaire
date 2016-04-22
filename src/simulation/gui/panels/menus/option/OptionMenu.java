@@ -9,8 +9,9 @@ import javax.swing.JSlider;
 
 import simulation.gui.panels.Panel;
 import simulation.gui.panels.menus.main.ReturnCode;
-import simulation.gui.panels.menus.main.action.MouseAction;
+import simulation.gui.panels.menus.option.action.MouseAction;
 import simulation.gui.panels.menus.split.ScrollingBackground;
+import simulation.time.NotReadyException;
 
 /**
  * The option panel
@@ -57,17 +58,13 @@ public class OptionMenu extends Panel
 	 * Background
 	 */
 	private ScrollingBackground background;
-
-
-
-
 	
 	/**
 	 * Construct the panel
 	 * @param background 
 	 * @throws  java.io.IOException 
 	 */
-	public OptionMenu(ScrollingBackground background )
+	public OptionMenu( ScrollingBackground background )
 	{
 		// Save
 		this.background = background;
@@ -75,13 +72,9 @@ public class OptionMenu extends Panel
 		// Init
 		this.isContinue = true;
 		
-		
-		// Create mouse listener
-		this.mouseAction = new MouseAction( this );
-		
 		// Add listener
-		super.addMouseListener( this.mouseAction );
-		super.addMouseMotionListener( this.mouseAction );
+		//super.addMouseListener( this.mouseAction );
+		//super.addMouseMotionListener( this.mouseAction );
 		
 		// Panel focusable
 		super.setFocusable( true );
@@ -109,57 +102,53 @@ public class OptionMenu extends Panel
 			RenderingHints.VALUE_ANTIALIAS_ON );
 		
 		// Clear background
-		// Set color
-			g.setColor( new Color( ScrollingBackground.BACKGROUND_COLOR,
-				false ) );
-		// Fill
-			g.fillRect( 0,
-				0,
-				super.getWidth( ),
-				super.getHeight( ) );
+			// Set color
+				g.setColor( new Color( ScrollingBackground.BACKGROUND_COLOR,
+					false ) );
+			// Fill
+				g.fillRect( 0,
+					0,
+					super.getWidth( ),
+					super.getHeight( ) );
 		
 		// Panel Background
 		this.background.blitBackground( g,
 			super.getWidth( ),
 			super.getHeight( ),
 			this );
-		
-		
+
 		// String color
-		g.setColor(Color.WHITE);
+		g.setColor( Color.WHITE );
 
+		// Option title
+			// Change font
+				g.setFont( new java.awt.Font( "Trebuchet MS",
+					java.awt.Font.BOLD,
+					40 ) );
+			// Blit title
+				g.drawString( OPTION_TITLE,
+						super.getWidth( ) / 2 - g.getFontMetrics( ).stringWidth( OPTION_TITLE ) / 2,
+						60 );
 
-	//Option title
-		// Change font
-		g.setFont( new java.awt.Font( "Trebuchet MS",
-			java.awt.Font.BOLD,
-			40 ) );
-		// Blit title
-		g.drawString( OPTION_TITLE,
-				super.getWidth( ) / 2 - g.getFontMetrics( ).stringWidth( OPTION_TITLE ) / 2,
-				60 );
-		
-	// Subtitle
-		// Change font
-		g.setFont( new java.awt.Font( "Trebuchet MS",
-			java.awt.Font.ITALIC,
-			30 ) );
-		// Blit subtitle
-		g.drawString( OPTION_SUBTITLE,
-			super.getWidth( ) / 2 - g.getFontMetrics( ).stringWidth( OPTION_SUBTITLE ) / 2,
-			100 );
-		
-		JSlider mapSlide = new JSlider();
+		// Subtitle
+			// Change font
+				g.setFont( new java.awt.Font( "Trebuchet MS",
+					java.awt.Font.ITALIC,
+					30 ) );
+			// Blit subtitle
+				g.drawString( OPTION_SUBTITLE,
+					super.getWidth( ) / 2 - g.getFontMetrics( ).stringWidth( OPTION_SUBTITLE ) / 2,
+					100 );
+
+		/*JSlider mapSlide = new JSlider( );
 		   
-	    mapSlide.setMaximum(100);
-	    mapSlide.setMinimum(0);
-	    mapSlide.setValue(50);
-	    mapSlide.setPaintTicks(true);
-	    mapSlide.setPaintLabels(true);
-	    mapSlide.setMinorTickSpacing(5);
-	    mapSlide.setMajorTickSpacing(10);
-		
-		
+	    mapSlide.setMaximum( 100 );
+	    mapSlide.setMinimum( 0 );
+	    mapSlide.setValue( 50 );
+	    mapSlide.setPaintTicks( true );
+	    mapSlide.setPaintLabels( true );
+	    mapSlide.setMinorTickSpacing( 5 );
+	    mapSlide.setMajorTickSpacing( 10 );*/
 	}
 	
 	/**
@@ -181,14 +170,40 @@ public class OptionMenu extends Panel
 	{
 		if( this.backgroundUpdateThread == null )
 		{
-			this.backgroundUpdateThread = new Thread( );
+			this.backgroundUpdateThread = new Thread( this );
 			this.backgroundUpdateThread.start( );
 		}
 	}
 	
 	public void run( )
 	{
-		System.out.println("TessTest");
+		do
+		{
+			// Repaint
+			super.repaint( );
+
+			// FAIS CE QUE TU AS A FAIRE ICI
+			
+			// Update background
+			try
+			{
+				this.background.update( );
+			}
+			catch( NotReadyException e1 )
+			{
+
+			}
+			
+			// Delay
+			try
+			{
+				Thread.sleep( Panel.DELAY_BETWEEN_FRAME );
+			}
+			catch( InterruptedException e )
+			{
+
+			}
+		} while( this.isContinue( ) );
 	}
 
 	public void stop( )
