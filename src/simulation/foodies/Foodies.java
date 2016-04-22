@@ -109,7 +109,7 @@ public class Foodies
 						foodies.window.switchPanel( PanelDefinition.PANEL_LOAD_MENU );
 						break;
 					case RETURN_CODE_OPTIONS:
-						foodies.window.switchPanel( PanelDefinition.PANEL_OPTIONS_MENU );
+						foodies.window.switchPanel(PanelDefinition.PANEL_OPTIONS_MENU);
 						break;
 					case RETURN_CODE_QUIT:
 						foodies.isContinue = false;

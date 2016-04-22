@@ -50,7 +50,7 @@ public class PanelRepository
 					this.panels[ pd.ordinal( ) ] = new MainMenu( this.scrollingBackground );
 					break;
 				case PANEL_OPTIONS_MENU:
-					//this.panels[ pd.ordinal( ) ] = new OptionMenu( );
+					this.panels[ pd.ordinal( ) ] = new OptionMenu( this.scrollingBackground );
 					break;
 					
 				default:

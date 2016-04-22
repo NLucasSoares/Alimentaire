@@ -2,14 +2,15 @@ package simulation.gui.panels.menus.option;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Panel;
-import java.awt.image.ImageObserver;
-import java.io.IOException;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 
 import javax.swing.JSlider;
 
+import simulation.gui.panels.Panel;
 import simulation.gui.panels.menus.main.ReturnCode;
 import simulation.gui.panels.menus.main.action.MouseAction;
+import simulation.gui.panels.menus.split.ScrollingBackground;
 
 /**
  * The option panel
@@ -36,7 +37,6 @@ public class OptionMenu extends Panel
 	 */
 	private ReturnCode returnCode;
 	
-	private static final ImageObserver observer = null;
 	
 	/**
 	 * Mouse action listener
@@ -52,6 +52,11 @@ public class OptionMenu extends Panel
 	 * Is launched?
 	 */
 	public boolean isContinue;
+	
+	/**
+	 * Background
+	 */
+	private ScrollingBackground background;
 
 
 
@@ -59,10 +64,14 @@ public class OptionMenu extends Panel
 	
 	/**
 	 * Construct the panel
+	 * @param background 
 	 * @throws  java.io.IOException 
 	 */
-	public OptionMenu( )
+	public OptionMenu(ScrollingBackground background )
 	{
+		// Save
+		this.background = background;
+		
 		// Init
 		this.isContinue = true;
 		
@@ -70,7 +79,9 @@ public class OptionMenu extends Panel
 		// Create mouse listener
 		this.mouseAction = new MouseAction( this );
 		
-		
+		// Add listener
+		super.addMouseListener( this.mouseAction );
+		super.addMouseMotionListener( this.mouseAction );
 		
 		// Panel focusable
 		super.setFocusable( true );
@@ -93,20 +104,26 @@ public class OptionMenu extends Panel
 	
 	public void paint( Graphics g )
 	{
+		// Anti Aliasing
+		((Graphics2D)g).setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+			RenderingHints.VALUE_ANTIALIAS_ON );
+		
+		// Clear background
+		// Set color
+			g.setColor( new Color( ScrollingBackground.BACKGROUND_COLOR,
+				false ) );
+		// Fill
+			g.fillRect( 0,
+				0,
+				super.getWidth( ),
+				super.getHeight( ) );
+		
 		// Panel Background
-		try
-		{
-			g.drawImage( art.Art.getArtImage( art.ArtList.ART_BACKGROUND_SPLIT ), 
-					0, 
-					0, 
-					super.getWidth( ), 
-					super.getHeight( ), 
-					observer );	 
-		}
-		catch (IOException e)
-		{
-			System.out.println("Image doesn't exist");
-		}
+		this.background.blitBackground( g,
+			super.getWidth( ),
+			super.getHeight( ),
+			this );
+		
 		
 		// String color
 		g.setColor(Color.WHITE);
@@ -132,17 +149,15 @@ public class OptionMenu extends Panel
 			super.getWidth( ) / 2 - g.getFontMetrics( ).stringWidth( OPTION_SUBTITLE ) / 2,
 			100 );
 		
-		JSlider mapSlide = new JSlider ();
-		
-		mapSlide.setMaximum(100);
-		mapSlide.setMinimum(10);
-		mapSlide.setValue(20);
-		mapSlide.setPaintTicks(true);
-		mapSlide.setPaintLabels(true);
-		mapSlide.setMinorTickSpacing(10);
-		mapSlide.setMajorTickSpacing(20);
-		
-		mapSlide.setVisible(true);
+		JSlider mapSlide = new JSlider();
+		   
+	    mapSlide.setMaximum(100);
+	    mapSlide.setMinimum(0);
+	    mapSlide.setValue(50);
+	    mapSlide.setPaintTicks(true);
+	    mapSlide.setPaintLabels(true);
+	    mapSlide.setMinorTickSpacing(5);
+	    mapSlide.setMajorTickSpacing(10);
 		
 		
 	}
@@ -169,6 +184,11 @@ public class OptionMenu extends Panel
 			this.backgroundUpdateThread = new Thread( );
 			this.backgroundUpdateThread.start( );
 		}
+	}
+	
+	public void run( )
+	{
+		System.out.println("TessTest");
 	}
 
 	public void stop( )
