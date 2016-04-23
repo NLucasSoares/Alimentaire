@@ -61,11 +61,6 @@ public class HexagonalMap
 	 * Size
 	 */
 	private int size;
-	
-	/**
-	 * Alpha gesture of selected map
-	 */
-	private AlphaEvolution alphaEvolutionSelectedMap;
 
 	/**
 	 * Construct the hexagonal map
@@ -116,11 +111,6 @@ public class HexagonalMap
 				hmv.getCurrentAxialCoordinates( ),
 				biome ) );
 		}
-		
-		// Create the alpha gesture
-		this.alphaEvolutionSelectedMap = new AlphaEvolution(50,
-			255,
-			1 );
 		
 		// Create the hexagons
 		this.createHexagons( width,
@@ -455,7 +445,8 @@ public class HexagonalMap
 		ViewState viewState,
 		int width,
 		int height,
-		JPanel mapContainer )
+		JPanel mapContainer,
+		AlphaEvolution selectedMapAlpha )
 	{
 		// Anti Aliasing
 		((Graphics2D)g).setRenderingHint( RenderingHints.KEY_ANTIALIASING,
@@ -482,7 +473,7 @@ public class HexagonalMap
 				// If current map selected, change alpha
 				if( this.hexagons[ i ].getMap( ) == viewState.getSelectedMap( ) )
 					( (Graphics2D)g ).setComposite( java.awt.AlphaComposite.getInstance( java.awt.AlphaComposite.SRC_OVER,
-							(float)alphaEvolutionSelectedMap.getCurrentAlpha( ) ) );
+							(float)selectedMapAlpha.getCurrentAlpha( ) ) );
 				
 				// Paint biome tileset
 				g.drawImage( this.hexagons[ i ].getMap( ).getBiome( ).getTileset( ),
@@ -544,10 +535,7 @@ public class HexagonalMap
 	 * Update the maps
 	 */
 	public void update( )
-	{
-		// Update alpha for selected map
-		this.alphaEvolutionSelectedMap.update( );
-		
+	{		
 		// Update map state
 		for( UnitHexagonalMap uhm : this.hexagons )
 			uhm.getMap( ).getState( ).update( );

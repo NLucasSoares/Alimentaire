@@ -1,4 +1,4 @@
-package simulation.gui.panels.simulation.action;
+package simulation.gui.panels.simulation.map.action;
 
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;

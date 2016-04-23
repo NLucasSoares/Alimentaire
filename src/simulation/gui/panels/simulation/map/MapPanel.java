@@ -5,6 +5,7 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
+import simulation.gui.panels.simulation.AlphaEvolution;
 import simulation.world.World;
 
 public class MapPanel extends JPanel
@@ -20,6 +21,11 @@ public class MapPanel extends JPanel
 	private boolean isPaintReady = false;
 	
 	/**
+	 * Alpha evolution for selected map
+	 */
+	private AlphaEvolution selectedMapAlpha;
+	
+	/**
 	 * World
 	 */
 	private World world;
@@ -30,13 +36,15 @@ public class MapPanel extends JPanel
 	 * @param world
 	 * 		The current world
 	 */
-	public MapPanel( World world )
+	public MapPanel( World world,
+		AlphaEvolution selectedMapAlpha )
 	{
 		// Parent constructor
 		super( );
 		
 		// Save
 		this.world = world;
+		this.selectedMapAlpha = selectedMapAlpha;
 	}
 	
 	/**
@@ -78,7 +86,8 @@ public class MapPanel extends JPanel
 		
 		// Draw content
 		this.world.drawWorld( g,
-			this );
+			this,
+			selectedMapAlpha );
 		
 		// Draw border
 		g.setColor( Color.WHITE );

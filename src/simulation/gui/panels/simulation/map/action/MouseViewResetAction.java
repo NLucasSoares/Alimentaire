@@ -1,4 +1,4 @@
-package simulation.gui.panels.simulation.action;
+package simulation.gui.panels.simulation.map.action;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -54,7 +54,7 @@ public class MouseViewResetAction extends MouseAction implements MouseListener
 		if( SwingUtilities.isMiddleMouseButton( e ) )
 		{
 			// Reset view state
-			super.getViewState( ).reset( );
+			super.getViewState( ).resetCamera( );
 			
 			try
 			{

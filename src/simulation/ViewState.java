@@ -16,6 +16,23 @@ public class ViewState
 	public static final int DEFAULT_VIEW_STATE_ZOOM = 5;
 	
 	/**
+	 * Default delay between frames
+	 */
+	public static final int DEFAULT_DELAY_BETWEEN_FRAMES = 100;
+	
+	/**
+	 * Minimum delay between frames
+	 * (10ms)
+	 */
+	public static final int MINIMUM_DELAY_BETWEEN_FRAMES = 5;
+	
+	/**
+	 * Maximum delay between frames
+	 * (2s)
+	 */
+	public static final int MAXIMUM_DELAY_BETWEEN_FRAMES = 1000;
+	
+	/**
 	 * The actual selected map
 	 */
 	private Map selectedMap;
@@ -34,6 +51,12 @@ public class ViewState
 	private Point<Integer> scrollPosition;
 
 	/**
+	 * Delay between two frames of the
+	 * simulation
+	 */
+	private int delayBetweenFrames;
+	
+	/**
 	 * Construct the viewState
 	 * 
 	 * @param centerMap
@@ -45,13 +68,14 @@ public class ViewState
 		this.selectedMap = centerMap;
 
 		// Init
-		this.reset( );
+		this.delayBetweenFrames = ViewState.DEFAULT_DELAY_BETWEEN_FRAMES;
+		this.resetCamera( );
 	}
 	
 	/**
 	 * Reset the viewstate
 	 */
-	public void reset( )
+	public void resetCamera( )
 	{
 		this.zoomLevel = ViewState.DEFAULT_VIEW_STATE_ZOOM;
 		this.scrollPosition = new Point<Integer>( 0,
@@ -108,4 +132,23 @@ public class ViewState
 	{
 		this.scrollPosition = scrollPosition;
 	}
+
+	/**
+	 * @return the delay between frames
+	 */
+	public int getDelayBetweenFrames( )
+	{
+		return delayBetweenFrames;
+	}
+
+	/**
+	 * @param delayBetweenFrames
+	 * 		the delay between frames to set
+	 */
+	public void setDelayBetweenFrames( int delayBetweenFrames )
+	{
+		this.delayBetweenFrames = delayBetweenFrames;
+	}
+	
+	
 }

@@ -1,9 +1,7 @@
 package simulation.world;
 
-import java.util.ArrayList;
-
 import simulation.ViewState;
-import simulation.world.animal.group.Group;
+import simulation.time.Time;
 
 public class WorldState
 {
@@ -11,11 +9,6 @@ public class WorldState
 	 * Current round
 	 */
 	private long round;
-
-	/**
-	 * Groups of animals
-	 */
-	private ArrayList<Group> animalGroup;
 	
 	/**
 	 * The actual viewstate
@@ -26,6 +19,11 @@ public class WorldState
 	 * Callback to world
 	 */
 	private World world;
+	
+	/**
+	 * Last update time
+	 */
+	private long lastUpdateTime;
 	
 	/**
 	 * Construct the world
@@ -40,7 +38,7 @@ public class WorldState
 		
 		// Init
 		this.round = 0;
-		this.animalGroup = new ArrayList<Group>( );
+		this.lastUpdateTime = 0;
 		this.viewState = new ViewState( this.world.getCenterMap( ) );
 	}
 
@@ -50,14 +48,6 @@ public class WorldState
 	public long getRound( )
 	{
 		return round;
-	}
-
-	/**
-	 * @return the animal group
-	 */
-	public ArrayList<Group> getAnimalGroup( )
-	{
-		return animalGroup;
 	}
 
 	/**
@@ -74,5 +64,23 @@ public class WorldState
 	public World getWorld( )
 	{
 		return world;
+	}
+	
+	/**
+	 * Is update ready?
+	 * 
+	 * @return if update ready
+	 */
+	public boolean isUpdateReady( )
+	{
+		return ( ( Time.getTicks( ) - this.lastUpdateTime ) >= this.viewState.getDelayBetweenFrames( ) );
+	}
+	
+	/**
+	 * The update has been done
+	 */
+	public void updateDone( )
+	{
+		this.lastUpdateTime = Time.getTicks( );
 	}
 }

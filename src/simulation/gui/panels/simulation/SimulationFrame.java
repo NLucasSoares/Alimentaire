@@ -4,15 +4,21 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.util.Hashtable;
 import java.util.concurrent.Semaphore;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 
+import simulation.ViewState;
 import simulation.gui.Window;
-import simulation.gui.panels.simulation.action.MouseDragMapAction;
-import simulation.gui.panels.simulation.action.MouseMapSelectAction;
-import simulation.gui.panels.simulation.action.MouseViewResetAction;
-import simulation.gui.panels.simulation.action.MouseWheelAction;
+import simulation.gui.panels.simulation.map.action.MouseDragMapAction;
+import simulation.gui.panels.simulation.map.action.MouseMapSelectAction;
+import simulation.gui.panels.simulation.map.action.MouseViewResetAction;
+import simulation.gui.panels.simulation.map.action.MouseWheelAction;
+import simulation.gui.panels.simulation.worldControl.WorldControlPanel;
+import simulation.gui.panels.simulation.worldControl.action.SliderFrameDelayAction;
 import simulation.gui.panels.simulation.map.MapPanel;
 import simulation.world.World;
 
@@ -34,9 +40,9 @@ public class SimulationFrame
 	private JPanel mapContainer;
 
 	/**
-	 * The biome display panel
+	 * The world control panel
 	 */
-	private JPanel biomeDisplayContainer;
+	private JPanel worldControlContainer;
 
 	/**
 	 * The instruments panel
@@ -47,6 +53,11 @@ public class SimulationFrame
 	 * Mutex
 	 */
 	private java.util.concurrent.Semaphore semaphore;
+	
+	/**
+	 * Alpha gesture of selected map
+	 */
+	private AlphaEvolution alphaEvolutionSelectedMap;
 	
 	/**
 	 * Continue simulation?
@@ -64,9 +75,14 @@ public class SimulationFrame
 	public SimulationFrame( Window window,
 		World world )
 	{
+		// Create the alpha gesture
+		this.alphaEvolutionSelectedMap = new AlphaEvolution( 50,
+			255,
+			1 );
+				
 		// Create the grid bag constraints
 		GridBagConstraints gbcMap = new GridBagConstraints( );
-		GridBagConstraints gbcBiome = new GridBagConstraints( );
+		GridBagConstraints gbcWorldControl = new GridBagConstraints( );
 		GridBagConstraints gbcInstruments = new GridBagConstraints( );
 
 		// Create the semaphore
@@ -78,8 +94,9 @@ public class SimulationFrame
 		// Create panels
 			// Map container
 				// Panel
-					this.mapContainer = new MapPanel( world );
-					this.mapContainer.setBackground( Color.RED );
+					this.mapContainer = new MapPanel( world,
+						this.alphaEvolutionSelectedMap );
+					this.mapContainer.setBackground( Color.BLACK );
 				// Configure the grid bag constraints
 					gbcMap.gridx = 0;
 					gbcMap.gridy = 0;
@@ -87,20 +104,26 @@ public class SimulationFrame
 					gbcMap.gridheight = GridBagConstraints.REMAINDER;
 					gbcMap.anchor = GridBagConstraints.LINE_START;
 					gbcMap.fill = GridBagConstraints.BOTH;
-					gbcMap.insets = new Insets( 5, 5, 5, 5 );
+					gbcMap.insets = new Insets( 5,
+						5,
+						5,
+						5 );
 					gbcMap.weightx = 1.0;
 					gbcMap.weighty = 1.0;
-			// Biome display
+			// World control
 				// Panel
-					this.biomeDisplayContainer = new JPanel( );
-					this.biomeDisplayContainer.setBackground( Color.GREEN );
+					this.worldControlContainer = new WorldControlPanel( world );
+					this.worldControlContainer.setBackground( Color.BLACK );
 					
-					this.biomeDisplayContainer.setPreferredSize( new Dimension( SimulationFrame.RIGHT_DISPLAY_WIDTH,
+					this.worldControlContainer.setPreferredSize( new Dimension( SimulationFrame.RIGHT_DISPLAY_WIDTH,
 						SimulationFrame.BIOME_DISPLAY_HEIGHT ) );
-					this.biomeDisplayContainer.setMinimumSize( new Dimension( SimulationFrame.RIGHT_DISPLAY_WIDTH,
+					this.worldControlContainer.setMinimumSize( new Dimension( SimulationFrame.RIGHT_DISPLAY_WIDTH,
 						SimulationFrame.BIOME_DISPLAY_HEIGHT ) );
 				// Configure the grid bag constraints
-					gbcBiome.insets = new Insets( 5, 0, 5, 5 );
+					gbcWorldControl.insets = new Insets( 5,
+						0,
+						5,
+						5 );
 			// Instruments container
 				// Panel
 					this.instrumentsContainer = new JPanel( );
@@ -110,7 +133,10 @@ public class SimulationFrame
 					this.instrumentsContainer.setMinimumSize( new Dimension( SimulationFrame.RIGHT_DISPLAY_WIDTH,
 							window.getHeight( ) - SimulationFrame.BIOME_DISPLAY_HEIGHT ) );
 				// Configure the grid bag constraints
-					gbcInstruments.insets = new Insets( 0, 0, 5, 5 );
+					gbcInstruments.insets = new Insets( 0,
+						0,
+						5,
+						5 );
 					gbcInstruments.weighty = 1.0;
 					gbcInstruments.gridheight = GridBagConstraints.RELATIVE;
 					gbcInstruments.fill = GridBagConstraints.VERTICAL;
@@ -118,32 +144,34 @@ public class SimulationFrame
 		// Set layout
 		window.prepareForGameRendering( mapContainer,
 			gbcMap,
-			biomeDisplayContainer,
-			gbcBiome,
+			worldControlContainer,
+			gbcWorldControl,
 			instrumentsContainer,
 			gbcInstruments );
 
 		// Add actions listener
-			// Wheel for map zoom
-				window.addMouseWheelListener( new MouseWheelAction( world.getState( ).getViewState( ),
-					world,
-					this.semaphore ) );
-			// Mouse control for map
-				// Create
-					MouseDragMapAction mdma = new MouseDragMapAction( world.getState( ).getViewState( ),
+			// Map controller
+				// Wheel for map zoom
+					window.addMouseWheelListener( new MouseWheelAction( world.getState( ).getViewState( ),
 						world,
-						this.semaphore );
-				// Add listeners
-					this.mapContainer.addMouseListener( mdma );
-					this.mapContainer.addMouseMotionListener( mdma );
-			// Mouse middle click to reset camera
-				this.mapContainer.addMouseListener( new MouseViewResetAction( world.getState( ).getViewState( ),
-					world,
-					this.semaphore ) );
-			// Mouse left click to select map
-				this.mapContainer.addMouseListener( new MouseMapSelectAction( world.getState( ).getViewState( ),
-					world,
-					this.semaphore ) );
+						this.semaphore ) );
+				// Mouse control for map
+					// Create
+						MouseDragMapAction mdma = new MouseDragMapAction( world.getState( ).getViewState( ),
+							world,
+							this.semaphore );
+					// Add listeners
+						this.mapContainer.addMouseListener( mdma );
+						this.mapContainer.addMouseMotionListener( mdma );
+				// Mouse middle click to reset camera
+					this.mapContainer.addMouseListener( new MouseViewResetAction( world.getState( ).getViewState( ),
+						world,
+						this.semaphore ) );
+				// Mouse left click to select map
+					this.mapContainer.addMouseListener( new MouseMapSelectAction( world.getState( ).getViewState( ),
+						world,
+						this.semaphore ) );
+				
 
 		// Start simulation
 		this.isContinue = true;
@@ -160,9 +188,9 @@ public class SimulationFrame
 	/**
 	 * @return the biomeDisplayContainer
 	 */
-	public JPanel getBiomeDisplayContainer( )
+	public JPanel getWorldControlContainer( )
 	{
-		return biomeDisplayContainer;
+		return worldControlContainer;
 	}
 
 	/**
@@ -192,8 +220,11 @@ public class SimulationFrame
 			// Update the world
 			world.update( );
 			
+			// Update alpha for selected map
+			this.alphaEvolutionSelectedMap.update( );
+			
 			// Paint
-			this.biomeDisplayContainer.repaint( );
+			this.worldControlContainer.repaint( );
 			this.instrumentsContainer.repaint( );
 			this.mapContainer.repaint( );
 

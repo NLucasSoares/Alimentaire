@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 
 import simulation.Database;
 import simulation.gui.Window;
+import simulation.gui.panels.simulation.AlphaEvolution;
 import simulation.gui.panels.simulation.SimulationFrame;
 import simulation.world.environment.Map;
 import simulation.world.environment.hexagonalMap.HexagonalMap;
@@ -127,22 +128,30 @@ public class World
 	 */
 	public void update( )
 	{
-		try
+		// Check for update ready
+		if( this.state.isUpdateReady( ) )
 		{
-			// Lock the semaphore
-			this.semaphore.acquire( );
-			
-			// Update the maps
-			this.hexagonalMap.update( );
-		}
-		catch( InterruptedException e )
-		{
-			
-		}
-		finally
-		{		
-			// Unlock the semaphore
-			this.semaphore.release( );
+			// Update
+			try
+			{
+				// Lock the semaphore
+				this.semaphore.acquire( );
+				
+				// Update the maps
+				this.hexagonalMap.update( );
+			}
+			catch( InterruptedException e )
+			{
+				
+			}
+			finally
+			{		
+				// Unlock the semaphore
+				this.semaphore.release( );
+				
+				// Update done
+				this.state.updateDone( );
+			}
 		}
 	}
 	
@@ -160,7 +169,8 @@ public class World
 	 * Draw the map
 	 */
 	public void drawWorld( Graphics g,
-		JPanel panel )
+		JPanel panel,
+		AlphaEvolution selectedMapAlpha )
 	{
 		try
 		{
@@ -172,7 +182,8 @@ public class World
 				this.state.getViewState( ),
 				this.simulationFrame.getMapContainer( ).getWidth( ),
 				this.simulationFrame.getMapContainer( ).getHeight( ),
-				panel );
+				panel,
+				selectedMapAlpha );
 		}
 		catch( InterruptedException e )
 		{

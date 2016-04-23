@@ -129,6 +129,11 @@ public class HexagonalMapVisitor
 	
 	/**
 	 * Update the current map by increase step/counter
+	 * Be aware this function won't necessarily go to
+	 * the next map, it'll only increase the current
+	 * step.
+	 * Use nextMap( ) for visitor to go to the next
+	 * map.
 	 */
 	public void updateMap( )
 	{

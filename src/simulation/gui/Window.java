@@ -139,17 +139,30 @@ public class Window extends JFrame
 	
 	/**
 	 * Prepare for game rendering
+	 * 
+	 * @param map
+	 * 		The map panel
+	 * @param gbcMap
+	 * 		The constraints for map panel
+	 * @param worldControl
+	 * 		The world control panel
+	 * @param gbcWorldControl
+	 * 		The constrains for world control panel
+	 * @param instruments
+	 * 		The instruments panel
+	 * @param gbcInstruments
+	 * 		The constraints for instruments panel
 	 */
 	public void prepareForGameRendering( JPanel map,
 		GridBagConstraints gbcMap,
-		JPanel biome,
-		GridBagConstraints gbcBiome,
+		JPanel worldControl,
+		GridBagConstraints gbcWorldControl,
 		JPanel instruments,
 		GridBagConstraints gbcInstruments )
 	{
 		// Black background
 		super.setContentPane( new JPanel( ) );
-		super.getContentPane( ).setBackground( Color.YELLOW );
+		super.getContentPane( ).setBackground( Color.BLACK );
 
 		// Set the new layout
 		super.setLayout( new GridBagLayout( ) );
@@ -159,8 +172,8 @@ public class Window extends JFrame
 				super.add( map,
 					gbcMap );
 			// Biome
-				super.add( biome,
-					gbcBiome );
+				super.add( worldControl,
+					gbcWorldControl );
 			// Instruments
 				super.add( instruments,
 					gbcInstruments );
