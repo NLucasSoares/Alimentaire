@@ -57,3 +57,42 @@ Besoin:
 	-Soif
 	-Température requise pour éviter l'hypothermie/l'hyperthermie
 	-
+
+	
+CIRCLE TEST:
+
+				
+				c1 = new Circle( new Point<Double>( 60.0d,
+						10.0d ),
+						20.0d );
+				c1.setColor( Color.RED );
+				c2 = new Circle( new Point<Double>( 50.0d,
+					50.0d ),
+					10.0d );
+				c2.setColor( Color.BLUE );
+				
+				super.addMouseMotionListener( new MouseMotionListener( ) {
+
+					Circle s;
+					
+					public MouseMotionListener init( Circle s )
+					{
+						this.s = s;
+						
+						return this;
+					}
+
+					@Override
+					public void mouseDragged( MouseEvent arg0 )
+					{
+
+					}
+
+					@Override
+					public void mouseMoved( MouseEvent arg0 )
+					{
+						s.setPosition( new Point<Double>( (double)arg0.getX( ),
+							(double)arg0.getY( ) ) );
+					}
+					
+				}.init( c1 ) );

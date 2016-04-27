@@ -34,6 +34,11 @@ public abstract class AbstractAnimal
 	 * The diet of an animal
 	 */
 	private Diet diet;
+	
+	/**
+	 * Maximum group size
+	 */
+	private int maximumDensity;
 
 	/**
 	 * 
@@ -66,9 +71,17 @@ public abstract class AbstractAnimal
 		int size,
 		int agility,
 		Diet diet,
-		Need needDefinition )
+		Need needDefinition,
+		int maximumDensity )
 	{
-		
+		// Save
+		this.name = name;
+		this.weight = weight;
+		this.size = size;
+		this.agility = agility;
+		this.diet = diet;
+		this.needDefinition = needDefinition;
+		this.maximumDensity = maximumDensity;
 	}
 
 	/**
@@ -117,5 +130,13 @@ public abstract class AbstractAnimal
 	public Need getNeedDefinition()
 	{
 		return needDefinition;
+	}
+	
+	/**
+	 * @return the maximum density
+	 */
+	public int getMaximumDensity( )
+	{
+		return this.maximumDensity;
 	}
 }

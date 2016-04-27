@@ -19,20 +19,40 @@ public class Group
 	 * The state of the group
 	 */
 	private GroupState groupState;
-	
-	/**
-	 * The maximum number of fellow in group
-	 */
-	private int maximumFellowNumber;
 
+	/**
+	 * Construct the group
+	 * 
+	 * @param animal
+	 * 		The animal which group is composed of
+	 * @param initialFellowCount
+	 * 		The initial count of group fellows
+	 */
 	public Group( AbstractAnimal animal,
-		int maximumFellowNumber )
+		int initialFellowCount )
 	{
 		// Save
 		this.animal = animal;
-		this.maximumFellowNumber = maximumFellowNumber;
 		
 		// Init
-		this.groupState = new GroupState( this.maximumFellowNumber );
+		this.groupState = new GroupState( initialFellowCount,
+			this.animal );
 	}
+	
+	/**
+	 * @return the animal for this group
+	 */
+	public AbstractAnimal getAnimal( )
+	{
+		return this.animal;
+	}
+	
+	/**
+	 * @return the group state
+	 */
+	public GroupState getState( )
+	{
+		return this.groupState;
+	}
+	
 }

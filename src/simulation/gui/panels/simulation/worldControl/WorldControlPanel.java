@@ -23,7 +23,7 @@ public class WorldControlPanel extends JPanel
 	 * World reference
 	 */
 	private World world;
-	
+
 	/**
 	 * Construct
 	 */
@@ -74,7 +74,7 @@ public class WorldControlPanel extends JPanel
 				super.add( js );
 				
 		// Notify changes
-		super.revalidate( );
+		super.revalidate( );		
 	}
 	
 	/**

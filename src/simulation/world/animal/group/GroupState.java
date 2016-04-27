@@ -2,8 +2,12 @@ package simulation.world.animal.group;
 
 import java.util.ArrayList;
 
+import simulation.math.circle.Circle;
+import simulation.math.point.Point;
 import simulation.world.animal.group.mortalityRate.MortalityRate;
+import simulation.world.animal.species.AbstractAnimal;
 import simulation.world.animal.species.state.AnimalState;
+import simulation.world.environment.plant.PlantGroup;
 
 /**
  * The current state of a group of animals.
@@ -11,17 +15,7 @@ import simulation.world.animal.species.state.AnimalState;
  * @author SOARES Lucas
  */
 public class GroupState
-{
-	/**
-	 * The maximum number of fellows
-	 */
-	private int maximumFellowNumber;
-	
-	/**
-	 * The last count of animals
-	 */
-	private int[ ] lastAnimalCount;
-	
+{	
 	/**
 	 * The mortality rate
 	 */
@@ -31,6 +25,21 @@ public class GroupState
 	 * The state of animals
 	 */
 	private ArrayList<AnimalState> animalState;
+	
+	/**
+	 * Group range diameter
+	 */
+	private int rangeDiameter;
+	
+	/**
+	 * Group position
+	 */
+	private Point<Double> position;
+	
+	/**
+	 * The animal definition
+	 */
+	private AbstractAnimal animal;
 
 	/**
 	 * Construct the group state
@@ -38,39 +47,43 @@ public class GroupState
 	 * @param maximumFellowNumber
 	 * 		The maximum fellow number
 	 */
-	public GroupState( int maximumFellowNumber )
+	public GroupState( int initialFellowCount,
+		AbstractAnimal animal )
 	{
-		this.lastAnimalCount = new int [ simulation.constant.SimulationConstant.LAST_TURNS ];
+		// Save
+		this.animal = animal;
+		
+		// Init
 		this.mortalityRate = new MortalityRate( );
 		this.animalState = new ArrayList<AnimalState>( );
-		this.maximumFellowNumber = maximumFellowNumber;
+		this.position = new Point<Double>( 0.0d,
+			0.0d );
+		
+		// Calculate diameter depending initial fellow count
+		this.updateRangeDiameter( initialFellowCount );
+		
+		// Create initial animals state
+		
 	}
 
 	/**
-	 * @return the maximum fellow number
-	 */
-	public int getMaximumFellowNumber( )
-	{
-		return maximumFellowNumber;
-	}
-
-	/**
-	 * Set the maximum fellow number
+	 * Update range diameter, with a specified
+	 * fellow count
 	 * 
-	 * @param maximumFellowNumber
-	 *		The maximum fellow number
+	 * @param fellowCount
+	 * 		The fellow count
 	 */
-	public void setMaximumFellowNumber( int maximumFellowNumber )
+	private void updateRangeDiameter( int fellowCount )
 	{
-		this.maximumFellowNumber = maximumFellowNumber;
+		this.rangeDiameter = fellowCount * this.animal.getSize( ) * this.animal.getAgility( );		
 	}
-
+	
 	/**
-	 * @return the historical of animal count
+	 * Update range diameter
 	 */
-	public int[ ] getLastAnimalCount( )
+	private void updateRangeDiameter( )
 	{
-		return lastAnimalCount;
+		this.updateRangeDiameter( this.animalState.size( ) );
 	}
 
 	/**
@@ -87,5 +100,50 @@ public class GroupState
 	public ArrayList<AnimalState> getAnimalState( )
 	{
 		return animalState;
+	}
+	
+	/**
+	 * Update the group
+	 */
+	public void update( )
+	{
+		// Update the diameter according to fellow count
+		this.updateRangeDiameter( );
+	}
+	
+	/**
+	 * Create group range (Circle)
+	 * 
+	 * @return the range
+	 */
+	public Circle createGroupRange( )
+	{
+		return new Circle( new Point<Double>( this.position.getX( ),
+				this.position.getY( ) ),
+			(double)this.rangeDiameter / 2.0d );
+	}
+	
+	/**
+	 * Is interesect with a plant group?
+	 * 
+	 * @param plantGroup
+	 * 		The plant group
+	 * 
+	 * @return if intersect exists
+	 */
+	public boolean isInteresect( PlantGroup plantGroup )
+	{
+		return this.createGroupRange( ).intersects( plantGroup.createGroupRange( ) );
+	}
+
+	/**
+	 * Is interesect with an animal group?
+	 * 
+	 * @param animal
+	 * 		The animal group
+	 */
+	public boolean isInteresect( Group animalGroup )
+	{
+		return this.createGroupRange( ).intersects( animalGroup.getState( ).createGroupRange( ) );
 	}
 }

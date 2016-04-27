@@ -14,6 +14,7 @@ import simulation.properties.animal.AnimalProperty;
 import simulation.world.animal.need.Need;
 import simulation.world.animal.species.AbstractAnimal;
 import simulation.world.animal.species.Carnivorous;
+import simulation.world.animal.species.Herbivorous;
 
 /**
  * The class used to load animal existing properties  
@@ -39,7 +40,7 @@ public class LoadingAnimalExisting
 	 * Load animal
 	 * @param database 
 	 */
-	public static AbstractAnimal [ ] load ( Database database ) throws FileNotFoundException,
+	public static AbstractAnimal [ ] load( Database database ) throws FileNotFoundException,
 		IOException
 	{
 		// The loaded animal
@@ -93,6 +94,7 @@ public class LoadingAnimalExisting
 				int sizeProperty = 0;
 				int agilityProperty = 0;
 				String dietProperty = "";
+				int maximumDensity = 0;
 				int needProteinProperty = 0;
 				int needWaterProperty = 0;
 				int needCaloriesProperty = 0;
@@ -103,7 +105,7 @@ public class LoadingAnimalExisting
 					switch ( ap )
 					{
 						case ANIMAL_PROPERTY_NAME:
-							nameProperty = pp[ ap.ordinal( ) ].getValue();
+							nameProperty = pp[ ap.ordinal( ) ].getValue( );
 							break;
 						
 						case ANIMAL_PROPERTY_WEIGHT:
@@ -118,7 +120,11 @@ public class LoadingAnimalExisting
 							agilityProperty = Integer.parseInt( pp[ ap.ordinal( ) ].getValue( ) );
 						
 						case ANIMAL_PROPERTY_DIET:
-							dietProperty = pp[ ap.ordinal( ) ].getValue();
+							dietProperty = pp[ ap.ordinal( ) ].getValue( );
+							break;
+							
+						case ANIMAL_PROPERTY_MAXIMUM_DENSITY:
+							maximumDensity = Integer.parseInt( pp[ ap.ordinal( ) ].getValue( ) );
 							break;
 							
 						case ANIMAL_PROPERTY_NEED_PROTEIN:
@@ -138,7 +144,7 @@ public class LoadingAnimalExisting
 					}
 				}
 				
-				// Create diet
+				// Create animal
 				switch( database.getDiet( dietProperty ).getType( ) )
 				{
 					case DIET_TYPE_CARNIVOROUS:
@@ -148,22 +154,25 @@ public class LoadingAnimalExisting
 							agilityProperty,
 							database.getDiet( dietProperty ),
 							new Need( needProteinProperty,
-								needWaterProperty ) );
+								needWaterProperty ),
+							maximumDensity );
 							
 						break;
 					case DIET_TYPE_HERBIVOROUS:
+						animal[ animalID ] = new Herbivorous( nameProperty,
+							weightProperty,
+							sizeProperty,
+							agilityProperty,
+							database.getDiet( dietProperty ),
+							new Need( needProteinProperty,
+								needWaterProperty ),
+							maximumDensity );
 						break;
 						
 					default:
 						break;
 				}
 			}
-				
-		
-	
-	
-			
-	
 		}
 		catch( java.io.IOException e )
 		{

@@ -25,19 +25,23 @@ public class Carnivorous extends AbstractAnimal
 	 * 		The diet of the animal
 	 * @param needDefinition
 	 * 		The need of the animal
+	 * @param maximumDensity
+	 * 		The maximum fellows in the group
 	 */
 	public Carnivorous( String name,
 		int weight,
 		int size,
 		int agility, 
 		Diet diet,
-		Need needDefinition )
+		Need needDefinition,
+		int maximumDensity )
 	{
 		super( name,
 			weight,
 			size,
 			agility,
 			diet,
-			needDefinition );
+			needDefinition,
+			maximumDensity );
 	}
 }

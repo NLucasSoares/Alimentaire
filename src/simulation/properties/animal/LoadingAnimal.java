@@ -33,9 +33,17 @@ public class LoadingAnimal
 		// Load prodecural animals
 		
 		// Do the sum
-		
+			// Allocate
+				AbstractAnimal[ ] output = new AbstractAnimal[ existingAnimals.length ];
+			// Add
+				int i = 0;
+				for( ; i < existingAnimals.length; i++ )
+				{
+					output[ i ] = existingAnimals[ i ];
+					System.out.println( "Je charge un " + output[ i ].getName( ) );
+				}
 		// OK
-		return existingAnimals;
+		return output;
 	}
 }
 

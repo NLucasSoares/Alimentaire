@@ -86,7 +86,7 @@ public class FileParser
 	{
 		// Line
 		String line;
-		
+
 		// Output
 		ParsedProperty[ ] output = new ParsedProperty[ this.propertiesName.length ];
 		
@@ -97,7 +97,7 @@ public class FileParser
 			{
 				// Get property data
 				ParsedProperty pp = parseLine( line );
-				
+
 				// Reference property
 				output[ pp.getPropertyIndex( ) ] = pp;
 			}

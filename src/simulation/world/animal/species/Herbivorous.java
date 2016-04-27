@@ -25,19 +25,23 @@ public class Herbivorous extends simulation.world.animal.species.AbstractAnimal
 	 * 		The diet of the animal
 	 * @param needDefinition
 	 * 		The need of the animal
+	 * @param maximumDensity
+	 * 		The maximum fellows number
 	 */
 	public Herbivorous( String name,
 		int weight,
 		int size,
 		int agility,
 		Diet diet,
-		Need needDefinition )
+		Need needDefinition,
+		int maximumDensity )
 	{
 		super( name,
 			weight,
 			size,
 			agility,
 			diet,
-			needDefinition );
+			needDefinition,
+			maximumDensity );
 	}
 }

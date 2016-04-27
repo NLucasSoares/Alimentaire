@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 
 import simulation.Database;
 import simulation.ViewState;
+import simulation.constant.SimulationConstant;
 import simulation.gui.panels.simulation.AlphaEvolution;
 import simulation.math.hexagon.HexagonEdge;
 import simulation.math.point.Point;
@@ -22,7 +23,7 @@ import simulation.world.Configuration;
 import simulation.world.environment.Map;
 import simulation.world.environment.biome.Biome;
 import simulation.world.environment.nameGenerator.MapNameGenerator;
-import simulation.world.plant.PlantGroup;
+import simulation.world.environment.plant.PlantGroup;
 
 /**
  * A hexagonal group of map, using axial
@@ -532,10 +533,29 @@ public class HexagonalMap
 	}
 	
 	/**
+	 * Give life, spawn random animal groups on each map
+	 */
+	public void giveLife( Database database )
+	{
+		for( UnitHexagonalMap uhm : this.hexagons )
+		{
+			// Determine how many group to spawn
+			int groupCount = (int)( SimulationConstant.MINIMUM_GROUP_COUNT_MAP_START + ( Math.random( ) * (double)( SimulationConstant.MAXIMUM_GROUP_COUNT_MAP_START - SimulationConstant.MINIMUM_GROUP_COUNT_MAP_START ) ) );
+			
+			for( int i = 0; i < groupCount; i++ )
+			{
+				// Create properties for this random group
+				//database
+			//uhm.getMap( ).getState( ).addGroup(  );
+			}
+		}
+	}
+	
+	/**
 	 * Update the maps
 	 */
 	public void update( )
-	{		
+	{
 		// Update map state
 		for( UnitHexagonalMap uhm : this.hexagons )
 			uhm.getMap( ).getState( ).update( );

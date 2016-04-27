@@ -1,5 +1,6 @@
-package simulation.world.plant;
+package simulation.world.environment.plant;
 
+import simulation.math.circle.Circle;
 import simulation.math.point.Point;
 import simulation.world.environment.biome.resource.NoMoreResourceException;
 import simulation.world.environment.biome.resource.state.ResourceState;
@@ -141,5 +142,17 @@ public class PlantGroup
 		
 		// Calculate diameter
 		this.diameter = this.calculateDiameter( );
+	}
+	
+	/**
+	 * Create group range (circle)
+	 * 
+	 * @return the range
+	 */
+	public Circle createGroupRange( )
+	{
+		return new Circle( new Point<Double>( (double)this.position.getX( ),
+				(double)this.position.getY( ) ),
+			(double)this.diameter / 2.0d );
 	}
 }

@@ -9,10 +9,11 @@ import simulation.math.hexagon.Hexagon;
 import simulation.math.point.Point;
 import simulation.math.probability.Experience;
 import simulation.world.animal.group.Group;
+import simulation.world.animal.species.AbstractAnimal;
 import simulation.world.environment.biome.resource.field.FieldResource;
 import simulation.world.environment.biome.resource.state.ResourceState;
 import simulation.world.environment.decomposer.Decomposer;
-import simulation.world.plant.PlantGroup;
+import simulation.world.environment.plant.PlantGroup;
 import simulation.world.plant.need.Need;
 
 /**
@@ -133,6 +134,28 @@ public class MapState
 							1,
 							1 ) ) ); // HAVE TO SEE FOR NEED DETAILS
 				}
+				
+		// Update animal groups
+		for( Iterator<Group> iterator = this.animalGroup.iterator( ); iterator.hasNext( ); )
+		{
+			// Get group
+			Group group = iterator.next( );
+			
+			// Update
+			group.getState( ).update( );
+		}
+	}
+	
+	/**
+	 * Add a group to the map
+	 * 
+	 * @param group
+	 * 		The group to add
+	 */
+	public void addGroup( Group group )
+	{
+		// Add the group
+		this.animalGroup.add( group );
 	}
 	
 	

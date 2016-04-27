@@ -3,15 +3,17 @@ package simulation;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 
 import simulation.properties.animal.LoadingAnimal;
 import simulation.properties.biomes.LoadingBiomes;
 import simulation.properties.climates.LoadingClimates;
 import simulation.properties.diets.LoadingDiets;
-import simulation.properties.resources.LoadingResources;
 import simulation.properties.weathers.LoadingWeather;
 import simulation.world.animal.diet.Diet;
 import simulation.world.animal.species.AbstractAnimal;
+import simulation.world.animal.species.Carnivorous;
+import simulation.world.animal.species.Herbivorous;
 import simulation.world.environment.biome.Biome;
 import simulation.world.environment.biome.resource.field.FieldResource;
 import simulation.world.environment.climate.Climate;
@@ -35,11 +37,6 @@ public class Database {
 	 * Animals diet
 	 */
 	private Diet[ ] diets;
-	
-	/**
-	 * Resources
-	 */
-	private FieldResource[ ] resources;
 
 	/**
 	 * Biomes
@@ -69,10 +66,7 @@ public class Database {
 	 */
 	public Database( ) throws FileNotFoundException,
 		IOException
-	{
-		// Load resources
-		this.resources = LoadingResources.load( this );
-		
+	{		
 		// Load diets
 		this.diets = LoadingDiets.load( this );
 		
@@ -221,5 +215,57 @@ public class Database {
 		
 		// Can't find
 		return null;//throw new InvalidParameterException( );
+	}
+	
+	/**
+	 * @return the animals definition
+	 */
+	public AbstractAnimal[ ] getAnimals( )
+	{
+		return this.animals;
+	}
+	
+	/**
+	 * @return the herbivirous animals
+	 */
+	public Herbivorous[ ] getHerbivorousAnimals( )
+	{
+		// Output buffer
+		ArrayList<Herbivorous> outputBuffer = new ArrayList<Herbivorous>( );
+		
+		// Add herbivorous
+		for( AbstractAnimal a : this.animals )
+			if( a instanceof Herbivorous )
+				outputBuffer.add( (Herbivorous)a );
+		
+		// Return result
+			// Allocate
+				Herbivorous output[ ] = new Herbivorous[ outputBuffer.size( ) ];
+			// Convert to array
+				outputBuffer.toArray( output );
+			// Return
+				return output;
+	}
+	
+	/**
+	 * @return the carnivorous animals
+	 */
+	public Carnivorous[ ] getCarnivorousAnimals( )
+	{
+		// Output buffer
+		ArrayList<Carnivorous> outputBuffer = new ArrayList<Carnivorous>( );
+		
+		// Add herbivorous
+		for( AbstractAnimal a : this.animals )
+			if( a instanceof Carnivorous )
+				outputBuffer.add( (Carnivorous)a );
+		
+		// Return result
+			// Allocate
+				Carnivorous output[ ] = new Carnivorous[ outputBuffer.size( ) ];
+			// Convert to array
+				outputBuffer.toArray( output );
+			// Return
+				return output;
 	}
 }
