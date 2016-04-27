@@ -2,6 +2,9 @@ package simulation.gui.panels.simulation.worldControl;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.util.Hashtable;
 
 import javax.swing.JLabel;
@@ -9,7 +12,9 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 
 import simulation.ViewState;
+import simulation.gui.object.Circle;
 import simulation.gui.panels.simulation.worldControl.action.SliderFrameDelayAction;
+import simulation.math.point.Point;
 import simulation.world.World;
 
 public class WorldControlPanel extends JPanel
@@ -74,7 +79,7 @@ public class WorldControlPanel extends JPanel
 				super.add( js );
 				
 		// Notify changes
-		super.revalidate( );		
+		super.revalidate( );
 	}
 	
 	/**

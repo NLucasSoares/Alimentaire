@@ -10,6 +10,7 @@ import simulation.math.point.Point;
  * Circle intersects/contains are from
  * http://stackoverflow.com/questions/8367512/algorithm-to-detect-if-a-circles-intersect-with-any-other-circle-in-the-same-pla
  * ("XNA / C# solution")
+ * 
  * @author SOARES Lucas
  */
 public class Operation

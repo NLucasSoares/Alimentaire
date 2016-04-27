@@ -540,7 +540,8 @@ public class HexagonalMap
 		for( UnitHexagonalMap uhm : this.hexagons )
 		{
 			// Determine how many group to spawn
-			int groupCount = (int)( SimulationConstant.MINIMUM_GROUP_COUNT_MAP_START + ( Math.random( ) * (double)( SimulationConstant.MAXIMUM_GROUP_COUNT_MAP_START - SimulationConstant.MINIMUM_GROUP_COUNT_MAP_START ) ) );
+			int groupCount = (int)simulation.math.Operation.random( SimulationConstant.MINIMUM_GROUP_COUNT_MAP_START,
+				SimulationConstant.MAXIMUM_GROUP_COUNT_MAP_START );
 			
 			for( int i = 0; i < groupCount; i++ )
 			{
