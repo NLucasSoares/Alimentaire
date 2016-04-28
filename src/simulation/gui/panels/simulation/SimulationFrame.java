@@ -4,21 +4,16 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.util.Hashtable;
 import java.util.concurrent.Semaphore;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 
-import simulation.ViewState;
 import simulation.gui.Window;
 import simulation.gui.panels.simulation.map.action.MouseDragMapAction;
 import simulation.gui.panels.simulation.map.action.MouseMapSelectAction;
 import simulation.gui.panels.simulation.map.action.MouseViewResetAction;
 import simulation.gui.panels.simulation.map.action.MouseWheelAction;
 import simulation.gui.panels.simulation.worldControl.WorldControlPanel;
-import simulation.gui.panels.simulation.worldControl.action.SliderFrameDelayAction;
 import simulation.gui.panels.simulation.map.MapPanel;
 import simulation.world.World;
 

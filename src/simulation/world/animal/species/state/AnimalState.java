@@ -1,5 +1,10 @@
 package simulation.world.animal.species.state;
 
+import java.awt.Shape;
+import java.awt.geom.Ellipse2D;
+
+import simulation.ViewState;
+import simulation.math.angle.AngleMovement;
 import simulation.math.point.Point;
 import simulation.world.animal.group.Group;
 import simulation.world.animal.need.state.NeedState;
@@ -23,14 +28,19 @@ public class AnimalState {
 	private NeedState needState;
 	
 	/**
-	 * Current position of this animal on the world grid.
+	 * Current position of this animal on the map
 	 */
-	private Point<Integer> position;
+	private AngleMovement position;
 	
 	/**
 	 * The birth date (in turns)
 	 */
 	private int birthDate;
+	
+	/**
+	 * The painting shape
+	 */
+	private Shape shape;
 
 	/**
 	 * Construct the animal state
@@ -44,6 +54,7 @@ public class AnimalState {
 	 * 
 	 */
 	public AnimalState( Group groupReference,
+		Point<Double> initialPosition,
 		AbstractAnimal animal,
 		int currentTurn )
 	{
@@ -52,8 +63,51 @@ public class AnimalState {
 		
 		// Init
 		this.needState = new NeedState( animal.getNeedDefinition( ) );
-		this.position = new Point<Integer>( 0,
-			0 );
+		this.position = new AngleMovement( 0.1,
+			initialPosition,
+			false );
 		this.birthDate = currentTurn;
+	}
+	
+	/**
+	 * @return the position
+	 */
+	public Point<Double> getPosition( )
+	{
+		return this.position.getPosition( );
+	}
+	
+	/**
+	 * @return the painting shape
+	 */
+	public Shape getShape( )
+	{
+		return this.shape;
+	}
+	
+	/**
+	 * @return the birth date
+	 */
+	public int getBirthDate( )
+	{
+		return this.birthDate;
+	}
+	
+	/**
+	 * Update view
+	 */
+	public void updateView( ViewState viewState,
+		Shape groupShape )
+	{
+		// Calculate
+		double ellipseSize = (double)viewState.getZoomLevel( );
+		double x = this.getPosition( ).getX( ) * viewState.getZoomLevel( ) + ((Ellipse2D.Double)groupShape).x - ( ellipseSize / 2.0d );
+		double y = this.getPosition( ).getY( ) * viewState.getZoomLevel( ) + ((Ellipse2D.Double)groupShape).y - ( ellipseSize / 2.0d );
+		
+		// Create shape
+		this.shape = new Ellipse2D.Double( x,
+			y,
+			ellipseSize,
+			ellipseSize );
 	}
 }

@@ -9,7 +9,6 @@ import simulation.math.hexagon.Hexagon;
 import simulation.math.point.Point;
 import simulation.math.probability.Experience;
 import simulation.world.animal.group.Group;
-import simulation.world.animal.species.AbstractAnimal;
 import simulation.world.environment.biome.resource.field.FieldResource;
 import simulation.world.environment.biome.resource.state.ResourceState;
 import simulation.world.environment.decomposer.Decomposer;
@@ -75,12 +74,21 @@ public class MapState
 	}
 	
 	/**
-	 * @return the plant group
+	 * @return an iterator on the plant group
 	 */
 	public Iterator<PlantGroup> getPlantGroup( )
 	{
 		return this.plantGroup.iterator( );
 	}
+	
+	/**
+	 * @return an iterator on the animal group
+	 */
+	public Iterator<Group> getAnimalGroup( )
+	{
+		return this.animalGroup.iterator( );
+	}
+	
 	/**
 	 * Update the state
 	 */
@@ -142,7 +150,7 @@ public class MapState
 			Group group = iterator.next( );
 			
 			// Update
-			group.getState( ).update( );
+			group.update( );
 		}
 	}
 	

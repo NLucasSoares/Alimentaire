@@ -15,10 +15,8 @@ import simulation.world.animal.species.AbstractAnimal;
 import simulation.world.animal.species.Carnivorous;
 import simulation.world.animal.species.Herbivorous;
 import simulation.world.environment.biome.Biome;
-import simulation.world.environment.biome.resource.field.FieldResource;
 import simulation.world.environment.climate.Climate;
 import simulation.world.environment.climate.weather.Weather;
-import simulation.world.environment.disaster.Disaster;
 
 /**
  * The database of the simulation, which
@@ -56,7 +54,7 @@ public class Database {
 	/**
 	 * Disasters
 	 */
-	private Disaster[ ] disasters;
+	//private Disaster[ ] disasters;
 	
 	/**
 	 * Construct the database
@@ -223,6 +221,15 @@ public class Database {
 	public AbstractAnimal[ ] getAnimals( )
 	{
 		return this.animals;
+	}
+	
+	/**
+	 * @return a random animal
+	 */
+	public AbstractAnimal getRandomAnimal( )
+	{
+		return this.animals[ (int)simulation.math.Operation.random( 0,
+			this.animals.length ) ];
 	}
 	
 	/**

@@ -27,7 +27,7 @@ public class Map
 	/**
 	 * The 6 edges maps
 	 */
-	private Map[ ] edgeMap = new Map[ HexagonEdge.values().length ];
+	private Map[ ] edgeMap = new Map[ HexagonEdge.values( ).length ];
 	
 	/**
 	 * The map's biome

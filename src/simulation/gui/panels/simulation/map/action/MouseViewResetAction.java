@@ -62,7 +62,7 @@ public class MouseViewResetAction extends MouseAction implements MouseListener
 				super.getSemaphore( ).acquire( );
 				
 				// Update view
-				super.getWorld( ).constructWorldMap( );
+				super.getWorld( ).updateWorldMap( );
 			}
 			catch( InterruptedException e1 )
 			{

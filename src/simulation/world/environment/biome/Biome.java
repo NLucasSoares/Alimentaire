@@ -3,8 +3,6 @@ package simulation.world.environment.biome;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
 import art.Art;
 import simulation.world.environment.biome.nearBiome.NearBiomes;
 import simulation.world.environment.climate.Climate;

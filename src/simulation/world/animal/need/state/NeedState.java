@@ -13,7 +13,7 @@ public class NeedState
 	/**
 	 * Callback to the defined needs of the animal
 	 */
-	private Need need;
+	private Need needDefinition;
 	
 	/**
 	 * Current amount in protein
@@ -31,10 +31,10 @@ public class NeedState
 	 * @param need
 	 * 		Callback to defined needs of animal
 	 */
-	public NeedState( Need need )
+	public NeedState( Need needDefinition )
 	{
 		// Save
-		this.need = need;
+		this.needDefinition = needDefinition;
 		
 		// Init
 		this.protein = 0;

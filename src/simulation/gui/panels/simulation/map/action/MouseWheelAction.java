@@ -49,7 +49,7 @@ public class MouseWheelAction extends MouseAction implements MouseWheelListener
 			super.getSemaphore( ).acquire( );
 			
 			// Update view
-			super.getWorld( ).constructWorldMap( );
+			super.getWorld( ).updateWorldMap( );
 		}
 		catch( InterruptedException e1 )
 		{

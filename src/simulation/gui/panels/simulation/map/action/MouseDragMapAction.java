@@ -109,7 +109,7 @@ public class MouseDragMapAction extends MouseAction implements MouseListener, Mo
 					super.getSemaphore( ).acquire( );
 					
 					// Update
-					super.getWorld( ).constructWorldMap( );
+					super.getWorld( ).updateWorldMap( );
 				}
 				catch( InterruptedException e1 )
 				{

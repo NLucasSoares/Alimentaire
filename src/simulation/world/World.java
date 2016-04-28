@@ -85,10 +85,8 @@ public class World
 		this.simulationFrame = new SimulationFrame( window,
 			this );
 		
-		// Create the hexagons
-		this.hexagonalMap.createHexagons( this.simulationFrame.getMapContainer( ).getWidth( ),
-			this.simulationFrame.getMapContainer( ).getHeight( ),
-			this.state.getViewState( ) );
+		// Update view
+		this.updateWorldMap( );
 		
 		// Activate painting
 		this.simulationFrame.activatePainting( );
@@ -139,6 +137,9 @@ public class World
 				
 				// Update the maps
 				this.hexagonalMap.update( );
+				
+				// Update view of the alive entities
+				this.hexagonalMap.updateMovingEntitiesView( this.getState( ).getViewState( ) );
 			}
 			catch( InterruptedException e )
 			{
@@ -158,15 +159,27 @@ public class World
 	/**
 	 * Construct the world map
 	 */
-	public void constructWorldMap( )
+	public void updateWorldMap( )
 	{
+		// Recreate hexagons
 		this.hexagonalMap.createHexagons( this.simulationFrame.getMapContainer( ).getWidth( ),
 			this.simulationFrame.getMapContainer( ).getHeight( ),
 			this.state.getViewState( ) );
+		
+		// Update view state
+		this.hexagonalMap.updateMovingEntitiesView( this.state.getViewState( ) );
 	}
 	
 	/**
 	 * Draw the map
+	 * 
+	 * @param g
+	 * 		The graphics place to draw
+	 * @param panel
+	 * 		The panel where to draw
+	 * @param selectedMapAlpha
+	 * 		The current state of selected
+	 * map alpha
 	 */
 	public void drawWorld( Graphics g,
 		JPanel panel,

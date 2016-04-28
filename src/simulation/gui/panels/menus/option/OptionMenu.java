@@ -5,8 +5,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
-import javax.swing.JSlider;
-
 import simulation.gui.panels.Panel;
 import simulation.gui.panels.menus.main.ReturnCode;
 import simulation.gui.panels.menus.option.action.MouseAction;

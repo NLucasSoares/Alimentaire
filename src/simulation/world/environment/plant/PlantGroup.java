@@ -1,5 +1,10 @@
 package simulation.world.environment.plant;
 
+import java.awt.Shape;
+import java.awt.geom.Ellipse2D;
+
+import simulation.ViewState;
+import simulation.gui.object.Hexagon;
 import simulation.math.circle.Circle;
 import simulation.math.point.Point;
 import simulation.world.environment.biome.resource.NoMoreResourceException;
@@ -48,6 +53,11 @@ public class PlantGroup
 	 * Position
 	 */
 	private Point<Integer> position;
+	
+	/**
+	 * Painting shape
+	 */
+	private Shape shape;
 
 	/**
 	 * Construct the plant group
@@ -76,7 +86,7 @@ public class PlantGroup
 	private int calculateDiameter( )
 	{
 		// Result
-		int result = ( this.leaves / LEAVES_BY_STAGE ) + 1;
+		int result = ( ( this.leaves / LEAVES_BY_STAGE ) / 2 ) + 1;
 		
 		// Return
 		return ( result >= MAXIMUM_STAGES ) ? MAXIMUM_STAGES : result;
@@ -115,6 +125,14 @@ public class PlantGroup
 	}
 	
 	/**
+	 * @return the painting shape
+	 */
+	public Shape getShape( )
+	{
+		return this.shape;
+	}
+	
+	/**
 	 * Update the plant group
 	 * 
 	 * @param resourceState
@@ -142,6 +160,30 @@ public class PlantGroup
 		
 		// Calculate diameter
 		this.diameter = this.calculateDiameter( );
+	}
+	
+	/**
+	 * Update view point
+	 * 
+	 * @param viewState
+	 * 		The current viewstate
+	 * @param hexagon
+	 * 		The hexagon representing the map where
+	 * the group is currently on
+	 */
+	public void updateView( ViewState viewState,
+		Hexagon hexagon )
+	{
+		// Calculate
+		double ellipseSize = ( ( (double)this.diameter ) * (double)viewState.getZoomLevel( ) );
+		double x = ( ( (double)this.getPosition( ).getX( ) * viewState.getZoomLevel( ) ) + hexagon.getPosition( ).getX( ) ) - ( ellipseSize / 2.0d );
+		double y = ( ( (double)this.getPosition( ).getY( ) * viewState.getZoomLevel( ) ) + hexagon.getPosition( ).getY( ) ) - ( ellipseSize / 2.0d );
+	
+		// Create the shape
+		this.shape = new Ellipse2D.Double( x,
+			y,
+			ellipseSize,
+			ellipseSize );
 	}
 	
 	/**

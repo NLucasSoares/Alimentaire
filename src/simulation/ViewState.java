@@ -1,5 +1,6 @@
 package simulation;
 
+import simulation.constant.SimulationConstant;
 import simulation.math.point.Point;
 import simulation.world.environment.Map;
 
@@ -14,11 +15,6 @@ public class ViewState
 	 * Default zoom level
 	 */
 	public static final int DEFAULT_VIEW_STATE_ZOOM = 5;
-	
-	/**
-	 * Default delay between frames
-	 */
-	public static final int DEFAULT_DELAY_BETWEEN_FRAMES = 100;
 	
 	/**
 	 * Minimum delay between frames
@@ -68,7 +64,7 @@ public class ViewState
 		this.selectedMap = centerMap;
 
 		// Init
-		this.delayBetweenFrames = ViewState.DEFAULT_DELAY_BETWEEN_FRAMES;
+		this.delayBetweenFrames = SimulationConstant.DEFAULT_DELAY_BETWEEN_FRAMES;
 		this.resetCamera( );
 	}
 	

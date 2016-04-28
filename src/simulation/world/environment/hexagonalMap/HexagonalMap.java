@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Shape;
-import java.awt.geom.Ellipse2D;
 import java.security.InvalidParameterException;
 import java.util.Iterator;
 
@@ -20,6 +19,10 @@ import simulation.math.point.Point;
 import simulation.math.point.PointDouble;
 import simulation.math.rectangle.Rectangle;
 import simulation.world.Configuration;
+import simulation.world.animal.group.Group;
+import simulation.world.animal.species.AbstractAnimal;
+import simulation.world.animal.species.Herbivorous;
+import simulation.world.animal.species.state.AnimalState;
 import simulation.world.environment.Map;
 import simulation.world.environment.biome.Biome;
 import simulation.world.environment.nameGenerator.MapNameGenerator;
@@ -117,6 +120,9 @@ public class HexagonalMap
 		this.createHexagons( width,
 			height,
 			new ViewState( this.centerMap ) );
+		
+		// Give life
+		this.giveLife( database );
 	}
 	
 	/**
@@ -428,6 +434,30 @@ public class HexagonalMap
 	}
 	
 	/**
+	 * Update view point
+	 * 
+	 * @param viewState
+	 * 		The current viewstate
+	 */
+	public void updateMovingEntitiesView( ViewState viewState )
+	{
+		// Update view point
+		for( UnitHexagonalMap uhm : this.hexagons )
+		{
+			// Plant
+			for( Iterator<PlantGroup> it = uhm.getMap( ).getState( ).getPlantGroup( ); it.hasNext( ); )
+				it.next( ).updateView( viewState,
+					uhm );
+			
+			// Animals
+			for( Iterator<Group> it = uhm.getMap( ).getState( ).getAnimalGroup( ); it.hasNext( ); )
+				it.next( ).updateView( viewState,
+					uhm );
+		}
+		
+	}
+	
+	/**
 	 * Blit the hexagonal map according to
 	 * the ViewState
 	 * 
@@ -505,27 +535,62 @@ public class HexagonalMap
 					// Get plant group
 					PlantGroup pg = it.next( );
 					
-					// Construct circle
+					// Print circle
 					if( pg.getDiameter( ) > 0 )
 					{
-						// Calculate
-							double ellipseSize = ( ( (double)pg.getDiameter( ) / 2.0d ) * (double)viewState.getZoomLevel( ) );
-							double x = ( ( (double)pg.getPosition( ).getX( ) * viewState.getZoomLevel( ) ) + this.hexagons[ i ].getPosition( ).getX( ) ) - ( ellipseSize / 2.0d );
-							double y = ( ( (double)pg.getPosition( ).getY( ) * viewState.getZoomLevel( ) ) + this.hexagons[ i ].getPosition( ).getY( ) ) - ( ellipseSize / 2.0d );
-						// Create
-							Shape ellipse = new Ellipse2D.Double( x,
-								y,
-								ellipseSize,
-								ellipseSize );
+						// Get ellipse
+						Shape ellipse = pg.getShape( );
+						
 						// Fill
-							g.setColor( new Color( 0x00,
-								0xFF,
-								0x00,
-								0x2F ) );
-							((Graphics2D)g).fill( ellipse );							
+							// Set color
+								g.setColor( SimulationConstant.PLANT_COLOR );
+							// Fill
+								((Graphics2D)g).fill( ellipse );			
+						
 						// Draw border
-							g.setColor( Color.WHITE );
-							((Graphics2D)g).draw( ellipse );
+							// Set color
+								g.setColor( Color.WHITE );
+							// Draw
+								((Graphics2D)g).draw( ellipse );
+					}
+				}
+				
+				// Animal group
+				for( Iterator<Group> it = this.hexagons[ i ].getMap( ).getState( ).getAnimalGroup( ); it.hasNext( ); )
+				{
+					// Get animal group
+					Group group = it.next( );
+					
+					// Construct circle
+					if( group.getRangeDiameter( ) > 0 )
+					{
+						// Get ellipse
+						Shape ellipse = group.getShape( );
+						
+						// Fill
+							// Set color
+								g.setColor( group.getAnimal( ) instanceof Herbivorous ?
+									SimulationConstant.HERBIVOROUS_ANIMAL_COLOR
+									: SimulationConstant.CARNIVOROUS_ANIMAL_COLOR );
+							// Fill
+								((Graphics2D)g).fill( ellipse );
+
+						// Draw border
+							// Set color
+								g.setColor( Color.WHITE );
+							// Draw
+								((Graphics2D)g).draw( ellipse );
+								
+						// Paint animals
+						for( Iterator<AnimalState> ait = group.getAnimalState( ).iterator( ); ait.hasNext( ); )
+						{
+							// Get state
+							Shape animalEllipse = ait.next( ).getShape( );
+							
+							// Fill
+							g.setColor( Color.YELLOW );
+							((Graphics2D)g).fill( animalEllipse );
+						}
 					}
 				}
 			}
@@ -534,20 +599,33 @@ public class HexagonalMap
 	
 	/**
 	 * Give life, spawn random animal groups on each map
+	 * 
+	 * @param database
+	 * 		The database
 	 */
 	public void giveLife( Database database )
 	{
+		// For each map
 		for( UnitHexagonalMap uhm : this.hexagons )
 		{
 			// Determine how many group to spawn
 			int groupCount = (int)simulation.math.Operation.random( SimulationConstant.MINIMUM_GROUP_COUNT_MAP_START,
 				SimulationConstant.MAXIMUM_GROUP_COUNT_MAP_START );
 			
+			// Populate
 			for( int i = 0; i < groupCount; i++ )
 			{
-				// Create properties for this random group
-				//database
-			//uhm.getMap( ).getState( ).addGroup(  );
+				// Choose animal
+				AbstractAnimal animal = database.getRandomAnimal( );
+				
+				// Create the group
+				Group g = new Group( database.getRandomAnimal( ),
+					(int)simulation.math.Operation.random( (double)SimulationConstant.INITIAL_SPAWN_ANIMALS_BY_GROUP_MINIMUM,
+						Math.max( (double)SimulationConstant.INITIAL_SPAWN_ANIMALS_BY_GROUP_MAXIMUM + 1.0d,
+							(double)animal.getMaximumDensity( ) ) ) );
+				
+				// Add the group
+				uhm.getMap( ).getState( ).addGroup( g );
 			}
 		}
 	}

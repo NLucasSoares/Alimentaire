@@ -38,10 +38,7 @@ public class LoadingAnimal
 			// Add
 				int i = 0;
 				for( ; i < existingAnimals.length; i++ )
-				{
 					output[ i ] = existingAnimals[ i ];
-					System.out.println( "Je charge un " + output[ i ].getName( ) );
-				}
 		// OK
 		return output;
 	}

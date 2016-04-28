@@ -5,7 +5,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import simulation.gui.panels.menus.main.MainMenu;
-import simulation.gui.panels.menus.option.OptionMenu;
 
 public class MouseAction implements MouseListener, MouseMotionListener
 {
