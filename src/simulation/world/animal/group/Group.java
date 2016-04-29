@@ -13,8 +13,13 @@ import simulation.math.circle.Circle;
 import simulation.math.point.Point;
 import simulation.world.animal.group.mortalityRate.MortalityRate;
 import simulation.world.animal.species.AbstractAnimal;
+import simulation.world.animal.species.Carnivorous;
+import simulation.world.animal.species.Herbivorous;
 import simulation.world.animal.species.state.AnimalState;
+import simulation.world.animal.species.state.CarnivorousState;
+import simulation.world.animal.species.state.HerbivorousState;
 import simulation.world.environment.Map;
+import simulation.world.environment.MapState;
 import simulation.world.environment.plant.PlantGroup;
 
 /**
@@ -23,7 +28,7 @@ import simulation.world.environment.plant.PlantGroup;
  * 
  * @author SOARES Lucas
  */
-public class Group
+public abstract class Group
 {
 	/**
 	 * The description of animals in the group
@@ -44,6 +49,11 @@ public class Group
 	 * Group range diameter
 	 */
 	private int rangeDiameter;
+	
+	/**
+	 * Group range circle
+	 */
+	private Circle groupRange;
 	
 	/**
 	 * Group position
@@ -89,8 +99,7 @@ public class Group
 		
 		// Init position
 		this.position = new AngleMovement( this.calculateGroupSpeed( ),
-			initialPosition,
-			false );
+			initialPosition );
 	}
 	
 	/**
@@ -154,10 +163,21 @@ public class Group
 				position.getY( ) ) );
 			
 			// Add
-			this.animals.add( new AnimalState( this,
-				position,
-				this.animalDefinition,
-				0 ) );
+				// Declaration
+					AnimalState animalState = null;
+				// Create
+					if( this.animalDefinition instanceof Carnivorous )
+						animalState = new CarnivorousState( this,
+							position,
+							this.animalDefinition,
+							0 );
+					else if( this.animalDefinition instanceof Herbivorous )
+						animalState = new HerbivorousState( this,
+							position,
+							this.animalDefinition,
+							0 );
+				// Add
+					this.animals.add( animalState );
 		}
 	}
 	
@@ -230,22 +250,41 @@ public class Group
 	}
 	
 	/**
-	 * Update the group
+	 * @return the group range
 	 */
-	public void update( )
+	public Circle getGroupRange( )
+	{
+		return this.groupRange;
+	}
+	
+	/**
+	 * Update the group
+	 * 
+	 * @param state
+	 * 		The current map state
+	 */
+	public void update( MapState state )
 	{
 		// Update the diameter according to fellow count
 		this.updateRangeDiameter( );
+		
+		// Create group range
+		this.createGroupRange( );
+		
+		// Update position
+		this.position.update( );
+		
+		// Update fellows
+		for( Iterator<AnimalState> it = this.animals.iterator( ); it.hasNext( ); )
+			it.next( ).update( );
 	}
 	
 	/**
 	 * Create group range (Circle)
-	 * 
-	 * @return the range
 	 */
-	public Circle createGroupRange( )
+	private void createGroupRange( )
 	{
-		return new Circle( new Point<Double>( this.position.getPosition( ).getX( ),
+		this.groupRange = new Circle( new Point<Double>( this.position.getPosition( ).getX( ),
 				this.position.getPosition( ).getY( ) ),
 			(double)this.rangeDiameter / 2.0d );
 	}
@@ -257,7 +296,7 @@ public class Group
 	 */
 	public double calculateGroupSpeed( )
 	{
-		return 0.01d;
+		return 0.05d;
 	}
 	
 	/**
@@ -270,7 +309,7 @@ public class Group
 	 */
 	public boolean isInteresect( PlantGroup plantGroup )
 	{
-		return this.createGroupRange( ).intersects( plantGroup.createGroupRange( ) );
+		return this.groupRange.intersects( plantGroup.getGroupRange( ) );
 	}
 
 	/**
@@ -281,7 +320,7 @@ public class Group
 	 */
 	public boolean isInteresect( Group animalGroup )
 	{
-		return this.createGroupRange( ).intersects( animalGroup.createGroupRange( ) );
+		return this.groupRange.intersects( animalGroup.getGroupRange( ) );
 	}
 	
 	/**
@@ -311,6 +350,42 @@ public class Group
 		for( Iterator<AnimalState> it = this.animals.iterator( ); it.hasNext( ); )
 			it.next( ).updateView( viewState,
 				this.shape );
+	}
+	
+	/**
+	 * Start moving
+	 */
+	public void startMoving( )
+	{
+		this.position.startMoving( );
+	}
+	
+	/**
+	 * Stop moving
+	 */
+	public void stopMoving( )
+	{
+		this.position.stopMoving( );
+	}
+	
+	/**
+	 * Aim a plant group
+	 * 
+	 * @param p
+	 * 		The plant group to aim
+	 */
+	public void aimPlantGroup( PlantGroup p )
+	{
+		this.position.aimPosition( new Point<Double>( (double)p.getPosition( ).getX( ),
+			(double)p.getPosition( ).getY( ) ) );
+	}
+	
+	/**
+	 * Aim an animal group
+	 */
+	public void aimAnimalGroup( Group g )
+	{
+		this.position.aimPosition( g.getPosition( ) );
 	}
 	
 }

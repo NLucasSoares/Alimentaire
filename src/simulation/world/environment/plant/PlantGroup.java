@@ -7,7 +7,6 @@ import simulation.ViewState;
 import simulation.gui.object.Hexagon;
 import simulation.math.circle.Circle;
 import simulation.math.point.Point;
-import simulation.world.environment.biome.resource.NoMoreResourceException;
 import simulation.world.environment.biome.resource.state.ResourceState;
 import simulation.world.plant.need.Need;
 import simulation.world.plant.need.state.NeedState;
@@ -52,7 +51,12 @@ public class PlantGroup
 	/**
 	 * Position
 	 */
-	private Point<Integer> position;
+	private Point<Double> position;
+	
+	/**
+	 * Group range
+	 */
+	private Circle groupRange;
 	
 	/**
 	 * Painting shape
@@ -62,7 +66,7 @@ public class PlantGroup
 	/**
 	 * Construct the plant group
 	 */
-	public PlantGroup( Point<Integer> position,
+	public PlantGroup( Point<Double> position,
 		Need needsDefinition )
 	{
 		// Init
@@ -76,6 +80,9 @@ public class PlantGroup
 		// Calculate
 			// Diameter
 				this.diameter = this.calculateDiameter( );
+				
+		// Create group range
+		this.createGroupRange( );
 	}
 	
 	/**
@@ -119,7 +126,7 @@ public class PlantGroup
 	/**
 	 * @return the position
 	 */
-	public Point<Integer> getPosition( )
+	public Point<Double> getPosition( )
 	{
 		return position;
 	}
@@ -133,6 +140,14 @@ public class PlantGroup
 	}
 	
 	/**
+	 * @return the group range
+	 */
+	public Circle getGroupRange( )
+	{
+		return this.groupRange;
+	}
+	
+	/**
 	 * Update the plant group
 	 * 
 	 * @param resourceState
@@ -143,23 +158,27 @@ public class PlantGroup
 		// What to be eaten (nitrogen)
 		double nitrogenToBeConsume = this.needsDefinition.getNitrogen( ) / ( ( (double)( MAXIMUM_STAGES * LEAVES_BY_STAGE ) - (double)this.leaves ) + 1.0d );
 		
+		// TODO
 		// Consume
-		try
-		{
+		//try
+		//{
 			// Consume
-			resourceState.consumeNitrogen( nitrogenToBeConsume );
+			//resourceState.consumeNitrogen( nitrogenToBeConsume );
 
 			// One more leaf
 			if( this.leaves < MAXIMUM_STAGES * LEAVES_BY_STAGE )
 				this.leaves++;
-		}
-		catch( NoMoreResourceException e )
-		{
-			this.leaves--;
-		}
+		//}
+		//catch( NoMoreResourceException e )
+		//{
+		//	this.leaves--;
+		//}
 		
 		// Calculate diameter
 		this.diameter = this.calculateDiameter( );
+		
+		// Create group range
+		this.createGroupRange( );
 	}
 	
 	/**
@@ -191,9 +210,9 @@ public class PlantGroup
 	 * 
 	 * @return the range
 	 */
-	public Circle createGroupRange( )
+	private void createGroupRange( )
 	{
-		return new Circle( new Point<Double>( (double)this.position.getX( ),
+		this.groupRange = new Circle( new Point<Double>( (double)this.position.getX( ),
 				(double)this.position.getY( ) ),
 			(double)this.diameter / 2.0d );
 	}

@@ -19,8 +19,11 @@ import simulation.math.point.Point;
 import simulation.math.point.PointDouble;
 import simulation.math.rectangle.Rectangle;
 import simulation.world.Configuration;
+import simulation.world.animal.group.CarnivorousGroup;
 import simulation.world.animal.group.Group;
+import simulation.world.animal.group.HerbivorousGroup;
 import simulation.world.animal.species.AbstractAnimal;
+import simulation.world.animal.species.Carnivorous;
 import simulation.world.animal.species.Herbivorous;
 import simulation.world.animal.species.state.AnimalState;
 import simulation.world.environment.Map;
@@ -619,13 +622,30 @@ public class HexagonalMap
 				AbstractAnimal animal = database.getRandomAnimal( );
 				
 				// Create the group
-				Group g = new Group( database.getRandomAnimal( ),
-					(int)simulation.math.Operation.random( (double)SimulationConstant.INITIAL_SPAWN_ANIMALS_BY_GROUP_MINIMUM,
-						Math.max( (double)SimulationConstant.INITIAL_SPAWN_ANIMALS_BY_GROUP_MAXIMUM + 1.0d,
-							(double)animal.getMaximumDensity( ) ) ) );
+				if( animal instanceof Carnivorous )
+				{
+					// Create the group
+					CarnivorousGroup g = new CarnivorousGroup( animal,
+						(int)simulation.math.Operation.random( (double)SimulationConstant.INITIAL_SPAWN_ANIMALS_BY_GROUP_MINIMUM,
+							Math.max( (double)SimulationConstant.INITIAL_SPAWN_ANIMALS_BY_GROUP_MAXIMUM + 1.0d,
+								(double)animal.getMaximumDensity( ) ) ) );
+					
+					// Add the group
+					uhm.getMap( ).getState( ).addGroup( g );
+				}
+				else if( animal instanceof Herbivorous )
+				{
+					// Create the group
+					HerbivorousGroup g = new HerbivorousGroup( animal,
+						(int)simulation.math.Operation.random( (double)SimulationConstant.INITIAL_SPAWN_ANIMALS_BY_GROUP_MINIMUM,
+							Math.max( (double)SimulationConstant.INITIAL_SPAWN_ANIMALS_BY_GROUP_MAXIMUM + 1.0d,
+								(double)animal.getMaximumDensity( ) ) ) );
+					
+					// Add the group
+					uhm.getMap( ).getState( ).addGroup( g );
+				}
 				
-				// Add the group
-				uhm.getMap( ).getState( ).addGroup( g );
+				
 			}
 		}
 	}

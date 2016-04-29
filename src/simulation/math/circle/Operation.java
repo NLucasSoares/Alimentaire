@@ -69,37 +69,26 @@ public class Operation
 	}
 	 
 	/**
-	 * Evaluate if circle 1 contains Circle 2?
+	 * Evaluate if circle contains point
 	 * 
-	 * @param p1
-	 * 		The first circle position
-	 * @param r1
-	 * 		The first circle radius
-	 * @param p2
-	 * 		The second circle position
-	 * @param r2
-	 * 		The second circle radius
+	 * @param circlePosition
+	 * 		The circle position
+	 * @param circleRadius
+	 * 		The circle radius
+	 * @param point
+	 * 		The point
 	 * 
 	 * @return if circle 1 contains circle 2
 	 */
-	public static boolean contains( Point<Double> p1,
-    	double r1,
-    	Point<Double> p2,
-    	double r2 )
+	public static boolean contains( Point<Double> circlePosition,
+    	double circleRadius,
+    	Point<Double> point )
      {
-		// If circle 2 has a larger radius, he can't be contained in circle 1
-		if( r2 > r1 )
-        	 return false;
-
-		// Calculate X/Y distances
-		double distanceX = p1.getX( ) - p2.getX( );
-		double distanceY = p1.getY( ) - p2.getY( );
-
-		// Calculate radius difference
-		double radiusDifference = r1 - r2;
-
-		// Evaluate
-		return ( ( ( distanceX * distanceX )
-			+ ( distanceY * distanceY ) ) <= radiusDifference * radiusDifference );
+		// Position difference
+		double dX = point.getX( ) - circlePosition.getX( );
+		double dY = point.getY( ) - circlePosition.getY( );
+				
+		// R^2 = ( x - xA )^2 + ( y - yA )^2
+		return ( ( dX * dX + dY * dY ) < circleRadius * circleRadius );
      }
 }

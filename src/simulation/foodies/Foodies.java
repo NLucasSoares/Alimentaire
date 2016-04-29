@@ -8,7 +8,6 @@ import simulation.gui.configuration.Configuration;
 import simulation.gui.panels.Panel;
 import simulation.gui.panels.PanelDefinition;
 import simulation.world.World;
-import simulation.world.environment.nameGenerator.MapNameGenerator;
 
 /**
  * 	The main function is here

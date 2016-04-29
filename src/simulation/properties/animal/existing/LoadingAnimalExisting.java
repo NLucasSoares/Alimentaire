@@ -96,8 +96,6 @@ public class LoadingAnimalExisting
 				String dietProperty = "";
 				int maximumDensity = 0;
 				int needProteinProperty = 0;
-				int needWaterProperty = 0;
-				int needCaloriesProperty = 0;
 				
 				// Get properties
 				for( AnimalProperty ap : AnimalProperty.values( ) )
@@ -130,12 +128,6 @@ public class LoadingAnimalExisting
 						case ANIMAL_PROPERTY_NEED_PROTEIN:
 							needProteinProperty = Integer.parseInt( pp[ ap.ordinal( ) ].getValue( ) );
 							break;
-						case ANIMAL_PROPERTY_NEED_WATER:
-							needWaterProperty = Integer.parseInt( pp[ ap.ordinal( ) ].getValue( ) );
-							break;
-						case ANIMAL_PROPERTY_NEED_CALORIES:
-							needCaloriesProperty = Integer.parseInt( pp[ ap.ordinal( ) ].getValue( ) );
-							break;
 							
 						default:
 							break;
@@ -154,7 +146,7 @@ public class LoadingAnimalExisting
 							agilityProperty,
 							database.getDiet( dietProperty ),
 							new Need( needProteinProperty,
-								needWaterProperty ),
+								0 ),
 							maximumDensity );
 							
 						break;
@@ -165,7 +157,7 @@ public class LoadingAnimalExisting
 							agilityProperty,
 							database.getDiet( dietProperty ),
 							new Need( needProteinProperty,
-								needWaterProperty ),
+								0 ),
 							maximumDensity );
 						break;
 						

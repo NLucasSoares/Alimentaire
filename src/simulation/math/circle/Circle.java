@@ -112,4 +112,17 @@ public class Circle
 					this.position.getY( ) ),
 			this.radius );
 	}
+	
+	/**
+	 * Contains a point?
+	 * 
+	 * @param point
+	 * 		The point to be evaluated
+	 */
+	public boolean contains( Point<Double> point )
+	{
+		return simulation.math.circle.Operation.contains( this.position,
+			this.radius,
+			point );
+	}
 }

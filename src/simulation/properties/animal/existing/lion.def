@@ -5,6 +5,4 @@ animal.agility=75
 animal.diet=carnivorous
 animal.maximumDensity=4
 
-animal.need.water=1000
 animal.need.protein=1000
-animal.need.calories=1000

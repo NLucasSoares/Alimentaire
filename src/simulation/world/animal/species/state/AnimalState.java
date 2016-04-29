@@ -5,7 +5,9 @@ import java.awt.geom.Ellipse2D;
 
 import simulation.ViewState;
 import simulation.math.angle.AngleMovement;
+import simulation.math.circle.Circle;
 import simulation.math.point.Point;
+import simulation.world.animal.AnimalHelper;
 import simulation.world.animal.group.Group;
 import simulation.world.animal.need.state.NeedState;
 import simulation.world.animal.species.AbstractAnimal;
@@ -15,7 +17,7 @@ import simulation.world.animal.species.AbstractAnimal;
  * 
  * @author SOARES Lucas 
  */
-public class AnimalState {
+public abstract class AnimalState {
 
 	/**
 	 * Reference to the group this animal belongs to.
@@ -51,7 +53,6 @@ public class AnimalState {
 	 * 		The animal definition
 	 * @param currentTurn
 	 * 		The current turn of simulation
-	 * 
 	 */
 	public AnimalState( Group groupReference,
 		Point<Double> initialPosition,
@@ -63,9 +64,8 @@ public class AnimalState {
 		
 		// Init
 		this.needState = new NeedState( animal.getNeedDefinition( ) );
-		this.position = new AngleMovement( 0.1,
-			initialPosition,
-			false );
+		this.position = new AngleMovement( AnimalHelper.calculateAnimalSpeed( animal.getAgility( ) ),
+			initialPosition );
 		this.birthDate = currentTurn;
 	}
 	
@@ -109,5 +109,49 @@ public class AnimalState {
 			y,
 			ellipseSize,
 			ellipseSize );
+	}
+	
+	/**
+	 * Aim a position
+	 * 
+	 * @param position
+	 * 		The position to aim
+	 */
+	public void aimPosition( Point<Double> position )
+	{
+		this.position.aimPosition( position );
+	}
+	
+	/**
+	 * Start moving
+	 */
+	public void startMoving( )
+	{
+		this.position.startMoving( );
+	}
+	
+	/**
+	 * Stop moving
+	 */
+	public void stopMoving( )
+	{
+		this.position.stopMoving( );
+	}
+	
+	/**
+	 * Update
+	 */
+	public void update( )
+	{
+		// Get future position
+		Point<Double> futurePosition = this.position.calculateFuturePosition( );
+		
+		// Check position
+		if( !this.groupReference.getGroupRange( ).contains( new Point<Double>( this.groupReference.getGroupRange( ).getPosition( ).getX( ) - this.groupReference.getRangeDiameter( ) / 2.0d + futurePosition.getX( ),
+			this.groupReference.getGroupRange( ).getPosition( ).getY( ) - this.groupReference.getRangeDiameter( ) / 2.0d + futurePosition.getY( ) ) ) )
+			this.position.stopMoving( );
+				
+		// Update position
+		this.position.update( );
 	}
 }

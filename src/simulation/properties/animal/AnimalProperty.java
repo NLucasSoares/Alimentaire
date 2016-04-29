@@ -14,9 +14,7 @@ public enum AnimalProperty
 	ANIMAL_PROPERTY_AGILITY,
 	ANIMAL_PROPERTY_DIET,
 	ANIMAL_PROPERTY_MAXIMUM_DENSITY,
-	ANIMAL_PROPERTY_NEED_WATER,
-	ANIMAL_PROPERTY_NEED_PROTEIN,
-	ANIMAL_PROPERTY_NEED_CALORIES;
+	ANIMAL_PROPERTY_NEED_PROTEIN;
 	
 	public static final String[ ] PROPERTIES_NAME =
 	{
@@ -26,8 +24,6 @@ public enum AnimalProperty
 		"animal.agility",
 		"animal.diet",
 		"animal.maximumDensity",
-		"animal.need.water",
-		"animal.need.protein",
-		"animal.need.calories"
+		"animal.need.protein"
 	};
 }

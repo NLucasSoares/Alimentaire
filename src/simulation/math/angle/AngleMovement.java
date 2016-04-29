@@ -1,15 +1,9 @@
 package simulation.math.angle;
 
 import simulation.math.point.Point;
-import simulation.time.Time;
 
 public class AngleMovement
-{	
-	/**
-	 * The last update time
-	 */
-	private long lastUpdate;
-	
+{		
 	/**
 	 * The current position
 	 */
@@ -26,9 +20,9 @@ public class AngleMovement
 	private double speed;
 	
 	/**
-	 * Is time dependent?
+	 * Is moving?
 	 */
-	private boolean isTimeDependent;
+	private boolean isMoving;
 	
 	/**
 	 * Construct the angle movement
@@ -36,13 +30,11 @@ public class AngleMovement
 	 * @param speed
 	 * 		The speed for movement
 	 */
-	public AngleMovement( double speed,
-		boolean isTimeDependent )
+	public AngleMovement( double speed )
 	{
 		this( speed,
 			new Point<Double>( 0.0d,
-				0.0d ),
-			isTimeDependent );
+				0.0d ) );
 	}
 	
 	/**
@@ -54,28 +46,15 @@ public class AngleMovement
 	 * 		The initial position
 	 */
 	public AngleMovement( double speed,
-		Point<Double> position,
-		boolean isTimeDependent )
+		Point<Double> position )
 	{
 		// Save
 		this.speed = speed;
-		this.isTimeDependent = isTimeDependent;
 		
 		// Init
 		this.angle = 0;
-		this.lastUpdate = 0;
 		this.position = position;
-	}
-	
-	/**
-	 * Set the time dependence
-	 * 
-	 * @param isTimeDependent
-	 *		The new time dependent state
-	 */
-	public void setIsTimeDependent( boolean isTimeDependent )
-	{
-		this.isTimeDependent = isTimeDependent;
+		this.isMoving = false;
 	}
 	
 	/**
@@ -147,27 +126,40 @@ public class AngleMovement
 	}
 	
 	/**
+	 * Start moving
+	 */
+	public void startMoving(  )
+	{
+		// Is now moving
+		this.isMoving = true;
+	}
+	
+	/**
+	 * Stop moving
+	 */
+	public void stopMoving( )
+	{
+		// Stop movement
+		this.isMoving = false;
+	}
+	
+	/**
 	 * Update the position according to specifications
 	 */	
 	public void update( )
-	{		
-		// Si le temps n'a pas encore été initialisé
-		if( this.lastUpdate == 0 )
-			this.lastUpdate = Time.getTicks( );
-
-		// Current time
-		long currentTime = Time.getTicks( );
-
-		// Time factor
-		double timeFactor = ( this.isTimeDependent ? ( (double)currentTime - (double)this.lastUpdate ) : 1.0d );
-		
-		// New position
-		Point<Double> newPosition = new Point<Double>( this.position.getX( ) - Math.sin( ( this.angle * Math.PI ) / 180.0d ) * this.speed * timeFactor,
-			this.position.getY( ) - Math.cos( ( this.angle * Math.PI ) / 180.0d ) * this.speed * timeFactor );
-		
-		// Save
-		this.lastUpdate = currentTime;
-		this.position = newPosition;
+	{
+		// Is it moving?
+		if( this.isMoving )
+			// Save
+			this.position = this.calculateFuturePosition( );
 	}
 	
+	/**
+	 * Get future position
+	 */
+	public Point<Double> calculateFuturePosition( )
+	{
+		return new Point<Double>( this.position.getX( ) + Math.sin( ( this.angle * Math.PI ) / 180.0d ) * this.speed,
+			this.position.getY( ) - Math.cos( ( this.angle * Math.PI ) / 180.0d ) * this.speed );
+	}
 }

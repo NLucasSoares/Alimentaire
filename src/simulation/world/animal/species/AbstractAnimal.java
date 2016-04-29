@@ -21,12 +21,12 @@ public abstract class AbstractAnimal
 	private int weight;
 
 	/**
-	 * The size of animal, for need calculation
+	 * The size of animal (in cm)
 	 */
 	private int size;
 
 	/**
-	 * The ability of animal
+	 * The ability of animal (between 0 and 100)
 	 */
 	private int agility;
 

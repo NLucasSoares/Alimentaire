@@ -127,14 +127,15 @@ public class MapState
 					simulation.gui.object.Hexagon hexagonCopy = new simulation.gui.object.Hexagon( Map.SIZE_PIXEL_BY_SIZE_UNIT );
 					
 					// Determine where allowed to plant
-					Point<Integer> position;
+					Point<Double> position;
 					do
 					{
-						position = new Point<Integer>( (int)( Operation.random( 1,
+						position = new Point<Double>( ( Operation.random( 1,
 								wPlant ) ),
-							(int)( Operation.random( 1,
+							( Operation.random( 1,
 								hPlant ) ) );
-					} while( !hexagonCopy.isContaining( position ) );
+					} while( !hexagonCopy.isContaining( position.getX( ).intValue( ),
+						position.getY( ).intValue( ) ) );
 					
 					// Plant
 					this.plantGroup.add( new PlantGroup( position,
@@ -150,7 +151,7 @@ public class MapState
 			Group group = iterator.next( );
 			
 			// Update
-			group.update( );
+			group.update( this );
 		}
 	}
 	
