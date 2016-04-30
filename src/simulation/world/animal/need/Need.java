@@ -8,43 +8,26 @@ package simulation.world.animal.need;
 public class Need
 {
 	/**
-	 * The protein needed by specie
+	 * The maximum protein a specie can stock
 	 */
-	private int protein;
-	
-	/**
-	 * The water needed by specie
-	 */
-	private int water;
+	private double protein;
 
 	/**
 	 * Construct the need
 	 * 
 	 * @param protein
-	 * 		The protein quantity needed by specie
-	 * @param water
-	 * 		The water needed by specie
+	 * 		The maximum protein quantity a specie can stock
 	 */
-	public Need( int protein,
-		int water )
+	public Need( double protein )
 	{
 		this.protein = protein;
-		this.water = water;
 	}
 
 	/**
 	 * @return the protein needed
 	 */
-	public int getProtein( )
+	public double getProtein( )
 	{
 		return protein;
-	}
-
-	/**
-	 * @return the water needed
-	 */
-	public int getWater( )
-	{
-		return water;
 	}
 }

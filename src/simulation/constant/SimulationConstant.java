@@ -16,6 +16,11 @@ public class SimulationConstant
 	public final static int LAST_TURNS = 5;
 	
 	/**
+	 * The maximum health point of an animal
+	 */
+	public static final int MAXIMUM_ANIMAL_HEALTH_POINT = 100;
+	
+	/**
 	 * Default delay between frames
 	 */
 	public static final int DEFAULT_DELAY_BETWEEN_FRAMES = 500;
@@ -76,7 +81,7 @@ public class SimulationConstant
 	 */
 	public final static int[ ] PLANT_SPAWN_PROBABILITY = {
 		1, // Probability on each turn to get plant spawn
-		200 };
+		500 };
 	
 	/**
 	 * Herbivorous group random move probability
@@ -93,4 +98,12 @@ public class SimulationConstant
 		1, // Probability on each inactive turn for herbivorous to get moving
 		130
 	};
+	
+	/**
+	 * Probability for an herbivorous to stop moving when in an
+	 * eating area
+	 */
+	public final static int[ ] HERBIVOROUS_STOP_MOVING_EATING_AREA_PROBABILITY = {
+		1,
+		100 };
 }

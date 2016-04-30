@@ -58,7 +58,11 @@ Besoin:
 	-TempÃ©rature requise pour Ã©viter l'hypothermie/l'hyperthermie
 	-
 
-	
+CHANGEMENT POUR LA GESTION DES BESOINS:
+Chaque espèce démarre avec la moitié de ce qu'elle peut stocker au maximum
+A chaque tour, selon ses actions, sa quantité de ressources diminue.
+Une fois à 0, l'animal perd 1 point de vie. Quand sa vie est à 0, il meurt.
+
 CIRCLE TEST:
 
 				

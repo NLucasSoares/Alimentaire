@@ -70,6 +70,20 @@ public class HerbivorousGroup extends Group
 		this.aimedPosition = new AimedPosition( );
 	}
 	
+	/**
+	 * @return the aimed plant group
+	 */
+	public PlantGroup getAimedPlantGroup( )
+	{
+		return this.currentlyAimedPlantGroup;
+	}
+	
+	/**
+	 * Update the herbivorous group
+	 *
+	 * @param state
+	 * 		The current map state
+	 */
 	public void update( MapState state )
 	{
 		// Parent update
@@ -190,5 +204,4 @@ public class HerbivorousGroup extends Group
 						animal.activateRandomMove( );
 				}
 	}
-
 }

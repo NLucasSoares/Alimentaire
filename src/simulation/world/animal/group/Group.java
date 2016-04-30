@@ -302,7 +302,23 @@ public abstract class Group implements AimedObject
 		
 		// Update fellows
 		for( Iterator<AnimalState> it = this.animals.iterator( ); it.hasNext( ); )
-			it.next( ).update( );
+		{
+			// Get animal
+			AnimalState animal = it.next( );
+			
+			// Update the animal
+			animal.update( );
+			
+			// Check if alive
+			if( !animal.isAlive( ) )
+			{
+				// Add a field resource
+				state.addFieldResource( animal );
+				
+				// Remove of the group
+				it.remove( );
+			}
+		}
 	}
 	
 	/**

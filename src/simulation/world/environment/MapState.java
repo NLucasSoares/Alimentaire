@@ -8,6 +8,7 @@ import simulation.math.hexagon.Hexagon;
 import simulation.math.point.Point;
 import simulation.math.probability.Experience;
 import simulation.world.animal.group.Group;
+import simulation.world.animal.species.state.AnimalState;
 import simulation.world.environment.biome.resource.field.FieldResource;
 import simulation.world.environment.biome.resource.state.ResourceState;
 import simulation.world.environment.decomposer.Decomposer;
@@ -89,6 +90,14 @@ public class MapState
 	}
 	
 	/**
+	 * @return an iterator on the field resource
+	 */
+	public Iterator<FieldResource> getFieldResource( )
+	{
+		return this.fieldResource.iterator( );
+	}
+	
+	/**
 	 * Update the state
 	 */
 	public void update( )
@@ -152,6 +161,20 @@ public class MapState
 			// Update
 			group.update( this );
 		}
+		
+		// Update field resources
+		for( Iterator<FieldResource> iterator = this.fieldResource.iterator( ); iterator.hasNext( ); )
+		{
+			// Get field resource
+			FieldResource fr = iterator.next( );
+			
+			// Update
+			fr.update( );
+			
+			// Check protein quantity
+			if( fr.getProteinQuantity( ) <= 0 )
+				iterator.remove( );
+		}
 	}
 	
 	/**
@@ -166,6 +189,17 @@ public class MapState
 		this.animalGroup.add( group );
 	}
 	
-	
-	
+	/**
+	 * Add an animal field resource
+	 *
+	 * @param animal
+	 * 		The animal to add
+	 */
+	public void addFieldResource( AnimalState a )
+	{
+		// Add field resource
+		this.fieldResource.add( new FieldResource( a.getAnimal( ).getName( ),
+			a.getAnimal( ).getSize( ) * a.getAnimal( ).getWeight( ),
+			a.getPosition( ) ) );
+	}
 }

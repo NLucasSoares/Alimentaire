@@ -28,6 +28,7 @@ import simulation.world.animal.species.Herbivorous;
 import simulation.world.animal.species.state.AnimalState;
 import simulation.world.environment.Map;
 import simulation.world.environment.biome.Biome;
+import simulation.world.environment.biome.resource.field.FieldResource;
 import simulation.world.environment.nameGenerator.MapNameGenerator;
 import simulation.world.environment.plant.PlantGroup;
 
@@ -531,7 +532,16 @@ public class HexagonalMap
 				&& this.hexagons[ i ].getPosition( ).getY( ) >= viewPoint.getPosition( ).getY( ) - this.hexagons[ i ].getHeightConstant( )
 				&& this.hexagons[ i ].getPosition( ).getX( ) + this.hexagons[ i ].getWidthConstant( ) <= viewPoint.getPosition( ).getX( )  + viewPoint.getSize( ).getX( ) 
 				&& this.hexagons[ i ].getPosition( ).getY( ) + this.hexagons[ i ].getHeightConstant( ) <= viewPoint.getPosition( ).getY( ) + viewPoint.getSize( ).getY( ) )
-			{				
+			{
+				// Field resource
+				for( Iterator<FieldResource> it = this.hexagons[ i ].getMap( ).getState( ).getFieldResource( ); it.hasNext( ); )
+				{
+					// Get field resource
+					FieldResource f = it.next( );
+					
+					// 
+				}
+				
 				// Plant group
 				for( Iterator<PlantGroup> it = this.hexagons[ i ].getMap( ).getState( ).getPlantGroup( ); it.hasNext( ); )
 				{
@@ -541,20 +551,17 @@ public class HexagonalMap
 					// Print circle
 					if( pg.getDiameter( ) > 0 )
 					{
-						// Get ellipse
-						Shape ellipse = pg.getShape( );
-						
 						// Fill
 							// Set color
 								g.setColor( SimulationConstant.PLANT_COLOR );
 							// Fill
-								((Graphics2D)g).fill( ellipse );			
+								((Graphics2D)g).fill( pg.getShape( ) );			
 						
 						// Draw border
 							// Set color
 								g.setColor( Color.WHITE );
 							// Draw
-								((Graphics2D)g).draw( ellipse );
+								((Graphics2D)g).draw( pg.getShape( ) );
 					}
 				}
 				
@@ -567,22 +574,19 @@ public class HexagonalMap
 					// Construct circle
 					if( group.getRangeDiameter( ) > 0 )
 					{
-						// Get ellipse
-						Shape ellipse = group.getShape( );
-						
 						// Fill
 							// Set color
 								g.setColor( group.getAnimal( ) instanceof Herbivorous ?
 									SimulationConstant.HERBIVOROUS_ANIMAL_COLOR
 									: SimulationConstant.CARNIVOROUS_ANIMAL_COLOR );
 							// Fill
-								((Graphics2D)g).fill( ellipse );
+								((Graphics2D)g).fill( group.getShape( ) );
 
 						// Draw border
 							// Set color
 								g.setColor( Color.WHITE );
 							// Draw
-								((Graphics2D)g).draw( ellipse );
+								((Graphics2D)g).draw( group.getShape( ) );
 								
 						// Paint animals
 						for( Iterator<AnimalState> ait = group.getAnimalState( ).iterator( ); ait.hasNext( ); )
@@ -603,6 +607,8 @@ public class HexagonalMap
 						}
 					}
 				}
+				
+				
 			}
 		}
 	}

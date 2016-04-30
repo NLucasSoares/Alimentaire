@@ -145,8 +145,7 @@ public class LoadingAnimalExisting
 							sizeProperty,
 							agilityProperty,
 							database.getDiet( dietProperty ),
-							new Need( needProteinProperty,
-								0 ),
+							new Need( needProteinProperty ),
 							maximumDensity );
 							
 						break;
@@ -156,8 +155,7 @@ public class LoadingAnimalExisting
 							sizeProperty,
 							agilityProperty,
 							database.getDiet( dietProperty ),
-							new Need( needProteinProperty,
-								0 ),
+							new Need( needProteinProperty ),
 							maximumDensity );
 						break;
 						

@@ -4,14 +4,12 @@ import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 
 import simulation.ViewState;
-import simulation.constant.SimulationConstant;
 import simulation.math.angle.AngleMovement;
 import simulation.math.circle.Circle;
 import simulation.math.point.Point;
 import simulation.world.animal.AnimalHelper;
 import simulation.world.animal.group.Group;
 import simulation.world.animal.move.AimedPosition;
-import simulation.world.animal.need.state.NeedState;
 import simulation.world.animal.species.AbstractAnimal;
 
 /**
@@ -29,7 +27,7 @@ public abstract class AnimalState {
 	/**
 	 * Current state of the needs of this animal.
 	 */
-	private NeedState needState;
+	private HealthState healthState;
 	
 	/**
 	 * Current position of this animal on the map
@@ -75,7 +73,7 @@ public abstract class AnimalState {
 		this.groupReference = groupReference;
 		
 		// Init
-		this.needState = new NeedState( animal.getNeedDefinition( ) );
+		this.healthState = new HealthState( animal.getNeedDefinition( ) );
 		this.position = new AngleMovement( AnimalHelper.calculateAnimalSpeed( animal.getAgility( ) ),
 			initialPosition );
 		this.birthDate = currentTurn;
@@ -116,7 +114,37 @@ public abstract class AnimalState {
 	}
 	
 	/**
+	 * @return the group reference
+	 */
+	public Group getGroup( )
+	{
+		return this.groupReference;
+	}
+	
+	/**
+	 * @return is alive?
+	 */
+	public boolean isAlive( )
+	{
+		return this.healthState.isAlive( );
+	}
+	
+	/**
+	 * @return the animal definition
+	 */
+	public AbstractAnimal getAnimal( )
+	{
+		return this.groupReference.getAnimal( );
+	}
+	
+	
+	/**
 	 * Update view
+	 * 
+	 * @param viewState
+	 * 		The current view state
+	 * @param groupShape
+	 * 		The shape of the group
 	 */
 	public void updateView( ViewState viewState,
 		Shape groupShape )
@@ -230,6 +258,9 @@ public abstract class AnimalState {
 			// Start moving
 			this.startMoving( );
 		}
+		
+		// Update needs
+		this.healthState.update( );
 		
 		// Update position
 		this.position.update( );
