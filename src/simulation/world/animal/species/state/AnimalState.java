@@ -4,11 +4,13 @@ import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 
 import simulation.ViewState;
+import simulation.constant.SimulationConstant;
 import simulation.math.angle.AngleMovement;
 import simulation.math.circle.Circle;
 import simulation.math.point.Point;
 import simulation.world.animal.AnimalHelper;
 import simulation.world.animal.group.Group;
+import simulation.world.animal.move.AimedPosition;
 import simulation.world.animal.need.state.NeedState;
 import simulation.world.animal.species.AbstractAnimal;
 
@@ -33,6 +35,16 @@ public abstract class AnimalState {
 	 * Current position of this animal on the map
 	 */
 	private AngleMovement position;
+	
+	/**
+	 * Currently aimed position
+	 */
+	private AimedPosition aimedPosition;
+	
+	/**
+	 * Is random move active?
+	 */
+	private boolean isRandomMoveActive;
 	
 	/**
 	 * The birth date (in turns)
@@ -67,6 +79,8 @@ public abstract class AnimalState {
 		this.position = new AngleMovement( AnimalHelper.calculateAnimalSpeed( animal.getAgility( ) ),
 			initialPosition );
 		this.birthDate = currentTurn;
+		this.aimedPosition = new AimedPosition( );
+		this.isRandomMoveActive = false;
 	}
 	
 	/**
@@ -91,6 +105,14 @@ public abstract class AnimalState {
 	public int getBirthDate( )
 	{
 		return this.birthDate;
+	}
+	
+	/**
+	 * @return the aimed position
+	 */
+	public Point<Double> getAimedPosition( )
+	{
+		return this.aimedPosition.getPosition( );
 	}
 	
 	/**
@@ -119,7 +141,22 @@ public abstract class AnimalState {
 	 */
 	public void aimPosition( Point<Double> position )
 	{
+		// Save position
+		this.aimedPosition.setNewAimedPoint( position );
+		
+		// Aim
 		this.position.aimPosition( position );
+		
+		// Reset random move
+		this.isRandomMoveActive = false;
+	}
+	
+	/**
+	 * Activate random move
+	 */
+	public void activateRandomMove( )
+	{
+		this.isRandomMoveActive = true;
 	}
 	
 	/**
@@ -143,14 +180,57 @@ public abstract class AnimalState {
 	 */
 	public void update( )
 	{
-		// Get future position
-		Point<Double> futurePosition = this.position.calculateFuturePosition( );
-		
-		// Check position
-		if( !this.groupReference.getGroupRange( ).contains( new Point<Double>( this.groupReference.getGroupRange( ).getPosition( ).getX( ) - this.groupReference.getRangeDiameter( ) / 2.0d + futurePosition.getX( ),
-			this.groupReference.getGroupRange( ).getPosition( ).getY( ) - this.groupReference.getRangeDiameter( ) / 2.0d + futurePosition.getY( ) ) ) )
-			this.position.stopMoving( );
+		// Check if animal doesn't exit his range
+		if( !this.groupReference.getGroupRange( ).contains( new Point<Double>( this.groupReference.getGroupRange( ).getPosition( ).getX( ) - this.groupReference.getRangeDiameter( ) / 2.0d + this.getPosition( ).getX( ),
+			this.groupReference.getGroupRange( ).getPosition( ).getY( ) - this.groupReference.getRangeDiameter( ) / 2.0d + this.getPosition( ).getY( ) ) ) )
+		{
+			// Aim the center
+			this.aimPosition( new Point<Double>( this.groupReference.getRangeDiameter( ) / 2.0d,
+				this.groupReference.getRangeDiameter( ) / 2.0d ) );
+		}
+			
+		// Are we aiming a point
+		if( this.aimedPosition.isAimingSomething( ) )
+		{
+			// Goal?
+			if( this.aimedPosition.isReachedPosition( this.getPosition( ) ) )
+			{
+				// Reset aim position
+				this.aimedPosition.removeAim( );
 				
+				// Stop moving
+				this.stopMoving( );
+			}
+			// Update aim
+			else
+				this.position.aimPosition( this.aimedPosition.getPosition( ) );
+		}
+		else if( this.isRandomMoveActive )
+		{
+			// Range for movement permission
+			Circle range = new Circle( new Point<Double>( 0.0d,
+					0.0d ),
+				this.groupReference.getRangeDiameter( ) );
+			
+			// Position
+			Point<Double> randomAimedPosition;
+			
+			// Pick a position
+			do
+			{
+				randomAimedPosition = new Point<Double>( simulation.math.probability.Operation.random( range.getPosition( ).getX( ),
+						range.getRadius( ) * 2.0d ),
+					simulation.math.probability.Operation.random( range.getPosition( ).getY( ),
+						range.getRadius( ) * 2.0d ) );					
+			} while( !range.contains( randomAimedPosition ) );
+
+			// Aim that
+			this.aimPosition( randomAimedPosition );
+			
+			// Start moving
+			this.startMoving( );
+		}
+		
 		// Update position
 		this.position.update( );
 	}

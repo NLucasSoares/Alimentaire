@@ -228,7 +228,7 @@ public class Database {
 	 */
 	public AbstractAnimal getRandomAnimal( )
 	{
-		return this.animals[ (int)simulation.math.Operation.random( 0,
+		return this.animals[ (int)simulation.math.probability.Operation.random( 0,
 			this.animals.length ) ];
 	}
 	

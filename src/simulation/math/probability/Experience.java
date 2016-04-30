@@ -1,11 +1,11 @@
 package simulation.math.probability;
 
-import java.security.InvalidParameterException;
-
 import simulation.math.Operation;
 
 /**
- * A random experience
+ * A random experience, based on an array of probabilities
+ * for each event. When experience done, it returns the
+ * event id which was randomly picked up.
  * 
  * @author Lucas SOARES
  */
@@ -15,6 +15,11 @@ public class Experience
 	 * The probability of each event
 	 */
 	private int[ ] probability;
+	
+	/**
+	 * Total of probabilities
+	 */
+	public int total;
 	
 	/**
 	 * Event id
@@ -27,14 +32,13 @@ public class Experience
 	 * @param probability
 	 * 		The probability for each event
 	 */
-	public Experience( int[ ] probability ) throws InvalidParameterException
+	public Experience( int[ ] probability )
 	{
-		// Check for validity
-		if( Operation.sumArray( probability ) != 100 )
-			throw new InvalidParameterException( );
-		
 		// Save the probability
 		this.probability = probability;
+		
+		// Calculate total
+		this.total = Operation.sumArray( probability );
 		
 		// Init
 		this.eventID = 0;
@@ -46,7 +50,7 @@ public class Experience
 	public void doExperience( )
 	{
 		// Pick-up random value
-		int randValue = (int)( Math.random( ) * 100.0d );
+		int randValue = (int)( Math.random( ) * (double)this.total );
 		
 		// Current value
 		double currentValue = 0;
@@ -64,10 +68,18 @@ public class Experience
 	}
 	
 	/**
-	 * Get the event id
+	 * @return the event id
 	 */
 	public int getEventID( )
 	{
 		return this.eventID;
+	}
+	
+	/**
+	 * @return the total
+	 */
+	public int getTotal( )
+	{
+		return this.total;
 	}
 }

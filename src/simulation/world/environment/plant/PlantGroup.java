@@ -7,6 +7,7 @@ import simulation.ViewState;
 import simulation.gui.object.Hexagon;
 import simulation.math.circle.Circle;
 import simulation.math.point.Point;
+import simulation.world.aim.AimedObject;
 import simulation.world.environment.biome.resource.state.ResourceState;
 import simulation.world.plant.need.Need;
 import simulation.world.plant.need.state.NeedState;
@@ -16,7 +17,7 @@ import simulation.world.plant.need.state.NeedState;
  * 
  * @author CAMPS Aurèle
  */
-public class PlantGroup
+public class PlantGroup implements AimedObject
 {
 	/**
 	 * The number of leaves for one stage in plant group

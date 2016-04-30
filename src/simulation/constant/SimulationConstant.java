@@ -9,17 +9,11 @@ import java.awt.Color;
  */
 public class SimulationConstant
 {
+	// VALUES
 	/**
 	 * Historical depth
 	 */
 	public final static int LAST_TURNS = 5;
-	
-	/**
-	 * Probability for Plant Spawn
-	 */
-	public final static int[ ] PLANT_SPAWN_PROBABILITY = {
-		1, // Probability on each turn to get plant spawn
-		99 };
 	
 	/**
 	 * Default delay between frames
@@ -49,7 +43,15 @@ public class SimulationConstant
 	/**
 	 * The division factor for the animal group range calculation
 	 */
-	public final static int GROUP_RANGE_BY_FACTOR = 1500;
+	public final static int GROUP_RANGE_BY_FACTOR = 1200;
+	
+	/**
+	 * The precision for position aiming
+	 * (more = less precision)
+	 */
+	public final static int POSITION_AIMING_PRECISION = 2;
+	
+	// COLOR
 	/**
 	 * Plant color
 	 */
@@ -67,4 +69,28 @@ public class SimulationConstant
 	 */
 	public final static Color CARNIVOROUS_ANIMAL_COLOR = new Color( 0x2FFF0000,
 		true );
+	
+	// PROBABILITIES
+	/**
+	 * Probability for Plant Spawn
+	 */
+	public final static int[ ] PLANT_SPAWN_PROBABILITY = {
+		1, // Probability on each turn to get plant spawn
+		200 };
+	
+	/**
+	 * Herbivorous group random move probability
+	 */
+	public final static int[ ] HERBIVOROUS_GROUP_RANDOM_MOVE_PROBABILITY = {
+		1, // Probility to get a move
+		80
+	};
+	
+	/**
+	 * Individual herbivorous random move probability
+	 */
+	public final static int[ ] HERBIVOROUS_INDIVIDUAL_RANDOM_MOVE_PROBABILITY = {
+		1, // Probability on each inactive turn for herbivorous to get moving
+		130
+	};
 }

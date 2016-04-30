@@ -11,6 +11,7 @@ import simulation.gui.object.Hexagon;
 import simulation.math.angle.AngleMovement;
 import simulation.math.circle.Circle;
 import simulation.math.point.Point;
+import simulation.world.aim.AimedObject;
 import simulation.world.animal.group.mortalityRate.MortalityRate;
 import simulation.world.animal.species.AbstractAnimal;
 import simulation.world.animal.species.Carnivorous;
@@ -28,7 +29,7 @@ import simulation.world.environment.plant.PlantGroup;
  * 
  * @author SOARES Lucas
  */
-public abstract class Group
+public abstract class Group implements AimedObject
 {
 	/**
 	 * The description of animals in the group
@@ -61,6 +62,11 @@ public abstract class Group
 	private AngleMovement position;
 	
 	/**
+	 * Currently aimed entitie
+	 */
+	private AimedObject aimedObject;
+	
+	/**
 	 * Painting shape
 	 */
 	private Shape shape;
@@ -90,9 +96,9 @@ public abstract class Group
 		// Look for correct initial position
 		do
 		{
-			initialPosition = new Point<Double>( simulation.math.Operation.random( 0.0d,
+			initialPosition = new Point<Double>( simulation.math.probability.Operation.random( 0.0d,
 					Map.SIZE_PIXEL_BY_SIZE_UNIT ),
-				simulation.math.Operation.random( 0.0d,
+				simulation.math.probability.Operation.random( 0.0d,
 					Map.SIZE_PIXEL_BY_SIZE_UNIT ) );
 		} while( !h.isContaining( initialPosition.getX( ).intValue( ),
 				initialPosition.getY( ).intValue( ) ) );
@@ -123,6 +129,7 @@ public abstract class Group
 		this.mortalityRate = new MortalityRate( );
 		this.animals = new ArrayList<AnimalState>( );
 		this.position = initialPosition;
+		this.aimedObject = null;
 		
 		// Calculate diameter depending initial fellow count
 		this.updateRangeDiameter( initialFellowCount );
@@ -155,9 +162,9 @@ public abstract class Group
 			do
 			{
 				// Create position
-				position = new Point<Double>( simulation.math.Operation.random( 0.0d,
+				position = new Point<Double>( simulation.math.probability.Operation.random( 0.0d,
 						this.rangeDiameter ),
-					simulation.math.Operation.random( 0.0d,
+					simulation.math.probability.Operation.random( 0.0d,
 						this.rangeDiameter ) );
 			} while( !shape.contains( position.getX( ),
 				position.getY( ) ) );
@@ -271,6 +278,25 @@ public abstract class Group
 		// Create group range
 		this.createGroupRange( );
 		
+		// Aim
+		if( this.aimedObject != null )
+		{
+			// Check if we've reached goal
+				// Create goal circle
+					Circle goalCircle = new Circle( this.aimedObject.getPosition( ),
+						SimulationConstant.POSITION_AIMING_PRECISION );
+				// Check goal
+					if( goalCircle.contains( this.getPosition( ) ) )
+					{
+						// If plant group it won't move so remove
+						if( this.aimedObject instanceof PlantGroup )
+							this.aimedObject = null;
+					}
+				// Aim object
+					else
+						this.aimObject( );
+		}
+		
 		// Update position
 		this.position.update( );
 		
@@ -369,6 +395,18 @@ public abstract class Group
 	}
 	
 	/**
+	 * Aim a position
+	 * 
+	 * @param position
+	 * 		The position to aim
+	 */
+	public void aimPosition( Point<Double> position )
+	{
+		// Aim
+		this.position.aimPosition( position );
+	}
+	
+	/**
 	 * Aim a plant group
 	 * 
 	 * @param p
@@ -376,8 +414,11 @@ public abstract class Group
 	 */
 	public void aimPlantGroup( PlantGroup p )
 	{
-		this.position.aimPosition( new Point<Double>( (double)p.getPosition( ).getX( ),
-			(double)p.getPosition( ).getY( ) ) );
+		// Save what we aim
+		this.aimedObject = p;
+		
+		// Aim
+		this.aimObject( );
 	}
 	
 	/**
@@ -385,7 +426,20 @@ public abstract class Group
 	 */
 	public void aimAnimalGroup( Group g )
 	{
-		this.position.aimPosition( g.getPosition( ) );
+		// Save what we aim
+		this.aimedObject = g;
+		
+		// Aim
+		this.aimObject( );
+	}
+	
+	/**
+	 * Aim currently aimed object
+	 */
+	private void aimObject( )
+	{
+		this.position.aimPosition( new Point<Double>( (double)this.aimedObject.getPosition( ).getX( ),
+			(double)this.aimedObject.getPosition( ).getY( ) ) );
 	}
 	
 }

@@ -1,5 +1,10 @@
 package simulation.world.animal;
 
+/**
+ * Work around animals
+ * 
+ * @author SOARES Lucas
+ */
 public class AnimalHelper
 {
 	/**
@@ -11,7 +16,7 @@ public class AnimalHelper
 	 */
 	public static double calculateAnimalSpeed( double agility )
 	{
-		return simulation.math.Operation.random( 0.01d,
+		return simulation.math.probability.Operation.random( 0.01d,
 			agility / 100.0d );
 	}
 }

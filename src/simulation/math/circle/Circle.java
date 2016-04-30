@@ -1,5 +1,7 @@
 package simulation.math.circle;
 
+import java.awt.geom.Ellipse2D;
+
 import simulation.math.point.Point;
 
 /**
@@ -111,6 +113,22 @@ public class Circle
 			new Point<Double>( this.position.getX( ),
 					this.position.getY( ) ),
 			this.radius );
+	}
+	
+	/**
+	 * Intersect with an Ellipse2D (which is circle)
+	 * 
+	 * @param circle
+	 * 		The circle to be evaluated
+	 */
+	public boolean intersects( Ellipse2D.Double circle )
+	{
+		return simulation.math.circle.Operation.intersects( new Point<Double>( this.position.getX( ),
+				this.position.getY( ) ),
+			this.radius,
+			new Point<Double>( circle.x,
+				circle.y ),
+			circle.width / 2.0d );
 	}
 	
 	/**

@@ -593,6 +593,13 @@ public class HexagonalMap
 							// Fill
 							g.setColor( Color.YELLOW );
 							((Graphics2D)g).fill( animalEllipse );
+							
+							// Border
+							if( viewState.getZoomLevel( ) > 1 )
+							{
+								g.setColor( Color.WHITE );
+								((Graphics2D)g).draw( animalEllipse );
+							}
 						}
 					}
 				}
@@ -612,7 +619,7 @@ public class HexagonalMap
 		for( UnitHexagonalMap uhm : this.hexagons )
 		{
 			// Determine how many group to spawn
-			int groupCount = (int)simulation.math.Operation.random( SimulationConstant.MINIMUM_GROUP_COUNT_MAP_START,
+			int groupCount = (int)simulation.math.probability.Operation.random( SimulationConstant.MINIMUM_GROUP_COUNT_MAP_START,
 				SimulationConstant.MAXIMUM_GROUP_COUNT_MAP_START );
 			
 			// Populate
@@ -626,7 +633,7 @@ public class HexagonalMap
 				{
 					// Create the group
 					CarnivorousGroup g = new CarnivorousGroup( animal,
-						(int)simulation.math.Operation.random( (double)SimulationConstant.INITIAL_SPAWN_ANIMALS_BY_GROUP_MINIMUM,
+						(int)simulation.math.probability.Operation.random( (double)SimulationConstant.INITIAL_SPAWN_ANIMALS_BY_GROUP_MINIMUM,
 							Math.max( (double)SimulationConstant.INITIAL_SPAWN_ANIMALS_BY_GROUP_MAXIMUM + 1.0d,
 								(double)animal.getMaximumDensity( ) ) ) );
 					
@@ -637,7 +644,7 @@ public class HexagonalMap
 				{
 					// Create the group
 					HerbivorousGroup g = new HerbivorousGroup( animal,
-						(int)simulation.math.Operation.random( (double)SimulationConstant.INITIAL_SPAWN_ANIMALS_BY_GROUP_MINIMUM,
+						(int)simulation.math.probability.Operation.random( (double)SimulationConstant.INITIAL_SPAWN_ANIMALS_BY_GROUP_MINIMUM,
 							Math.max( (double)SimulationConstant.INITIAL_SPAWN_ANIMALS_BY_GROUP_MAXIMUM + 1.0d,
 								(double)animal.getMaximumDensity( ) ) ) );
 					

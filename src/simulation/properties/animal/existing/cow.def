@@ -1,7 +1,7 @@
 animal.name=cow
 animal.weight=30
 animal.size=120
-animal.agility=30
+animal.agility=10
 animal.diet=herbivorous
 animal.maximumDensity=10
 

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import simulation.constant.SimulationConstant;
-import simulation.math.Operation;
 import simulation.math.hexagon.Hexagon;
 import simulation.math.point.Point;
 import simulation.math.probability.Experience;
@@ -130,9 +129,9 @@ public class MapState
 					Point<Double> position;
 					do
 					{
-						position = new Point<Double>( ( Operation.random( 1,
+						position = new Point<Double>( ( simulation.math.probability.Operation.random( 1,
 								wPlant ) ),
-							( Operation.random( 1,
+							( simulation.math.probability.Operation.random( 1,
 								hPlant ) ) );
 					} while( !hexagonCopy.isContaining( position.getX( ).intValue( ),
 						position.getY( ).intValue( ) ) );

@@ -1,7 +1,7 @@
 animal.name=lion
 animal.weight=20
 animal.size=90
-animal.agility=75
+animal.agility=30
 animal.diet=carnivorous
 animal.maximumDensity=4
 
