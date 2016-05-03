@@ -47,6 +47,11 @@ public abstract class Group implements AimedObject
 	private ArrayList<AnimalState> animals;
 	
 	/**
+	 * Map reference
+	 */
+	private Map map;
+	
+	/**
 	 * Group range diameter
 	 */
 	private int rangeDiameter;
@@ -80,12 +85,14 @@ public abstract class Group implements AimedObject
 	 * 		The initial count of ground fellows
 	 */
 	public Group( AbstractAnimal animal,
-		int initialFellowCount )
+		int initialFellowCount,
+		Map map )
 	{
 		// Construct base
 		this( animal,
 			initialFellowCount,
-			null );
+			null,
+			map );
 
 		// The position
 		Point<Double> initialPosition;
@@ -120,10 +127,12 @@ public abstract class Group implements AimedObject
 	 */
 	public Group( AbstractAnimal animal,
 		int initialFellowCount,
-		AngleMovement initialPosition )
+		AngleMovement initialPosition,
+		Map map )
 	{
 		// Save
 		this.animalDefinition = animal;
+		this.map = map;
 		
 		// Init
 		this.mortalityRate = new MortalityRate( );
@@ -262,6 +271,14 @@ public abstract class Group implements AimedObject
 	public Circle getGroupRange( )
 	{
 		return this.groupRange;
+	}
+	
+	/**
+	 * @return the map callback
+	 */
+	public Map getMap( )
+	{
+		return this.map;
 	}
 	
 	/**

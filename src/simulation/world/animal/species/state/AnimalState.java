@@ -137,6 +137,13 @@ public abstract class AnimalState {
 		return this.groupReference.getAnimal( );
 	}
 	
+	/**
+	 * @return the health state of animal
+	 */
+	public HealthState getHealthState( )
+	{
+		return this.healthState;
+	}
 	
 	/**
 	 * Update view

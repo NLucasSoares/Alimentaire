@@ -126,34 +126,37 @@ public class World
 	 */
 	public void update( )
 	{
-		// Check for update ready
-		if( this.state.isUpdateReady( ) )
+		// Update
+		try
 		{
-			// Update
-			try
+			// Lock the semaphore
+			this.semaphore.acquire( );
+			
+			// Check for update ready
+			if( this.state.isUpdateReady( ) )
 			{
-				// Lock the semaphore
-				this.semaphore.acquire( );
-				
 				// Update the maps
 				this.hexagonalMap.update( );
 				
 				// Update view of the alive entities
 				this.hexagonalMap.updateMovingEntitiesView( this.getState( ).getViewState( ) );
-			}
-			catch( InterruptedException e )
-			{
-				
-			}
-			finally
-			{		
-				// Unlock the semaphore
-				this.semaphore.release( );
 				
 				// Update done
 				this.state.updateDone( );
 			}
+			
+			// Update round-independant components
+			this.hexagonalMap.updateDesynchronized( );
 		}
+		catch( InterruptedException e )
+		{
+			
+		}
+		finally
+		{		
+			// Unlock the semaphore
+			this.semaphore.release( );
+		}		
 	}
 	
 	/**

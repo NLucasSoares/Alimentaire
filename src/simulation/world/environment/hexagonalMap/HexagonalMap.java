@@ -608,6 +608,16 @@ public class HexagonalMap
 					}
 				}
 				
+				// Annotations
+					// Plant group
+						for( Iterator<PlantGroup> it = this.hexagons[ i ].getMap( ).getState( ).getPlantGroup( ); it.hasNext( ); )
+						{
+							// Get plant group
+							PlantGroup pg = it.next( );
+							
+							// Draw
+							pg.getAnnotation( ).draw( g );
+						}
 				
 			}
 		}
@@ -641,8 +651,9 @@ public class HexagonalMap
 					CarnivorousGroup g = new CarnivorousGroup( animal,
 						(int)simulation.math.probability.Operation.random( (double)SimulationConstant.INITIAL_SPAWN_ANIMALS_BY_GROUP_MINIMUM,
 							Math.max( (double)SimulationConstant.INITIAL_SPAWN_ANIMALS_BY_GROUP_MAXIMUM + 1.0d,
-								(double)animal.getMaximumDensity( ) ) ) );
-					
+								(double)animal.getMaximumDensity( ) ) ),
+							uhm.getMap( ) );
+
 					// Add the group
 					uhm.getMap( ).getState( ).addGroup( g );
 				}
@@ -652,13 +663,12 @@ public class HexagonalMap
 					HerbivorousGroup g = new HerbivorousGroup( animal,
 						(int)simulation.math.probability.Operation.random( (double)SimulationConstant.INITIAL_SPAWN_ANIMALS_BY_GROUP_MINIMUM,
 							Math.max( (double)SimulationConstant.INITIAL_SPAWN_ANIMALS_BY_GROUP_MAXIMUM + 1.0d,
-								(double)animal.getMaximumDensity( ) ) ) );
+								(double)animal.getMaximumDensity( ) ) ),
+							uhm.getMap( ) );
 					
 					// Add the group
 					uhm.getMap( ).getState( ).addGroup( g );
 				}
-				
-				
 			}
 		}
 	}
@@ -674,6 +684,17 @@ public class HexagonalMap
 
 		// Update weathers
 		
+	}
+	
+	/**
+	 * Update elements that aren't dependant
+	 * of round gesture
+	 */
+	public void updateDesynchronized( )
+	{
+		// Update
+		for( UnitHexagonalMap uhm : this.hexagons )
+			uhm.getMap( ).getState( ).updateDesynchronized( );
 	}
 }
 

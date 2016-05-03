@@ -2,6 +2,7 @@ package simulation.world.animal.group;
 
 import simulation.math.angle.AngleMovement;
 import simulation.world.animal.species.AbstractAnimal;
+import simulation.world.environment.Map;
 
 public class CarnivorousGroup extends Group
 {
@@ -17,12 +18,14 @@ public class CarnivorousGroup extends Group
 	 */
 	public CarnivorousGroup( AbstractAnimal animal,
 		int initialFellowCount,
-		AngleMovement initialPosition )
+		AngleMovement initialPosition,
+		Map map )
 	{
 		// Parent constructor
 		super( animal,
 			initialFellowCount,
-			initialPosition );
+			initialPosition,
+			map );
 	}
 	
 	/**
@@ -34,11 +37,13 @@ public class CarnivorousGroup extends Group
 	 * 		The initial count of ground fellows
 	 */
 	public CarnivorousGroup( AbstractAnimal animal,
-		int initialFellowCount )
+		int initialFellowCount,
+		Map map )
 	{
 		// Parent constructor
 		super( animal,
-			initialFellowCount );
+			initialFellowCount,
+			map );
 	}
 	
 	

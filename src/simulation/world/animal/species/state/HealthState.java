@@ -25,6 +25,11 @@ public class HealthState
 	 */
 	private int healthPoint;
 	
+	/**
+	 * Decrease health controller
+	 */
+	private int healthDecreaseController;
+	
 
 	/**
 	 * Construct the state of needs
@@ -67,12 +72,38 @@ public class HealthState
 	}
 	
 	/**
+	 * Eat
+	 * 
+	 * @param leavesCount
+	 * 		The count of leaves eaten
+	 */
+	public void eat( int leavesCount )
+	{
+		// Increase protein quantity
+		this.protein += SimulationConstant.PROTEIN_BY_LEAF * leavesCount;
+	}
+	
+	/**
 	 * Update the state
 	 */
 	public void update( )
 	{
 		// If needs are bad, loss of life
 		if( this.protein == 0 )
-			this.healthPoint--;
+		{
+			if( this.healthDecreaseController < SimulationConstant.TURN_BEFORE_LOSING_HEALTH )
+				this.healthDecreaseController++;
+			else
+			{
+				// Health point decrease
+				this.healthPoint--;
+				
+				// Controller reset
+				this.healthDecreaseController = 0;
+			}
+		}
+		// Controller to 0
+		else
+			this.healthDecreaseController = 0;
 	}
 }

@@ -15,11 +15,66 @@ public class SimulationConstant
 	 */
 	public final static int LAST_TURNS = 5;
 	
+	// Animal
 	/**
 	 * The maximum health point of an animal
 	 */
 	public static final int MAXIMUM_ANIMAL_HEALTH_POINT = 100;
 	
+	/**
+	 * Turn count before losing life due to low feeding
+	 */
+	public static final int TURN_BEFORE_LOSING_HEALTH = 5;
+	
+	/**
+	 * Turn taken for plant feeding
+	 * (this is a basis, which is modulate
+	 * by animal agilty through
+	 * calculateRoundTakenForLeafEating( )
+	 * method from Herbivorous.
+	 */
+	public static final int TURN_TAKEN_HERBIVOROUS_PLANT_FEEDING = 0;
+	
+	// Plant group
+	/**
+	 * The number of leaves for one stage in plant group
+	 */
+	public static final int LEAVES_BY_STAGE = 20;
+	
+	/**
+	 * Maximum stage for one plant group
+	 */
+	public static final int MAXIMUM_STAGES = 50;
+	
+	/**
+	 * Minimum leaves growing in one turn (simulate the different leaf size, which
+	 * require more or less resource)
+	 */
+	public static final int MINIMUM_LEAF_GROWING_ONE_TURN = 1;
+	
+	/**
+	 * Maximum leaves growing in one turn (simulate the different leaf size, which
+	 * require more or less resource)
+	 */
+	public static final int MAXIMUM_LEAF_GROWING_ONE_TURN = 3;
+	
+	/**
+	 * Protein given by one leaf
+	 */
+	public static final int PROTEIN_BY_LEAF = 10;
+	
+	/**
+	 * Maximum diameter for plant group
+	 */
+	public static final int MAXIMUM_PLANT_GROUP_DIAMETER = 30;
+	
+	// Decomposer
+	/**
+	 * Decomposer efficacity factor
+	 */
+	public static final double DECOMPOSER_EFFICACITY_FACTOR = 2.0d;
+	
+	// Simulation
 	/**
 	 * Default delay between frames
 	 */
@@ -28,12 +83,12 @@ public class SimulationConstant
 	/**
 	 * Minimum group count on a map at start
 	 */
-	public final static int MINIMUM_GROUP_COUNT_MAP_START = 2;
+	public final static int MINIMUM_GROUP_COUNT_MAP_START = 20;
 	
 	/**
 	 * Maximum group count on a map at start
 	 */
-	public final static int MAXIMUM_GROUP_COUNT_MAP_START = 10;
+	public final static int MAXIMUM_GROUP_COUNT_MAP_START = 20;
 	
 	/**
 	 * Initial minimum animals by group at world creation
@@ -45,6 +100,7 @@ public class SimulationConstant
 	 */
 	public final static int INITIAL_SPAWN_ANIMALS_BY_GROUP_MAXIMUM = 5;
 	
+	// Group
 	/**
 	 * The division factor for the animal group range calculation
 	 */

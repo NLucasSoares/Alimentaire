@@ -4,10 +4,13 @@ import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 
 import simulation.ViewState;
+import simulation.constant.SimulationConstant;
+import simulation.gui.animation.Annotation;
 import simulation.gui.object.Hexagon;
 import simulation.math.circle.Circle;
 import simulation.math.point.Point;
 import simulation.world.aim.AimedObject;
+import simulation.world.environment.biome.resource.NoMoreResourceException;
 import simulation.world.environment.biome.resource.state.ResourceState;
 import simulation.world.plant.need.Need;
 import simulation.world.plant.need.state.NeedState;
@@ -19,16 +22,6 @@ import simulation.world.plant.need.state.NeedState;
  */
 public class PlantGroup implements AimedObject
 {
-	/**
-	 * The number of leaves for one stage in plant group
-	 */
-	private static final int LEAVES_BY_STAGE = 5;
-	
-	/**
-	 * Maximum stage for one plant group
-	 */
-	private static final int MAXIMUM_STAGES = 30;
-
 	/**
 	 * The amount of leaves of a plant group
 	 */
@@ -63,6 +56,11 @@ public class PlantGroup implements AimedObject
 	 * Painting shape
 	 */
 	private Shape shape;
+	
+	/**
+	 * Annotation
+	 */
+	private Annotation annotation;
 
 	/**
 	 * Construct the plant group
@@ -73,6 +71,8 @@ public class PlantGroup implements AimedObject
 		// Init
 		this.leaves = 1;
 		this.needsState = new NeedState( );
+		this.annotation = new Annotation( 1,
+			0xFFFFFFFF );
 		
 		// Save
 		this.position = position;
@@ -94,10 +94,10 @@ public class PlantGroup implements AimedObject
 	private int calculateDiameter( )
 	{
 		// Result
-		int result = ( ( this.leaves / LEAVES_BY_STAGE ) / 2 ) + 1;
+		int result = ( ( this.leaves / SimulationConstant.LEAVES_BY_STAGE ) / 2 ) + 1;
 		
 		// Return
-		return ( result >= MAXIMUM_STAGES ) ? MAXIMUM_STAGES : result;
+		return ( result >= SimulationConstant.MAXIMUM_PLANT_GROUP_DIAMETER ) ? SimulationConstant.MAXIMUM_PLANT_GROUP_DIAMETER : result;
 	}
 
 	/**
@@ -149,6 +149,33 @@ public class PlantGroup implements AimedObject
 	}
 	
 	/**
+	 * @return the annotation
+	 */
+	public Annotation getAnnotation( )
+	{
+		return this.annotation;
+	}
+	
+	/**
+	 * Be eaten
+	 * 
+	 * @param leafEaten
+	 * 		The count of leaves eaten by herbivorous
+	 */
+	public void beEaten( int leavesEaten )
+	{
+		// Decrease leaf
+		this.leaves = ( this.leaves < leavesEaten ? 0 : this.leaves - leavesEaten );
+		
+		// Annotate
+		this.annotation.addMessage( "- "
+			+ leavesEaten
+			+ "("
+			+ this.leaves
+			+ ")" );
+	}
+	
+	/**
 	 * Update the plant group
 	 * 
 	 * @param resourceState
@@ -157,29 +184,53 @@ public class PlantGroup implements AimedObject
 	public void update( ResourceState resourceState )
 	{
 		// What to be eaten (nitrogen)
-		double nitrogenToBeConsume = this.needsDefinition.getNitrogen( ) / ( ( (double)( MAXIMUM_STAGES * LEAVES_BY_STAGE ) - (double)this.leaves ) + 1.0d );
-		
-		// TODO
-		// Consume
-		//try
-		//{
-			// Consume
-			//resourceState.consumeNitrogen( nitrogenToBeConsume );
+		double nitrogenToBeConsume = this.needsDefinition.getNitrogen( ) / ( ( (double)( SimulationConstant.MAXIMUM_STAGES * SimulationConstant.LEAVES_BY_STAGE ) - (double)this.leaves ) + 1.0d );
 
-			// One more leaf
-			if( this.leaves < MAXIMUM_STAGES * LEAVES_BY_STAGE )
-				this.leaves++;
-		//}
-		//catch( NoMoreResourceException e )
-		//{
-		//	this.leaves--;
-		//}
+		// Consume
+		try
+		{
+			// Consume
+			resourceState.consumeNitrogen( nitrogenToBeConsume );
+
+			// More leaves
+				// Pick a number
+					int addedLeaves = (int)simulation.math.probability.Operation.random( (double)SimulationConstant.MINIMUM_LEAF_GROWING_ONE_TURN,
+						(double)SimulationConstant.MAXIMUM_LEAF_GROWING_ONE_TURN );
+				// Add
+					this.leaves += addedLeaves;
+				// Add annotation
+					this.annotation.addMessage( "+ "
+						+ addedLeaves
+						+ "("
+						+ this.leaves
+						+ ")" );
+		}
+		catch( NoMoreResourceException e )
+		{
+			// Reduce
+			this.leaves--;
+			
+			// Add annotation
+			this.annotation.addMessage( "- 1 ("
+				+ this.leaves
+				+ ")" );
+		}
 		
 		// Calculate diameter
 		this.diameter = this.calculateDiameter( );
 		
 		// Create group range
 		this.createGroupRange( );
+	}
+	
+	/**
+	 * Update elements that aren't dependant of round
+	 * gesture
+	 */
+	public void updateDesynchronized( )
+	{
+		// Update annotation
+		this.annotation.update( );
 	}
 	
 	/**
@@ -204,6 +255,10 @@ public class PlantGroup implements AimedObject
 			y,
 			ellipseSize,
 			ellipseSize );
+		
+		// Update annotation position
+		this.annotation.setPosition( new Point<Integer>( (int)x + (int)( ellipseSize / 2.0d ),
+			(int)y + (int)( ellipseSize / 2.0d ) ) );
 	}
 	
 	/**

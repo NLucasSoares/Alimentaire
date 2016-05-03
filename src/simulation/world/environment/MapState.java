@@ -103,7 +103,7 @@ public class MapState
 	public void update( )
 	{
 		// The decomposer do their job
-		this.resourceState.addNitrogen( this.decomposer.work( this.fieldResource ) );
+		this.resourceState.addNitrogen( this.decomposer.work( this ) );
 		
 		// The plant group update themselves
 		for( Iterator<PlantGroup> it = this.plantGroup.iterator( ); it.hasNext( ); )
@@ -175,6 +175,18 @@ public class MapState
 			if( fr.getProteinQuantity( ) <= 0 )
 				iterator.remove( );
 		}
+	}
+	
+	/**
+	 * Update elements that aren't dependant of
+	 * round gesture
+	 */
+	public void updateDesynchronized( )
+	{
+		// Plant group
+		for( Iterator<PlantGroup> it = this.getPlantGroup( ); it.hasNext( ); )
+			// Update
+			it.next( ).updateDesynchronized( );
 	}
 	
 	/**

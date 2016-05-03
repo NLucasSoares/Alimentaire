@@ -38,12 +38,14 @@ public class HerbivorousGroup extends Group
 	 */
 	public HerbivorousGroup( AbstractAnimal animal,
 		int initialFellowCount,
-		AngleMovement initialPosition )
+		AngleMovement initialPosition,
+		Map map )
 	{
 		// Parent constructor
 		super( animal,
 			initialFellowCount,
-			initialPosition );
+			initialPosition,
+			map );
 		
 		// Init
 		this.currentlyAimedPlantGroup = null;
@@ -59,11 +61,13 @@ public class HerbivorousGroup extends Group
 	 * 		The initial count of ground fellows
 	 */
 	public HerbivorousGroup( AbstractAnimal animal,
-		int initialFellowCount )
+		int initialFellowCount,
+		Map map )
 	{
 		// Parent constructor
 		super( animal,
-			initialFellowCount );
+			initialFellowCount,
+			map );
 		
 		// Init
 		this.currentlyAimedPlantGroup = null;

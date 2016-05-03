@@ -1,5 +1,6 @@
 package simulation.world.animal.species;
 
+import simulation.constant.SimulationConstant;
 import simulation.world.animal.diet.Diet;
 import simulation.world.animal.need.Need;
 
@@ -44,4 +45,15 @@ public class Herbivorous extends simulation.world.animal.species.AbstractAnimal
 			needDefinition,
 			maximumDensity );
 	}
+	
+	/**
+	 * Calculate the rounds count for leaf feeding
+	 * 
+	 * @return the rounds count
+	 */
+	public int calculateRoundTakenForLeafEating( )
+	{
+		return SimulationConstant.TURN_TAKEN_HERBIVOROUS_PLANT_FEEDING + (int)( 10.0d - ( super.getAgility( ) / 10.0d ) );
+	}
+	
 }
