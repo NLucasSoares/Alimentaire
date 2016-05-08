@@ -96,6 +96,14 @@ public class AngleMovement
 	}
 	
 	/**
+	 * @return if is moving
+	 */
+	public boolean isMoving( )
+	{
+		return this.isMoving;
+	}
+	
+	/**
 	 * Aim a position
 	 * 
 	 * @param x

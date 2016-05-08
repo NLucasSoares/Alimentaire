@@ -7,6 +7,7 @@ import java.util.Iterator;
 
 import simulation.ViewState;
 import simulation.constant.SimulationConstant;
+import simulation.gui.animation.Annotation;
 import simulation.gui.object.Hexagon;
 import simulation.math.angle.AngleMovement;
 import simulation.math.circle.Circle;
@@ -47,6 +48,11 @@ public abstract class Group implements AimedObject
 	private ArrayList<AnimalState> animals;
 	
 	/**
+	 * Animal to add at the update ending
+	 */
+	private ArrayList<AnimalState> animalsToAdd;
+	
+	/**
 	 * Map reference
 	 */
 	private Map map;
@@ -60,6 +66,11 @@ public abstract class Group implements AimedObject
 	 * Group range circle
 	 */
 	private Circle groupRange;
+	
+	/**
+	 * Annotation
+	 */
+	private Annotation annotation;
 	
 	/**
 	 * Group position
@@ -139,6 +150,9 @@ public abstract class Group implements AimedObject
 		this.animals = new ArrayList<AnimalState>( );
 		this.position = initialPosition;
 		this.aimedObject = null;
+		this.annotation = new Annotation( 1,
+			0xFFFFFFFF );
+		this.animalsToAdd = new ArrayList<AnimalState>( );
 		
 		// Calculate diameter depending initial fellow count
 		this.updateRangeDiameter( initialFellowCount );
@@ -282,6 +296,22 @@ public abstract class Group implements AimedObject
 	}
 	
 	/**
+	 * @return the annotation
+	 */
+	public Annotation getAnnotation( )
+	{
+		return this.annotation;
+	}
+	
+	/**
+	 * @return if is moving
+	 */
+	public boolean isMoving( )
+	{
+		return this.position.isMoving( );
+	}
+	
+	/**
 	 * Update the group
 	 * 
 	 * @param state
@@ -313,28 +343,98 @@ public abstract class Group implements AimedObject
 					else
 						this.aimObject( );
 		}
-		
+
 		// Update position
 		this.position.update( );
+		
+		// To remove fellows list
+		ArrayList<AnimalState> removeList = new ArrayList<AnimalState>( );
 		
 		// Update fellows
 		for( Iterator<AnimalState> it = this.animals.iterator( ); it.hasNext( ); )
 		{
 			// Get animal
 			AnimalState animal = it.next( );
-			
+
 			// Update the animal
 			animal.update( );
-			
+
 			// Check if alive
-			if( !animal.isAlive( ) )
+			if( !animal.isAlive( )
+				|| state.getWorldState( ).getRound( ) - animal.getBirthDate( ) >= animal.getLifeTime( ) )
 			{
 				// Add a field resource
 				state.addFieldResource( animal );
+
+				// Add annotation
+				this.annotation.addMessage( "- 1" );
 				
 				// Remove of the group
-				it.remove( );
+				removeList.add( animal );
+				
+				// Continue
+				continue;
 			}
+			
+			// Activate reproduce look for
+			if( this.animals.size( ) < this.animalDefinition.getMaximumDensity( ) )
+				// Check for good animal condition
+				if( ( animal.getHealthState( ).getProtein( ) / animal.getAnimal( ).getNeedDefinition( ).getProtein( ) ) * 100.0d >= (double)SimulationConstant.FLOOR_FOR_PROTEIN_STOCK_REPRODUCING
+					&& this.getMap( ).getState( ).getWorldState( ).getRound( ) - animal.getLastRoundGivenBirth( ) >= animal.getAnimal( ).getReproduceTime( ) )
+					animal.activateReproduceResearch( );
+		}
+		
+		// Remove deads fellows
+		for( Iterator<AnimalState> it = removeList.iterator( ); it.hasNext( ); )
+			this.animals.remove( it.next( ) );
+		
+		// Add the animals requested
+		for( Iterator<AnimalState> it = this.animalsToAdd.iterator( ); it.hasNext( ); )
+			this.animals.add( it.next( ) );
+		
+		// Empty adding list
+		while( this.animalsToAdd.size( ) > 0 )
+			this.animalsToAdd.remove( 0 );
+	}
+	
+	/**
+	 * Update desynchronized
+	 */
+	public void updateDesynchronized( )
+	{
+		// Update state
+		this.annotation.update( );
+	}
+	
+	/**
+	 * Add animal due to reproducing result
+	 * 
+	 * @param parent
+	 * 		One of the parent
+	 */
+	public void addReproduceResult( AnimalState parent )
+	{
+		// If limit not reached
+		if( this.animals.size( ) < this.animalDefinition.getMaximumDensity( ) )
+		{
+			// Create animal
+			AnimalState animal = ( this.animalDefinition instanceof Herbivorous ) ?
+				new HerbivorousState( this,
+					parent.getPosition( ),
+					this.animalDefinition,
+					this.getMap( ).getState( ).getWorldState( ).getRound( ) )
+				: new CarnivorousState( this,
+						parent.getPosition( ),
+					this.animalDefinition,
+					this.getMap( ).getState( ).getWorldState( ).getRound( ) );
+	
+			// Add animal
+			this.animalsToAdd.add( animal );
+			
+			System.out.println( this.animals.size( ) + " on " + this.animalDefinition.getMaximumDensity( ) );
+			
+			// Add annotation
+			this.annotation.addMessage( "+ 1" );
 		}
 	}
 	
@@ -409,6 +509,10 @@ public abstract class Group implements AimedObject
 		for( Iterator<AnimalState> it = this.animals.iterator( ); it.hasNext( ); )
 			it.next( ).updateView( viewState,
 				this.shape );
+		
+		// Update annotation position
+		this.annotation.setPosition( new Point<Integer>( (int)x + (int)( ellipseSize / 2.0d ),
+			(int)y + (int)( ellipseSize / 2.0d ) ) );
 	}
 	
 	/**
@@ -475,4 +579,11 @@ public abstract class Group implements AimedObject
 			(double)this.aimedObject.getPosition( ).getY( ) ) );
 	}
 	
+	/**
+	 * Remove aiming object
+	 */
+	public void removeAimOnObject( )
+	{
+		this.aimedObject = null;
+	}
 }

@@ -174,8 +174,7 @@ public class Annotation
 				// Reset state
 				this.resetState( );
 			}
-				
-			
+
 			// Check if delay passed
 			if( Time.getTicks( ) - this.lastUpdate >= this.alphaReductionDelay )
 			{

@@ -4,5 +4,7 @@ animal.size=120
 animal.agility=10
 animal.diet=herbivorous
 animal.maximumDensity=10
+animal.lifeTime=8000
+animal.reproduceTime=800
 
-animal.need.protein=200
+animal.need.protein=10000

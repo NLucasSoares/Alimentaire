@@ -5,10 +5,12 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 
 import simulation.ViewState;
+import simulation.constant.SimulationConstant;
 import simulation.gui.object.Hexagon;
 import simulation.math.circle.Circle;
 import simulation.math.point.Point;
 import simulation.math.rectangle.Rectangle;
+import simulation.world.aim.AimedObject;
 import simulation.world.environment.biome.resource.ResourceBasis;
 
 /**
@@ -18,7 +20,7 @@ import simulation.world.environment.biome.resource.ResourceBasis;
  * @author CAMPS Aurèle
  */
 
-public class FieldResource extends ResourceBasis
+public class FieldResource extends ResourceBasis implements AimedObject
 {
 	/**
 	 * The name of the resource
@@ -69,10 +71,10 @@ public class FieldResource extends ResourceBasis
 		
 		// Calcultate size
 		this.size = this.calculateSize( );
+		this.createRangeDiameter( );
 		
 		// Init
 		this.shape = null;
-		this.range = null;
 	}
 
 	/**
@@ -84,13 +86,29 @@ public class FieldResource extends ResourceBasis
 	}
 	
 	/**
+	 * @return the shape
+	 */
+	public Shape getShape( )
+	{
+		return this.shape;
+	}
+	
+	/**
+	 * @return the range
+	 */
+	public Rectangle getRange( )
+	{
+		return this.range;
+	}
+	
+	/**
 	 * Calculate the size according to protein quantity
 	 * 
 	 * @return the size
 	 */
 	public int calculateSize( )
 	{
-		return (int)( this.getProteinQuantity( ) / 1000.0d ) + 1;
+		return (int)( SimulationConstant.FIELD_RESOURCE_SIZE );
 	}
 	
 	/**
@@ -122,8 +140,8 @@ public class FieldResource extends ResourceBasis
 	public void createRangeDiameter( )
 	{
 		// Create the range
-		this.range = new Rectangle( new Point<Integer>( 5,
-				5 ),
+		this.range = new Rectangle( new Point<Integer>( SimulationConstant.FIELD_RESOURCE_SIZE,
+				SimulationConstant.FIELD_RESOURCE_SIZE ),
 			new Point<Integer>( this.position.getX( ).intValue( ),
 				this.position.getY( ).intValue( ) ) );
 	}
@@ -138,5 +156,14 @@ public class FieldResource extends ResourceBasis
 		
 		// Create the range diameter
 		this.createRangeDiameter( );
+	}
+
+	/**
+	 * @return the position
+	 */
+	@Override
+	public Point<Double> getPosition( )
+	{
+		return this.position;
 	}
 }

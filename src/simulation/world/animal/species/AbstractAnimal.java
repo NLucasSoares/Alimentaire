@@ -1,6 +1,5 @@
 package simulation.world.animal.species;
 
-import simulation.world.animal.diet.Diet;
 import simulation.world.animal.need.Need;
 
 /**
@@ -29,17 +28,22 @@ public abstract class AbstractAnimal
 	 * The ability of animal (between 0 and 100)
 	 */
 	private int agility;
-
-	/**
-	 * The diet of an animal
-	 */
-	private Diet diet;
 	
 	/**
 	 * Maximum group size
 	 */
 	private int maximumDensity;
 
+	/**
+	 * Lifetime
+	 */
+	private int lifeTime;
+	
+	/**
+	 * Reproduce time
+	 */
+	private int reproduceTime;
+	
 	/**
 	 * 
 	 */
@@ -65,23 +69,29 @@ public abstract class AbstractAnimal
 	 * 		The diet of the animal
 	 * @param needDefinition
 	 * 		The need of the animal
+	 * @param lifeTime
+	 * 		The life time of animal
+	 * @param reproduceTime
+	 * 		Time before able to reproduce
 	 */
 	public AbstractAnimal( String name,
 		int weight,
 		int size,
 		int agility,
-		Diet diet,
 		Need needDefinition,
-		int maximumDensity )
+		int maximumDensity,
+		int lifeTime,
+		int reproduceTime )
 	{
 		// Save
 		this.name = name;
 		this.weight = weight;
 		this.size = size;
 		this.agility = agility;
-		this.diet = diet;
 		this.needDefinition = needDefinition;
 		this.maximumDensity = maximumDensity;
+		this.lifeTime = lifeTime;
+		this.reproduceTime = reproduceTime;
 	}
 
 	/**
@@ -115,14 +125,6 @@ public abstract class AbstractAnimal
 	{
 		return agility;
 	}
-	
-	/**
-	 * @return the diet of the animal
-	 */
-	public Diet getDiet( )
-	{
-		return diet;
-	}
 
 	/**
 	 * @return the need definition of the animal
@@ -138,5 +140,21 @@ public abstract class AbstractAnimal
 	public int getMaximumDensity( )
 	{
 		return this.maximumDensity;
+	}
+	
+	/**
+	 * @return the life time
+	 */
+	public int getLifeTime( )
+	{
+		return this.lifeTime;
+	}
+	
+	/**
+	 * @return the reproduce time
+	 */
+	public int getReproduceTime( )
+	{
+		return this.reproduceTime;
 	}
 }

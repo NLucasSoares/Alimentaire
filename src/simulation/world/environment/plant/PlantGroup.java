@@ -12,6 +12,7 @@ import simulation.math.point.Point;
 import simulation.world.aim.AimedObject;
 import simulation.world.environment.biome.resource.NoMoreResourceException;
 import simulation.world.environment.biome.resource.state.ResourceState;
+import simulation.world.environment.decomposer.Decomposer;
 import simulation.world.plant.need.Need;
 import simulation.world.plant.need.state.NeedState;
 
@@ -181,10 +182,11 @@ public class PlantGroup implements AimedObject
 	 * @param resourceState
 	 * 		The resources state
 	 */
-	public void update( ResourceState resourceState )
+	public void update( ResourceState resourceState,
+		Decomposer decomposer )
 	{
 		// What to be eaten (nitrogen)
-		double nitrogenToBeConsume = this.needsDefinition.getNitrogen( ) / ( ( (double)( SimulationConstant.MAXIMUM_STAGES * SimulationConstant.LEAVES_BY_STAGE ) - (double)this.leaves ) + 1.0d );
+		double nitrogenToBeConsume = this.needsDefinition.getNitrogen( );
 
 		// Consume
 		try
@@ -207,11 +209,18 @@ public class PlantGroup implements AimedObject
 		}
 		catch( NoMoreResourceException e )
 		{
+			// Create random dying leaves count
+			int dyingLeaves = (int)simulation.math.probability.Operation.random( SimulationConstant.MINIMUM_LEAF_DYING_NOT_FOOD,
+				SimulationConstant.MAXIMUM_LEAF_DYING_NOT_FOOD + 1.0d );
+			
 			// Reduce
-			this.leaves--;
+			this.leaves -= dyingLeaves;
+			
+			// Add work for decomposer
+			decomposer.addPlantMass( dyingLeaves );
 			
 			// Add annotation
-			this.annotation.addMessage( "- 1 ("
+			this.annotation.addMessage( "- " + dyingLeaves + " ("
 				+ this.leaves
 				+ ")" );
 		}

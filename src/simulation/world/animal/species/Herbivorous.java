@@ -1,7 +1,6 @@
 package simulation.world.animal.species;
 
 import simulation.constant.SimulationConstant;
-import simulation.world.animal.diet.Diet;
 import simulation.world.animal.need.Need;
 
 /**
@@ -11,6 +10,11 @@ import simulation.world.animal.need.Need;
  */
 public class Herbivorous extends simulation.world.animal.species.AbstractAnimal
 {
+	/**
+	 * Round taken calculation basis for eating
+	 */
+	public static final double DIVISION_FACTOR_ROUND_EATING_HERBIVOROUS = 10.0d;
+	
 	/**
 	 * Construct Herbivorous Animal
 	 * 
@@ -28,22 +32,26 @@ public class Herbivorous extends simulation.world.animal.species.AbstractAnimal
 	 * 		The need of the animal
 	 * @param maximumDensity
 	 * 		The maximum fellows number
+	 * @param lifeTime
+	 * 		The life time of animal
 	 */
 	public Herbivorous( String name,
 		int weight,
 		int size,
 		int agility,
-		Diet diet,
 		Need needDefinition,
-		int maximumDensity )
+		int maximumDensity,
+		int lifeTime,
+		int reproduceTime )
 	{
 		super( name,
 			weight,
 			size,
 			agility,
-			diet,
 			needDefinition,
-			maximumDensity );
+			maximumDensity,
+			lifeTime,
+			reproduceTime );
 	}
 	
 	/**
@@ -53,7 +61,9 @@ public class Herbivorous extends simulation.world.animal.species.AbstractAnimal
 	 */
 	public int calculateRoundTakenForLeafEating( )
 	{
-		return SimulationConstant.TURN_TAKEN_HERBIVOROUS_PLANT_FEEDING + (int)( 10.0d - ( super.getAgility( ) / 10.0d ) );
+		return SimulationConstant.TURN_TAKEN_HERBIVOROUS_PLANT_FEEDING
+			+ (int)( Herbivorous.DIVISION_FACTOR_ROUND_EATING_HERBIVOROUS
+						- ( super.getAgility( ) / Herbivorous.DIVISION_FACTOR_ROUND_EATING_HERBIVOROUS ) );
 	}
 	
 }

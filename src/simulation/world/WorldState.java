@@ -77,6 +77,15 @@ public class WorldState
 	}
 	
 	/**
+	 * Update
+	 */
+	public void update( )
+	{
+		// Increase round
+		this.round++;
+	}
+	
+	/**
 	 * The update has been done
 	 */
 	public void updateDone( )

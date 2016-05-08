@@ -15,6 +15,9 @@ public class SimulationConstant
 	 */
 	public final static int LAST_TURNS = 5;
 	
+	// Field resource
+	public static final int FIELD_RESOURCE_SIZE = 2;
+	
 	// Animal
 	/**
 	 * The maximum health point of an animal
@@ -34,6 +37,22 @@ public class SimulationConstant
 	 * method from Herbivorous.
 	 */
 	public static final int TURN_TAKEN_HERBIVOROUS_PLANT_FEEDING = 0;
+	
+	/**
+	 * Round count in good shape before regaining
+	 * health points
+	 */
+	public static final int ROUND_GOOD_SHAPE_BEFORE_GAINING_HEALTH_POINT_ANIMAL = 15;
+	
+	/**
+	 * Life time reduction factor min
+	 */
+	public static final double ANIMAL_LIFE_TIME_REDUCTION_FACTOR_MIN = 0.9d;
+	
+	/**
+	 * Life time reduction factor max
+	 */
+	public static final double ANIMAL_LIFE_TIME_REDUCTION_FACTOR_MAX = 1.2d;
 	
 	// Plant group
 	/**
@@ -59,6 +78,36 @@ public class SimulationConstant
 	public static final int MAXIMUM_LEAF_GROWING_ONE_TURN = 3;
 	
 	/**
+	 * Minimum leaves dying when not enough food
+	 */
+	public static final int MINIMUM_LEAF_DYING_NOT_FOOD = 1;
+	
+	/**
+	 * Maximum leaves dying when not enough food
+	 */
+	public static final int MAXIMUM_LEAF_DYING_NOT_FOOD = 5;
+	
+	/**
+	 * Decomposable mass in one leaf
+	 */
+	public static final int LEAF_DECOMPOSABLE_MASS = 20;
+	
+	/**
+	 * Maximum plant group on one single map
+	 */
+	public static final int MAXIMUM_PLANT_GROUP_COUNT_MAP = 5;
+	
+	/**
+	 * Minimum plant group count at start
+	 */
+	public static final int MINIMUM_PLANT_GROUP_COUNT_MAP_START = 5;
+	
+	/**
+	 * Maximum plant group count at start
+	 */
+	public static final int MAXIMUM_PLANT_GROUP_COUNT_MAP_START = MAXIMUM_PLANT_GROUP_COUNT_MAP;
+	
+	/**
 	 * Protein given by one leaf
 	 */
 	public static final int PROTEIN_BY_LEAF = 10;
@@ -74,6 +123,11 @@ public class SimulationConstant
 	 */
 	public static final double DECOMPOSER_EFFICACITY_FACTOR = 2.0d;
 	
+	/**
+	 * Minimum nitrogen generated on each turn
+	 */
+	public static final double MINIMUM_NITROGEN_ADD_EACH_TURN = 0.1d;
+	
 	// Simulation
 	/**
 	 * Default delay between frames
@@ -81,14 +135,14 @@ public class SimulationConstant
 	public static final int DEFAULT_DELAY_BETWEEN_FRAMES = 500;
 	
 	/**
-	 * Minimum group count on a map at start
+	 * Minimum animal group count on a map at start
 	 */
-	public final static int MINIMUM_GROUP_COUNT_MAP_START = 20;
+	public final static int MINIMUM_ANIMAL_GROUP_COUNT_MAP_START = 2;
 	
 	/**
-	 * Maximum group count on a map at start
+	 * Maximum animal group count on a map at start
 	 */
-	public final static int MAXIMUM_GROUP_COUNT_MAP_START = 20;
+	public final static int MAXIMUM_ANIMAL_GROUP_COUNT_MAP_START = 8;
 	
 	/**
 	 * Initial minimum animals by group at world creation
@@ -112,11 +166,28 @@ public class SimulationConstant
 	 */
 	public final static int POSITION_AIMING_PRECISION = 2;
 	
+	/**
+	 * The stock capacity which much be reached to reproduce (%)
+	 */
+	public final static int FLOOR_FOR_PROTEIN_STOCK_REPRODUCING = 70;
+	
+	/**
+	 * The stock capacity which set the end of search when
+	 * not found mate to reproduce (%)
+	 */
+	public final static int FLOOR_FOR_PROTEIN_STOCK_STOP_REPRODUCING = 60;
+	
 	// COLOR
 	/**
 	 * Plant color
 	 */
 	public final static Color PLANT_COLOR = new Color( 0x2F00FF00,
+		true );
+	
+	/**
+	 * Field resource color
+	 */
+	public final static Color FIELD_RESOURCE_COLOR = new Color( 0xFFFF0000,
 		true );
 	
 	/**
@@ -162,4 +233,13 @@ public class SimulationConstant
 	public final static int[ ] HERBIVOROUS_STOP_MOVING_EATING_AREA_PROBABILITY = {
 		1,
 		100 };
+	
+	/**
+	 * Probability for the herbivorous group to stop on a
+	 * plant group center
+	 */
+	public final static int[ ] HERBIVOROUS_STOP_MOVING_PLANT_CENTER_PROBABILITY = {
+		1,
+		80
+	};
 }

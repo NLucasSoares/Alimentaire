@@ -79,8 +79,8 @@ public class World
 			window.getHeight( ) );
 		
 		// Init
-		this.state = new WorldState( this );
-		
+		this.diffuseWorldState( this.state = new WorldState( this ) );
+				
 		// Create the simulation frame
 		this.simulationFrame = new SimulationFrame( window,
 			this );
@@ -118,7 +118,19 @@ public class World
 		this.hexagonalMap = new HexagonalMap( this.configuration,
 			this.database,
 			width,
-			height );
+			height,
+			this );
+	}
+	
+	/**
+	 * Diffuse world state in map details
+	 * 
+	 * @param worldState
+	 * 		The world state to diffuse
+	 */
+	private void diffuseWorldState( WorldState worldState )
+	{
+		this.hexagonalMap.diffuseWorldState( worldState );
 	}
 	
 	/**
@@ -139,8 +151,11 @@ public class World
 				this.hexagonalMap.update( );
 				
 				// Update view of the alive entities
-				this.hexagonalMap.updateMovingEntitiesView( this.getState( ).getViewState( ) );
+				this.hexagonalMap.updateEntitiesView( this.getState( ).getViewState( ) );
 				
+				// Update world state
+				this.state.update( );
+
 				// Update done
 				this.state.updateDone( );
 			}
@@ -156,7 +171,7 @@ public class World
 		{		
 			// Unlock the semaphore
 			this.semaphore.release( );
-		}		
+		}
 	}
 	
 	/**
@@ -170,7 +185,7 @@ public class World
 			this.state.getViewState( ) );
 		
 		// Update view state
-		this.hexagonalMap.updateMovingEntitiesView( this.state.getViewState( ) );
+		this.hexagonalMap.updateEntitiesView( this.state.getViewState( ) );
 	}
 	
 	/**

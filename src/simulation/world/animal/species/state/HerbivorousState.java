@@ -28,7 +28,7 @@ public class HerbivorousState extends AnimalState
 	public HerbivorousState( Group groupReference,
 		Point<Double> initialPosition,
 		AbstractAnimal animal,
-		int currentTurn )
+		long currentTurn )
 	{
 		// Parent constructor
 		super( groupReference,
@@ -56,6 +56,8 @@ public class HerbivorousState extends AnimalState
 				super.getGroup( ).getGroupRange( ).getPosition( ).getY( ) + super.getPosition( ).getY( ) ) ) )
 			{
 				// Random movement stop
+				if( !super.isTryingReproduce( ) )
+				{
 					// Experience
 						Experience e = new Experience( SimulationConstant.HERBIVOROUS_STOP_MOVING_EATING_AREA_PROBABILITY );
 					// Do the experience
@@ -63,24 +65,29 @@ public class HerbivorousState extends AnimalState
 					// He stops moving
 						if( e.getEventID( ) == 0 )
 							super.stopMoving( );
+				}
 				
 				// Check leaves count
 				if( ((HerbivorousGroup)super.getGroup( )).getAimedPlantGroup( ).getLeaves( ) > 0 )
 				{
-					// Modulate eating speed
-					if( this.feedingControllerCounter >= ((Herbivorous)super.getAnimal( )).calculateRoundTakenForLeafEating( ) )
+					// If stock max not reached
+					if( super.getHealthState( ).getProtein( ) < super.getAnimal( ).getNeedDefinition( ).getProtein( ) )
 					{
-						// Eat
-						((HerbivorousGroup)super.getGroup( )).getAimedPlantGroup( ).beEaten( 1 );
-							
 						// Increase protein stock
 						super.getHealthState( ).eat( 1 );
 						
-						// Reset controller
-						this.feedingControllerCounter = 0;
+						// Modulate leaf eating speed
+						if( this.feedingControllerCounter >= ((Herbivorous)super.getAnimal( )).calculateRoundTakenForLeafEating( ) )
+						{
+							// Eat
+							((HerbivorousGroup)super.getGroup( )).getAimedPlantGroup( ).beEaten( 1 );
+							
+							// Reset controller
+							this.feedingControllerCounter = 0;
+						}
+						else
+							this.feedingControllerCounter++;
 					}
-					else
-						this.feedingControllerCounter++;
 				}
 				else
 					this.feedingControllerCounter = 0;

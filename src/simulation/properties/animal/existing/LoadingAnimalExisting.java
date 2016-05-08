@@ -11,6 +11,7 @@ import simulation.file.parser.FileParser;
 import simulation.file.parser.ParsedProperty;
 import simulation.properties.LoadingProperties;
 import simulation.properties.animal.AnimalProperty;
+import simulation.world.animal.diet.DietType;
 import simulation.world.animal.need.Need;
 import simulation.world.animal.species.AbstractAnimal;
 import simulation.world.animal.species.Carnivorous;
@@ -96,6 +97,8 @@ public class LoadingAnimalExisting
 				String dietProperty = "";
 				int maximumDensity = 0;
 				int needProteinProperty = 0;
+				int lifeTime = 0;
+				int reproduceTime = 0;
 				
 				// Get properties
 				for( AnimalProperty ap : AnimalProperty.values( ) )
@@ -125,6 +128,14 @@ public class LoadingAnimalExisting
 							maximumDensity = Integer.parseInt( pp[ ap.ordinal( ) ].getValue( ) );
 							break;
 							
+						case ANIMAL_PROPERTY_LIFE_TIME:
+							lifeTime = Integer.parseInt( pp[ ap.ordinal( ) ].getValue( ) );
+							break;
+							
+						case ANIMAL_PROPERTY_REPRODUCE_TIME:
+							reproduceTime = Integer.parseInt( pp[ ap.ordinal( ) ].getValue( ) );
+							break;
+							
 						case ANIMAL_PROPERTY_NEED_PROTEIN:
 							needProteinProperty = Integer.parseInt( pp[ ap.ordinal( ) ].getValue( ) );
 							break;
@@ -137,16 +148,17 @@ public class LoadingAnimalExisting
 				}
 				
 				// Create animal
-				switch( database.getDiet( dietProperty ).getType( ) )
+				switch( DietType.getType( dietProperty ) )
 				{
 					case DIET_TYPE_CARNIVOROUS:
 						animal[ animalID ] = new Carnivorous( nameProperty,
 							weightProperty,
 							sizeProperty,
 							agilityProperty,
-							database.getDiet( dietProperty ),
 							new Need( needProteinProperty ),
-							maximumDensity );
+							maximumDensity,
+							lifeTime,
+							reproduceTime );
 							
 						break;
 					case DIET_TYPE_HERBIVOROUS:
@@ -154,9 +166,10 @@ public class LoadingAnimalExisting
 							weightProperty,
 							sizeProperty,
 							agilityProperty,
-							database.getDiet( dietProperty ),
 							new Need( needProteinProperty ),
-							maximumDensity );
+							maximumDensity,
+							lifeTime,
+							reproduceTime );
 						break;
 						
 					default:

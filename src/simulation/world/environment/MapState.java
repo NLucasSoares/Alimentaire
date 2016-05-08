@@ -7,6 +7,7 @@ import simulation.constant.SimulationConstant;
 import simulation.math.hexagon.Hexagon;
 import simulation.math.point.Point;
 import simulation.math.probability.Experience;
+import simulation.world.WorldState;
 import simulation.world.animal.group.Group;
 import simulation.world.animal.species.state.AnimalState;
 import simulation.world.environment.biome.resource.field.FieldResource;
@@ -48,6 +49,11 @@ public class MapState
 	private ArrayList<PlantGroup> plantGroup;
 	
 	/**
+	 * World state reference
+	 */
+	private WorldState worldState;
+
+	/**
 	 * Reference to map
 	 */
 	private Map map;
@@ -63,14 +69,23 @@ public class MapState
 	{
 		// Save
 		this.map = map;
-		
+
 		// Init
-		this.resourceState = new ResourceState( 1000,
-			1000 );
+		this.resourceState = new ResourceState( 10000,
+			10000 );
 		this.decomposer = new Decomposer( );
 		this.animalGroup = new ArrayList<Group>( );
 		this.fieldResource = new ArrayList<FieldResource>( );
 		this.plantGroup = new ArrayList<PlantGroup>( );
+		this.worldState = null;
+	}
+	
+	/**
+	 * @return the world state reference
+	 */
+	public WorldState getWorldState( )
+	{
+		return this.worldState;
 	}
 	
 	/**
@@ -112,7 +127,8 @@ public class MapState
 			PlantGroup pg = it.next( );
 			
 			// Update
-			pg.update( this.resourceState );
+			pg.update( this.resourceState,
+				this.decomposer );
 			
 			// Check leaves count
 			if( pg.getLeaves( ) <= 0 )
@@ -120,6 +136,8 @@ public class MapState
 		}
 		
 		// Plant group spawn
+		if( this.plantGroup.size( ) < SimulationConstant.MAXIMUM_PLANT_GROUP_COUNT_MAP )
+		{
 			// Create the experience
 				Experience e = new Experience( SimulationConstant.PLANT_SPAWN_PROBABILITY );
 			// Do the experience
@@ -127,40 +145,21 @@ public class MapState
 			// Act according to result
 				if( e.getEventID( ) == 0 )
 				{
-					// Calculate size
-					double wPlant = Hexagon.calculateWidth( Map.SIZE_PIXEL_BY_SIZE_UNIT );
-					double hPlant = Hexagon.calculateHeight( Map.SIZE_PIXEL_BY_SIZE_UNIT );
-					
-					// Create hexagon copy
-					simulation.gui.object.Hexagon hexagonCopy = new simulation.gui.object.Hexagon( Map.SIZE_PIXEL_BY_SIZE_UNIT );
-					
-					// Determine where allowed to plant
-					Point<Double> position;
-					do
-					{
-						position = new Point<Double>( ( simulation.math.probability.Operation.random( 1,
-								wPlant ) ),
-							( simulation.math.probability.Operation.random( 1,
-								hPlant ) ) );
-					} while( !hexagonCopy.isContaining( position.getX( ).intValue( ),
-						position.getY( ).intValue( ) ) );
+					// Get random position
+					Point<Double> position = Hexagon.getRandomPosition( (double)Map.SIZE_PIXEL_BY_SIZE_UNIT );
 					
 					// Plant
 					this.plantGroup.add( new PlantGroup( position,
 						new Need( 1,
 							1,
-							1 ) ) ); // HAVE TO SEE FOR NEED DETAILS
+							1 ) ) ); // TODO HAVE TO SEE FOR NEED DETAILS
 				}
+		}
 				
 		// Update animal groups
 		for( Iterator<Group> iterator = this.animalGroup.iterator( ); iterator.hasNext( ); )
-		{
-			// Get group
-			Group group = iterator.next( );
-			
 			// Update
-			group.update( this );
-		}
+			iterator.next( ).update( this );
 		
 		// Update field resources
 		for( Iterator<FieldResource> iterator = this.fieldResource.iterator( ); iterator.hasNext( ); )
@@ -187,6 +186,11 @@ public class MapState
 		for( Iterator<PlantGroup> it = this.getPlantGroup( ); it.hasNext( ); )
 			// Update
 			it.next( ).updateDesynchronized( );
+		
+		// Animal group
+		for( Iterator<Group> it = this.getAnimalGroup( ); it.hasNext( ); )
+			// Update
+			it.next( ).updateDesynchronized( );
 	}
 	
 	/**
@@ -202,6 +206,18 @@ public class MapState
 	}
 	
 	/**
+	 * Add a plant group
+	 * 
+	 * @param group
+	 * 		The plant group to add
+	 */
+	public void addPlantGroup( PlantGroup group )
+	{
+		// Add the group
+		this.plantGroup.add( group );
+	}
+	
+	/**
 	 * Add an animal field resource
 	 *
 	 * @param animal
@@ -212,6 +228,18 @@ public class MapState
 		// Add field resource
 		this.fieldResource.add( new FieldResource( a.getAnimal( ).getName( ),
 			a.getAnimal( ).getSize( ) * a.getAnimal( ).getWeight( ),
-			a.getPosition( ) ) );
+			new Point<Double>( a.getPosition( ).getX( ) + a.getGroup( ).getPosition( ).getX( ),
+				a.getPosition( ).getY( ) + a.getGroup( ).getPosition( ).getY( ) ) ) );
+	}
+
+	/**
+	 * Set the world state
+	 * 
+	 * @param world state
+	 * 		The world state to set
+	 */
+	public void setWorldState( WorldState worldState )
+	{
+		this.worldState = worldState;
 	}
 }

@@ -1,5 +1,6 @@
 package simulation.math.hexagon;
 
+import simulation.math.point.Point;
 import simulation.math.point.PointDouble;
 
 /**
@@ -57,6 +58,35 @@ public class Hexagon
 
 		// Calculate the constants
 		this.calculateConstants( );
+	}
+	
+	/**
+	 * Find random position in hexagon
+	 * 
+	 * @return the random position
+	 */
+	public static Point<Double> getRandomPosition( double size )
+	{
+		// Calculate size
+		double w = Hexagon.calculateWidth( size );
+		double h = Hexagon.calculateHeight( size );
+		
+		// Create hexagon copy
+		simulation.gui.object.Hexagon hexagonCopy = new simulation.gui.object.Hexagon( size );
+		
+		// Determine random position
+		Point<Double> position;
+		do
+		{
+			position = new Point<Double>( ( simulation.math.probability.Operation.random( 1,
+					w ) ),
+				( simulation.math.probability.Operation.random( 1,
+					h ) ) );
+		} while( !hexagonCopy.isContaining( position.getX( ).intValue( ),
+			position.getY( ).intValue( ) ) );
+		
+		// Return position
+		return position;
 	}
 	
 	/**

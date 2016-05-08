@@ -92,7 +92,7 @@ public class HerbivorousGroup extends Group
 	{
 		// Parent update
 		super.update( state );
-		
+
 		// Check the random move
 		if( this.aimedPosition.isAimingSomething( ) )
 			// Check for goal
@@ -100,21 +100,30 @@ public class HerbivorousGroup extends Group
 			{
 				// Stop movement
 				super.stopMoving( );
-				
+
 				// Remove aimed positon
 				this.aimedPosition.removeAim( );
 			}
 		
 		// Check for current food source existence
 		if( this.currentlyAimedPlantGroup != null )
+		{			
+			// Check plant group
 			if( this.currentlyAimedPlantGroup.getLeaves( ) == 0 )
 			{
 				// Cut link
 				this.currentlyAimedPlantGroup = null;
+
+				// Remove random aim
+				this.aimedPosition.removeAim( );
 				
+				// Remove object aim
+				super.removeAimOnObject( );
+
 				// Stop movement
 				super.stopMoving( );
 			}
+		}
 
 		// If need to find new source
 		if( this.currentlyAimedPlantGroup == null )
@@ -122,13 +131,13 @@ public class HerbivorousGroup extends Group
 			{
 				// Get the group
 				PlantGroup p = it.next( );
-				
+
 				// Check for intersect
 				if( this.isInteresect( p ) )
 				{
 					// Found the new source
 					this.currentlyAimedPlantGroup = p;
-					
+
 					// Leave search
 					break;
 				}
@@ -142,11 +151,20 @@ public class HerbivorousGroup extends Group
 			
 			// Stop if arrived
 			if( this.getGroupRange( ).contains( this.currentlyAimedPlantGroup.getGroupRange( ).getPosition( ) ) )
-				this.stopMoving( );
+			{
+				// Experience
+				Experience experience = new Experience( SimulationConstant.HERBIVOROUS_STOP_MOVING_PLANT_CENTER_PROBABILITY );
+				
+				// Do the experience
+				experience.doExperience( );
+				
+				// Stop only if experience succeed
+				if( experience.getEventID( ) == 0 )
+					this.stopMoving( );
+			}
 			// Make group move
 			else
 				this.startMoving( );
-				
 		}
 		// If nothing was found, random move
 		else
@@ -163,22 +181,8 @@ public class HerbivorousGroup extends Group
 				// Get result
 				if( experience.getEventID( ) == 0 )
 				{
-					// The aimed position
-					Point<Double> position;
-					
-					// Hexagon
-					Hexagon h = new Hexagon( Map.SIZE_PIXEL_BY_SIZE_UNIT );
-					
-					// Pick a random position
-					do
-					{
-						// Random creation
-						position = new Point<Double>( simulation.math.probability.Operation.random( 0.0d,
-								(double)Map.SIZE_PIXEL_BY_SIZE_UNIT ),
-							simulation.math.probability.Operation.random( 0.0d,
-								(double)Map.SIZE_PIXEL_BY_SIZE_UNIT ) );
-					} while( !h.isContaining( new Point<Integer>( position.getX( ).intValue( ),
-						position.getY( ).intValue( ) ) ) );
+					// Get random position
+					Point<Double> position = Hexagon.getRandomPosition( (double)Map.SIZE_PIXEL_BY_SIZE_UNIT );
 					
 					// Aim the point
 						// Set for later check up

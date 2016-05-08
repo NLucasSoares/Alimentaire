@@ -1,6 +1,5 @@
 package simulation.world.animal.species;
 
-import simulation.world.animal.diet.Diet;
 import simulation.world.animal.need.Need;
 
 /**
@@ -27,21 +26,25 @@ public class Carnivorous extends AbstractAnimal
 	 * 		The need of the animal
 	 * @param maximumDensity
 	 * 		The maximum fellows in the group
+	 * @param lifeTime
+	 * 		The life time of animal
 	 */
 	public Carnivorous( String name,
 		int weight,
 		int size,
-		int agility, 
-		Diet diet,
+		int agility,
 		Need needDefinition,
-		int maximumDensity )
+		int maximumDensity,
+		int lifeTime,
+		int reproduceTime )
 	{
 		super( name,
 			weight,
 			size,
 			agility,
-			diet,
 			needDefinition,
-			maximumDensity );
+			maximumDensity,
+			lifeTime,
+			reproduceTime );
 	}
 }

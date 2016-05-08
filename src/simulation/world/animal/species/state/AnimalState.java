@@ -2,8 +2,10 @@ package simulation.world.animal.species.state;
 
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
+import java.util.Iterator;
 
 import simulation.ViewState;
+import simulation.constant.SimulationConstant;
 import simulation.math.angle.AngleMovement;
 import simulation.math.circle.Circle;
 import simulation.math.point.Point;
@@ -23,6 +25,11 @@ public abstract class AnimalState {
 	 * Reference to the group this animal belongs to.
 	 */
 	private Group groupReference;
+	
+	/**
+	 * The round count it will stay alive
+	 */
+	private long lifeTimeModulated;
 	
 	/**
 	 * Current state of the needs of this animal.
@@ -45,9 +52,24 @@ public abstract class AnimalState {
 	private boolean isRandomMoveActive;
 	
 	/**
+	 * Is reproducing searching?
+	 */
+	private boolean isReproduceSearching;
+	
+	/**
+	 * The animal with who trying to reproduce
+	 */
+	private AnimalState animalToReproduceWith;
+	
+	/**
 	 * The birth date (in turns)
 	 */
-	private int birthDate;
+	private long birthDate;
+	
+	/**
+	 * Last round given birth
+	 */
+	private long lastRoundGivenBirth;
 	
 	/**
 	 * The painting shape
@@ -67,7 +89,7 @@ public abstract class AnimalState {
 	public AnimalState( Group groupReference,
 		Point<Double> initialPosition,
 		AbstractAnimal animal,
-		int currentTurn )
+		long currentTurn )
 	{
 		// Save
 		this.groupReference = groupReference;
@@ -79,6 +101,11 @@ public abstract class AnimalState {
 		this.birthDate = currentTurn;
 		this.aimedPosition = new AimedPosition( );
 		this.isRandomMoveActive = false;
+		this.lastRoundGivenBirth = 0;
+		this.isReproduceSearching = false;
+		this.animalToReproduceWith = null;
+		this.lifeTimeModulated = (long)( (double)animal.getLifeTime( ) * simulation.math.probability.Operation.random( SimulationConstant.ANIMAL_LIFE_TIME_REDUCTION_FACTOR_MIN,
+			SimulationConstant.ANIMAL_LIFE_TIME_REDUCTION_FACTOR_MAX ) );
 	}
 	
 	/**
@@ -98,9 +125,17 @@ public abstract class AnimalState {
 	}
 	
 	/**
+	 * @return the modulated life time
+	 */
+	public long getLifeTime( )
+	{
+		return this.lifeTimeModulated;
+	}
+	
+	/**
 	 * @return the birth date
 	 */
-	public int getBirthDate( )
+	public long getBirthDate( )
 	{
 		return this.birthDate;
 	}
@@ -130,6 +165,14 @@ public abstract class AnimalState {
 	}
 	
 	/**
+	 * @return is trying to reproduce
+	 */
+	public boolean isTryingReproduce( )
+	{
+		return this.animalToReproduceWith != null;
+	}
+	
+	/**
 	 * @return the animal definition
 	 */
 	public AbstractAnimal getAnimal( )
@@ -145,6 +188,14 @@ public abstract class AnimalState {
 		return this.healthState;
 	}
 	
+	/**
+	 * @return last round given birth
+	 */
+	public long getLastRoundGivenBirth( )
+	{
+		return this.lastRoundGivenBirth;
+	}
+
 	/**
 	 * Update view
 	 * 
@@ -195,6 +246,14 @@ public abstract class AnimalState {
 	}
 	
 	/**
+	 * Activate mate search to reproduce
+	 */
+	public void activateReproduceResearch( )
+	{
+		this.isReproduceSearching = true;
+	}
+	
+	/**
 	 * Start moving
 	 */
 	public void startMoving( )
@@ -211,10 +270,30 @@ public abstract class AnimalState {
 	}
 	
 	/**
+	 * @return if is moving
+	 */
+	public boolean isMoving( )
+	{
+		return this.position.isMoving( );
+	}
+	
+	/**
+	 * Kill the animal
+	 */
+	public void kill( )
+	{
+		this.healthState.kill( );
+	}
+	
+	/**
 	 * Update
 	 */
 	public void update( )
 	{
+		// Check if alive
+		if( !this.isAlive( ) )
+			return;
+		
 		// Check if animal doesn't exit his range
 		if( !this.groupReference.getGroupRange( ).contains( new Point<Double>( this.groupReference.getGroupRange( ).getPosition( ).getX( ) - this.groupReference.getRangeDiameter( ) / 2.0d + this.getPosition( ).getX( ),
 			this.groupReference.getGroupRange( ).getPosition( ).getY( ) - this.groupReference.getRangeDiameter( ) / 2.0d + this.getPosition( ).getY( ) ) ) )
@@ -222,10 +301,92 @@ public abstract class AnimalState {
 			// Aim the center
 			this.aimPosition( new Point<Double>( this.groupReference.getRangeDiameter( ) / 2.0d,
 				this.groupReference.getRangeDiameter( ) / 2.0d ) );
+			
+			// Start to move
+			this.startMoving( );
 		}
 			
+		// If looking for reproduce
+		if( this.isReproduceSearching )
+		{
+			// Doesn't have enough resource to continue search
+			if( ( this.getHealthState( ).getProtein( ) / this.getAnimal( ).getNeedDefinition().getProtein( ) ) * 100.0d < (double)SimulationConstant.FLOOR_FOR_PROTEIN_STOCK_STOP_REPRODUCING )
+				this.isReproduceSearching = false;
+			// Have enough resource
+			else
+			{
+				// Check for current search
+				if( this.animalToReproduceWith != null )
+				{
+					// Animal aimed alive?
+					if( this.animalToReproduceWith.isAlive( ) )
+					{
+						// Range circle
+						Circle circle = new Circle( this.getPosition( ),
+							SimulationConstant.POSITION_AIMING_PRECISION );
+						
+						// Partner found?
+						if( circle.contains( this.animalToReproduceWith.getPosition( ) ) )
+						{
+							// Stop moving
+							this.stopMoving( );
+
+							// Add animal
+							this.getGroup( ).addReproduceResult( this );
+
+							// Save turn for this
+							this.lastRoundGivenBirth = this.getGroup( ).getMap( ).getState( ).getWorldState( ).getRound( );
+
+							// Remove aim
+							this.isReproduceSearching = false;
+							this.animalToReproduceWith = null;
+						}
+						// Go to the partner
+						else
+						{
+							// Aim
+							this.position.aimPosition( this.animalToReproduceWith.getPosition( ) );
+
+							// Move
+							this.position.startMoving( );
+						}
+					}
+					// Partner is dead
+					else
+					{
+						// Remove
+						this.animalToReproduceWith = null;
+						
+						// Stop movement
+						this.stopMoving( );
+					}
+				}
+				// Look for partner in the group
+				else
+				{
+					// Browse animals
+					for( Iterator<AnimalState> it = this.getGroup( ).getAnimalState( ).iterator( ); it.hasNext( ); )
+					{
+						// Get animal
+						AnimalState a = it.next( );
+						
+						// Check current state
+						if( a.isReproduceSearching
+							&& a.animalToReproduceWith == null )
+						{
+							// Save
+							this.animalToReproduceWith = a;
+							a.animalToReproduceWith = this;
+							
+							// Leave research
+							break;
+						}
+					}
+				}
+			}
+		}
 		// Are we aiming a point
-		if( this.aimedPosition.isAimingSomething( ) )
+		else if( this.aimedPosition.isAimingSomething( ) )
 		{
 			// Goal?
 			if( this.aimedPosition.isReachedPosition( this.getPosition( ) ) )
@@ -265,6 +426,14 @@ public abstract class AnimalState {
 			// Start moving
 			this.startMoving( );
 		}
+		
+		// Consume protein
+			// If animal is moving
+				if( this.isMoving( ) )
+					this.healthState.addProteinConsumption( 1 );
+			// If the whole group is moving
+				if( this.groupReference.isMoving( ) )
+					this.healthState.addProteinConsumption( 1 );
 		
 		// Update needs
 		this.healthState.update( );

@@ -8,9 +8,7 @@ import java.util.ArrayList;
 import simulation.properties.animal.LoadingAnimal;
 import simulation.properties.biomes.LoadingBiomes;
 import simulation.properties.climates.LoadingClimates;
-import simulation.properties.diets.LoadingDiets;
 import simulation.properties.weathers.LoadingWeather;
-import simulation.world.animal.diet.Diet;
 import simulation.world.animal.species.AbstractAnimal;
 import simulation.world.animal.species.Carnivorous;
 import simulation.world.animal.species.Herbivorous;
@@ -30,11 +28,6 @@ public class Database {
 	 * Animals
 	 */
 	private AbstractAnimal[ ] animals;
-	
-	/**
-	 * Animals diet
-	 */
-	private Diet[ ] diets;
 
 	/**
 	 * Biomes
@@ -64,10 +57,7 @@ public class Database {
 	 */
 	public Database( ) throws FileNotFoundException,
 		IOException
-	{		
-		// Load diets
-		this.diets = LoadingDiets.load( this );
-		
+	{
 		// Load animals
 		this.animals = LoadingAnimal.load( this );
 		
@@ -79,60 +69,6 @@ public class Database {
 		
 		// Load biomes
 		this.biomes = LoadingBiomes.load( this );
-	}
-	
-	/**
-	 * Get diet ID from diet name
-	 * 
-	 * @param name
-	 * 		The name of the diet
-	 * 
-	 * @return the id of the diet
-	 */
-	private int getDietIDFromName( String name ) throws InvalidParameterException
-	{
-		// Iterator
-		int i = 0;
-		
-		// Look for name
-		for( Diet d : this.diets )
-		{
-			// Check
-			if( d.getName( ).equals( name ) )
-				return i;
-			
-			// Iterate
-			i++;
-		}
-		
-		// Unfound
-		throw new InvalidParameterException( );
-	}
-	
-	/**
-	 * Get diet from name
-	 * 
-	 * @param name
-	 * 		The name of the diet
-	 * 
-	 * @return the diet
-	 */
-	public Diet getDiet( String name )
-	{
-		return getDiet( this.getDietIDFromName( name ) );
-	}
-	
-	/**
-	 * Get diet from id
-	 * 
-	 * @param id
-	 * 		The id of the diet
-	 * 
-	 * @return diet
-	 */
-	public Diet getDiet( int id )
-	{
-		return this.diets[ id ];
 	}
 	
 	/**

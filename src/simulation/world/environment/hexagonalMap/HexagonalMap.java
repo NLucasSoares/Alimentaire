@@ -13,12 +13,15 @@ import javax.swing.JPanel;
 import simulation.Database;
 import simulation.ViewState;
 import simulation.constant.SimulationConstant;
+import simulation.gui.object.Hexagon;
 import simulation.gui.panels.simulation.AlphaEvolution;
 import simulation.math.hexagon.HexagonEdge;
 import simulation.math.point.Point;
 import simulation.math.point.PointDouble;
 import simulation.math.rectangle.Rectangle;
 import simulation.world.Configuration;
+import simulation.world.World;
+import simulation.world.WorldState;
 import simulation.world.animal.group.CarnivorousGroup;
 import simulation.world.animal.group.Group;
 import simulation.world.animal.group.HerbivorousGroup;
@@ -31,6 +34,7 @@ import simulation.world.environment.biome.Biome;
 import simulation.world.environment.biome.resource.field.FieldResource;
 import simulation.world.environment.nameGenerator.MapNameGenerator;
 import simulation.world.environment.plant.PlantGroup;
+import simulation.world.plant.need.Need;
 
 /**
  * A hexagonal group of map, using axial
@@ -80,7 +84,8 @@ public class HexagonalMap
 	public HexagonalMap( Configuration configuration,
 		Database database,
 		int width,
-		int height )
+		int height,
+		World world )
 	{
 		// Save the size
 		this.size = configuration.getSize( );
@@ -119,7 +124,7 @@ public class HexagonalMap
 				hmv.getCurrentAxialCoordinates( ),
 				biome ) );
 		}
-		
+
 		// Create the hexagons
 		this.createHexagons( width,
 			height,
@@ -343,6 +348,19 @@ public class HexagonalMap
 	}	
 	
 	/**
+	 * Diffuse world state
+	 * 
+	 * @param worldState
+	 * 		The world state to diffuse
+	 */
+	public void diffuseWorldState( WorldState worldState )
+	{
+		// Save
+		for( UnitHexagonalMap uhm : this.hexagons )
+			uhm.getMap( ).getState( ).setWorldState( worldState );
+	}
+	
+	/**
 	 * Calculate hexagons count
 	 * 
 	 * @return the hexagonal count
@@ -443,7 +461,7 @@ public class HexagonalMap
 	 * @param viewState
 	 * 		The current viewstate
 	 */
-	public void updateMovingEntitiesView( ViewState viewState )
+	public void updateEntitiesView( ViewState viewState )
 	{
 		// Update view point
 		for( UnitHexagonalMap uhm : this.hexagons )
@@ -457,8 +475,12 @@ public class HexagonalMap
 			for( Iterator<Group> it = uhm.getMap( ).getState( ).getAnimalGroup( ); it.hasNext( ); )
 				it.next( ).updateView( viewState,
 					uhm );
+			
+			// Field resource
+			for( Iterator<FieldResource> it = uhm.getMap().getState().getFieldResource( ); it.hasNext( ); )
+				it.next( ).updateView( viewState,
+					uhm );
 		}
-		
 	}
 	
 	/**
@@ -539,7 +561,11 @@ public class HexagonalMap
 					// Get field resource
 					FieldResource f = it.next( );
 					
-					// 
+					// Fill
+						// Set color
+							g.setColor( SimulationConstant.FIELD_RESOURCE_COLOR );
+						// Fill
+							((Graphics2D)g).fill( f.getShape( ) );
 				}
 				
 				// Plant group
@@ -555,13 +581,17 @@ public class HexagonalMap
 							// Set color
 								g.setColor( SimulationConstant.PLANT_COLOR );
 							// Fill
-								((Graphics2D)g).fill( pg.getShape( ) );			
+								((Graphics2D)g).fill( pg.getShape( ) );
 						
 						// Draw border
+						if( viewState.getZoomLevel( ) > 1 )
+						{
 							// Set color
 								g.setColor( Color.WHITE );
 							// Draw
 								((Graphics2D)g).draw( pg.getShape( ) );
+								
+						}
 					}
 				}
 				
@@ -572,7 +602,7 @@ public class HexagonalMap
 					Group group = it.next( );
 					
 					// Construct circle
-					if( group.getRangeDiameter( ) > 0 )
+					if( group.getRangeDiameter( ) > 1 )
 					{
 						// Fill
 							// Set color
@@ -583,10 +613,13 @@ public class HexagonalMap
 								((Graphics2D)g).fill( group.getShape( ) );
 
 						// Draw border
+						if( viewState.getZoomLevel( ) > 1 )
+						{
 							// Set color
 								g.setColor( Color.WHITE );
 							// Draw
 								((Graphics2D)g).draw( group.getShape( ) );
+						}
 								
 						// Paint animals
 						for( Iterator<AnimalState> ait = group.getAnimalState( ).iterator( ); ait.hasNext( ); )
@@ -611,13 +644,13 @@ public class HexagonalMap
 				// Annotations
 					// Plant group
 						for( Iterator<PlantGroup> it = this.hexagons[ i ].getMap( ).getState( ).getPlantGroup( ); it.hasNext( ); )
-						{
-							// Get plant group
-							PlantGroup pg = it.next( );
-							
 							// Draw
-							pg.getAnnotation( ).draw( g );
-						}
+							it.next( ).getAnnotation( ).draw( g );
+
+					// Animal group
+						for( Iterator<Group> it = this.hexagons[ i ].getMap( ).getState( ).getAnimalGroup( ); it.hasNext( ); )
+							// Draw
+							it.next( ).getAnnotation( ).draw( g );
 				
 			}
 		}
@@ -634,11 +667,11 @@ public class HexagonalMap
 		// For each map
 		for( UnitHexagonalMap uhm : this.hexagons )
 		{
-			// Determine how many group to spawn
-			int groupCount = (int)simulation.math.probability.Operation.random( SimulationConstant.MINIMUM_GROUP_COUNT_MAP_START,
-				SimulationConstant.MAXIMUM_GROUP_COUNT_MAP_START );
+			// Determine how many animal group to spawn
+			int groupCount = (int)simulation.math.probability.Operation.random( SimulationConstant.MINIMUM_ANIMAL_GROUP_COUNT_MAP_START,
+				SimulationConstant.MAXIMUM_ANIMAL_GROUP_COUNT_MAP_START );
 			
-			// Populate
+			// Populate with animals
 			for( int i = 0; i < groupCount; i++ )
 			{
 				// Choose animal
@@ -669,6 +702,20 @@ public class HexagonalMap
 					// Add the group
 					uhm.getMap( ).getState( ).addGroup( g );
 				}
+			}
+			
+			// Determine how many plant group to spawn
+			groupCount = (int)simulation.math.probability.Operation.random( SimulationConstant.MINIMUM_PLANT_GROUP_COUNT_MAP_START,
+				SimulationConstant.MAXIMUM_PLANT_GROUP_COUNT_MAP_START );
+			
+			// Populate with plants
+			for( int i = 0; i < groupCount; i++ )
+			{
+				// Plant group
+				uhm.getMap( ).getState( ).addPlantGroup( new PlantGroup( Hexagon.getRandomPosition( (double)Map.SIZE_PIXEL_BY_SIZE_UNIT ),
+					new Need( 1, // TODO
+						1,
+						1 ) ) );
 			}
 		}
 	}

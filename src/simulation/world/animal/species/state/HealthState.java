@@ -21,6 +21,11 @@ public class HealthState
 	private double protein;
 	
 	/**
+	 * Good health round count
+	 */
+	private int goodHealthRoundCount;
+	
+	/**
 	 * Health point
 	 */
 	private int healthPoint;
@@ -29,6 +34,16 @@ public class HealthState
 	 * Decrease health controller
 	 */
 	private int healthDecreaseController;
+	
+	/**
+	 * Protein consumtion
+	 */
+	private int proteinConsumption;
+	
+	/**
+	 * Is dead
+	 */
+	private boolean isDead;
 	
 
 	/**
@@ -43,8 +58,12 @@ public class HealthState
 		this.needDefinition = needDefinition;
 		
 		// Init
-		this.protein = this.needDefinition.getProtein( ) / 2.0d;
+		this.protein = this.needDefinition.getProtein( ) / simulation.math.probability.Operation.random( 1.5d,
+			2.5d );
 		this.healthPoint = SimulationConstant.MAXIMUM_ANIMAL_HEALTH_POINT;
+		this.proteinConsumption = 0;
+		this.goodHealthRoundCount = 0;
+		this.isDead = false;
 	}
 
 	/**
@@ -68,7 +87,26 @@ public class HealthState
 	 */
 	public boolean isAlive( )
 	{
-		return ( this.healthPoint > 0 );
+		return !this.isDead;
+	}
+	
+	/**
+	 * Add consumtion of protein
+	 * 
+	 * @param protein
+	 * 		Protein consumed by an action
+	 */
+	public void addProteinConsumption( int protein )
+	{
+		this.proteinConsumption += protein;
+	}
+	
+	/**
+	 * Kill
+	 */
+	public void kill( )
+	{
+		this.isDead = true;
 	}
 	
 	/**
@@ -88,9 +126,19 @@ public class HealthState
 	 */
 	public void update( )
 	{
+		// Reduce protein quantity
+		this.protein -= this.proteinConsumption;
+		
+		// Reset the protein consumption gesture
+		this.proteinConsumption = 0;
+		
 		// If needs are bad, loss of life
-		if( this.protein == 0 )
+		if( this.protein <= 0 )
 		{
+			// Set to zero
+			this.protein = 0;
+			
+			// Reduce health point
 			if( this.healthDecreaseController < SimulationConstant.TURN_BEFORE_LOSING_HEALTH )
 				this.healthDecreaseController++;
 			else
@@ -102,8 +150,28 @@ public class HealthState
 				this.healthDecreaseController = 0;
 			}
 		}
-		// Controller to 0
+		// Good nutrition
 		else
+		{
+			// Reset controller
 			this.healthDecreaseController = 0;
+			
+			// Increase good health round counter
+			if( this.goodHealthRoundCount < SimulationConstant.ROUND_GOOD_SHAPE_BEFORE_GAINING_HEALTH_POINT_ANIMAL )
+				this.goodHealthRoundCount++;
+			else
+			{
+				// Reset counter
+				this.goodHealthRoundCount = 0;
+				
+				// Increase health point
+				if( this.healthPoint < SimulationConstant.MAXIMUM_ANIMAL_HEALTH_POINT )
+					this.healthPoint++;
+			}
+		}
+		
+		// Check if dead
+		if( this.healthPoint <= 0 )
+			this.isDead = true;
 	}
 }

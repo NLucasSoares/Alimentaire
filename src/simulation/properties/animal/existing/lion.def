@@ -4,5 +4,7 @@ animal.size=90
 animal.agility=30
 animal.diet=carnivorous
 animal.maximumDensity=4
+animal.lifeTime=5000
+animal.reproduceTime=600
 
 animal.need.protein=1000
