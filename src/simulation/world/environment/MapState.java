@@ -8,7 +8,9 @@ import simulation.math.hexagon.Hexagon;
 import simulation.math.point.Point;
 import simulation.math.probability.Experience;
 import simulation.world.WorldState;
+import simulation.world.animal.group.CarnivorousGroup;
 import simulation.world.animal.group.Group;
+import simulation.world.animal.group.HerbivorousGroup;
 import simulation.world.animal.species.state.AnimalState;
 import simulation.world.environment.biome.resource.field.FieldResource;
 import simulation.world.environment.biome.resource.state.ResourceState;
@@ -52,11 +54,6 @@ public class MapState
 	 * World state reference
 	 */
 	private WorldState worldState;
-
-	/**
-	 * Reference to map
-	 */
-	private Map map;
 	
 	/**
 	 * Construct the map state from map
@@ -65,11 +62,8 @@ public class MapState
 	 * @param map
 	 * 		Reference to current map
 	 */
-	public MapState( Map map )
+	public MapState( )
 	{
-		// Save
-		this.map = map;
-
 		// Init
 		this.resourceState = new ResourceState( 10000,
 			10000 );
@@ -113,6 +107,30 @@ public class MapState
 	}
 	
 	/**
+	 * @return the total animal count
+	 */
+	public long getAnimalCount( )
+	{
+		// Output
+		long output = 0;
+		
+		// Calculate
+		for( Iterator<Group> it = this.animalGroup.iterator( ); it.hasNext( ); )
+			output += it.next( ).getAnimalCount( );
+		
+		// OK
+		return output;
+	}
+	
+	/**
+	 * @return the plant group count
+	 */
+	public long getPlantGroupCount( )
+	{
+		return this.plantGroup.size( );
+	}
+	
+	/**
 	 * Update the state
 	 */
 	public void update( )
@@ -152,14 +170,47 @@ public class MapState
 					this.plantGroup.add( new PlantGroup( position,
 						new Need( 1,
 							1,
-							1 ) ) ); // TODO HAVE TO SEE FOR NEED DETAILS
+							1 ) ) );
 				}
 		}
-				
+		
+		// Group to add
+		ArrayList<Group> groupToAdd = new ArrayList<Group>( );
+		
+		// Group to remove
+		ArrayList<Group> groupToRemove = new ArrayList<Group>( );
+		
 		// Update animal groups
 		for( Iterator<Group> iterator = this.animalGroup.iterator( ); iterator.hasNext( ); )
+		{
+			// Group
+			Group g = iterator.next( );
+			
 			// Update
-			iterator.next( ).update( this );
+			g.update( this );
+			
+			// Add group to add if requested
+			if( g.getNextTurnGroupUpdate( ).getGroupToAdd( ) != null )
+			{
+				// Add
+				groupToAdd.add( g.getNextTurnGroupUpdate( ).getGroupToAdd( ) );
+				
+				// Remove
+				g.getNextTurnGroupUpdate( ).removeGroupToAdd( );
+			}
+			
+			// Check group empty
+			if( g.getAnimalCount( ) <= 0 )
+				groupToRemove.add( g );
+		}
+		
+		// Remove empty groups
+		for( Iterator<Group> it = groupToRemove.iterator( ); it.hasNext( ); )
+			this.animalGroup.remove( it.next( ) );
+		
+		// Add the group if requested
+		for( Iterator<Group> it = groupToAdd.iterator( ); it.hasNext( ); )
+			this.animalGroup.add( it.next( ) );
 		
 		// Update field resources
 		for( Iterator<FieldResource> iterator = this.fieldResource.iterator( ); iterator.hasNext( ); )
@@ -174,6 +225,48 @@ public class MapState
 			if( fr.getProteinQuantity( ) <= 0 )
 				iterator.remove( );
 		}
+	}
+	
+	/**
+	 * @return group count
+	 */
+	public int getGroupCount( )
+	{
+		return this.animalGroup.size( );
+	}
+	
+	/**
+	 * @return the herbivorous group count
+	 */
+	public int getHerbivorousGroupCount( )
+	{
+		// Result
+		int output = 0;
+		
+		// Count
+		for( Iterator<Group> it = this.animalGroup.iterator( ); it.hasNext( ); )
+			if( it.next( ) instanceof HerbivorousGroup )
+				output++;
+		
+		// Return result
+		return output;
+	}
+	
+	/**
+	 * @return the carnivorous group count
+	 */
+	public int getCarnivorousGroupCount( )
+	{
+		// Result
+		int output = 0;
+		
+		// Count
+		for( Iterator<Group> it = this.animalGroup.iterator( ); it.hasNext( ); )
+			if( it.next( ) instanceof CarnivorousGroup )
+				output++;
+		
+		// Return result
+		return output;
 	}
 	
 	/**

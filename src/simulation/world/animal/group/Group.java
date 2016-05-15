@@ -13,6 +13,7 @@ import simulation.math.angle.AngleMovement;
 import simulation.math.circle.Circle;
 import simulation.math.point.Point;
 import simulation.world.aim.AimedObject;
+import simulation.world.animal.AnimalHelper;
 import simulation.world.animal.group.mortalityRate.MortalityRate;
 import simulation.world.animal.species.AbstractAnimal;
 import simulation.world.animal.species.Carnivorous;
@@ -48,11 +49,6 @@ public abstract class Group implements AimedObject
 	private ArrayList<AnimalState> animals;
 	
 	/**
-	 * Animal to add at the update ending
-	 */
-	private ArrayList<AnimalState> animalsToAdd;
-	
-	/**
 	 * Map reference
 	 */
 	private Map map;
@@ -86,6 +82,11 @@ public abstract class Group implements AimedObject
 	 * Painting shape
 	 */
 	private Shape shape;
+	
+	/**
+	 * Next turn group update
+	 */
+	private NextTurnGroupUpdate nextTurnGroupUpdate;
 
 	/**
 	 * Construct the group
@@ -152,7 +153,7 @@ public abstract class Group implements AimedObject
 		this.aimedObject = null;
 		this.annotation = new Annotation( 1,
 			0xFFFFFFFF );
-		this.animalsToAdd = new ArrayList<AnimalState>( );
+		this.nextTurnGroupUpdate = new NextTurnGroupUpdate( );
 		
 		// Calculate diameter depending initial fellow count
 		this.updateRangeDiameter( initialFellowCount );
@@ -220,6 +221,14 @@ public abstract class Group implements AimedObject
 	}
 	
 	/**
+	 * @return the animal count
+	 */
+	public int getAnimalCount( )
+	{
+		return this.animals.size( );
+	}
+	
+	/**
 	 * Update range diameter, with a specified
 	 * fellow count
 	 * 
@@ -272,6 +281,14 @@ public abstract class Group implements AimedObject
 	}
 	
 	/**
+	 * @return the next
+	 */
+	public NextTurnGroupUpdate getNextTurnGroupUpdate( )
+	{
+		return this.nextTurnGroupUpdate;
+	}
+	
+	/**
 	 * @return the painting shape
 	 */
 	public Shape getShape( )
@@ -310,7 +327,7 @@ public abstract class Group implements AimedObject
 	{
 		return this.position.isMoving( );
 	}
-	
+
 	/**
 	 * Update the group
 	 * 
@@ -383,18 +400,50 @@ public abstract class Group implements AimedObject
 					&& this.getMap( ).getState( ).getWorldState( ).getRound( ) - animal.getLastRoundGivenBirth( ) >= animal.getAnimal( ).getReproduceTime( ) )
 					animal.activateReproduceResearch( );
 		}
+
+		// Check if group is full
+		if( this.animals.size( ) >= this.animalDefinition.getMaximumDensity( ) )
+		{
+			if( this.getMap( ).getState( ).getGroupCount( ) < SimulationConstant.MAXIMUM_GROUP_BY_MAP )
+			{
+				// New group size
+				int newGroupSize = this.animals.size( ) / 2;
+				
+				// Create new group
+				Group group = ( this instanceof HerbivorousGroup ) ?
+					new HerbivorousGroup( this.getAnimal( ),
+							newGroupSize,
+						new AngleMovement( AnimalHelper.calculateAnimalSpeed( this.animalDefinition.getAgility( ) ),
+							this.animals.get( 0 ).getPosition( ) ),
+						this.map )
+					: new CarnivorousGroup( this.getAnimal( ),
+							newGroupSize,
+						new AngleMovement( AnimalHelper.calculateAnimalSpeed( this.animalDefinition.getAgility( ) ),
+							this.animals.get( 0 ).getPosition( ) ),
+						this.map );
+					
+				// Set position
+				group.position.setPosition( this.position.getPosition( ) );
+				
+				// Remove fellows from current group
+				for( int i = 0; i < newGroupSize; i++ )
+					this.animals.remove( 0 );
+
+				// Group to add
+				this.nextTurnGroupUpdate.addGroup( group );
+			}
+		}
 		
 		// Remove deads fellows
 		for( Iterator<AnimalState> it = removeList.iterator( ); it.hasNext( ); )
 			this.animals.remove( it.next( ) );
 		
 		// Add the animals requested
-		for( Iterator<AnimalState> it = this.animalsToAdd.iterator( ); it.hasNext( ); )
+		for( Iterator<AnimalState> it = this.nextTurnGroupUpdate.getAnimalToAdd( ).iterator( ); it.hasNext( ); )
 			this.animals.add( it.next( ) );
 		
 		// Empty adding list
-		while( this.animalsToAdd.size( ) > 0 )
-			this.animalsToAdd.remove( 0 );
+		this.nextTurnGroupUpdate.emptyAddingList( );
 	}
 	
 	/**
@@ -429,9 +478,7 @@ public abstract class Group implements AimedObject
 					this.getMap( ).getState( ).getWorldState( ).getRound( ) );
 	
 			// Add animal
-			this.animalsToAdd.add( animal );
-			
-			System.out.println( this.animals.size( ) + " on " + this.animalDefinition.getMaximumDensity( ) );
+			this.nextTurnGroupUpdate.addAnimal( animal );
 			
 			// Add annotation
 			this.annotation.addMessage( "+ 1" );

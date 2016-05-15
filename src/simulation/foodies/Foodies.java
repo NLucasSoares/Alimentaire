@@ -93,22 +93,17 @@ public class Foodies
 				switch( ((simulation.gui.panels.menus.main.MainMenu)foodies.window.getPanel( PanelDefinition.PANEL_MAIN_MENU )).getReturnCode( ) )
 				{
 					case RETURN_CODE_NEW:
-						//foodies.window.switchPanel( PanelDefinition.PANEL_NEW_MENU );
+						// Create a new world
 						foodies.world = new World( "Test",
-								new simulation.world.Configuration( 20,
-									true,
-									100,
-									foodies.database.getBiomeFromName( "jungle" ) ),
-								foodies.database,
-								foodies.window );
+							new simulation.world.Configuration( 20,
+								true,
+								100,
+								foodies.database.getBiomeFromName( "jungle" ) ),
+							foodies.database,
+							foodies.window );
 						
+						// Simulate the world
 						foodies.world.getSimulationFrame( ).simulate( foodies.world );
-						break;
-					case RETURN_CODE_LOAD:
-						foodies.window.switchPanel( PanelDefinition.PANEL_LOAD_MENU );
-						break;
-					case RETURN_CODE_OPTIONS:
-						foodies.window.switchPanel(PanelDefinition.PANEL_OPTIONS_MENU);
 						break;
 					case RETURN_CODE_QUIT:
 						foodies.isContinue = false;

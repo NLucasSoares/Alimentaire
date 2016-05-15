@@ -74,7 +74,7 @@ public class HerbivorousState extends AnimalState
 					if( super.getHealthState( ).getProtein( ) < super.getAnimal( ).getNeedDefinition( ).getProtein( ) )
 					{
 						// Increase protein stock
-						super.getHealthState( ).eat( 1 );
+						super.getHealthState( ).eatPlant( 1 );
 						
 						// Modulate leaf eating speed
 						if( this.feedingControllerCounter >= ((Herbivorous)super.getAnimal( )).calculateRoundTakenForLeafEating( ) )

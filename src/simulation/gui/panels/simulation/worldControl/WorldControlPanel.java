@@ -2,9 +2,6 @@ package simulation.gui.panels.simulation.worldControl;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 import java.util.Hashtable;
 
 import javax.swing.JLabel;
@@ -12,9 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 
 import simulation.ViewState;
-import simulation.gui.object.Circle;
 import simulation.gui.panels.simulation.worldControl.action.SliderFrameDelayAction;
-import simulation.math.point.Point;
 import simulation.world.World;
 
 public class WorldControlPanel extends JPanel
@@ -28,6 +23,18 @@ public class WorldControlPanel extends JPanel
 	 * World reference
 	 */
 	private World world;
+	
+	/**
+	 * Round count
+	 */
+	private JLabel roundCountLabel;
+	
+	/**
+	 * World state label
+	 */
+	private JLabel groupCountLabel,
+		plantCountLabel,
+		animalCountLabel;
 
 	/**
 	 * Construct
@@ -78,6 +85,28 @@ public class WorldControlPanel extends JPanel
 			// Add to world control panel
 				super.add( js );
 				
+		// Round count
+			// Create label
+				this.roundCountLabel = new JLabel( "Days count:" );
+			// Set color
+				this.roundCountLabel.setForeground( Color.WHITE );
+			// Add
+				this.add( this.roundCountLabel );
+				
+		// World state
+			// Create
+				this.groupCountLabel = new JLabel( "Group count: " );
+				this.plantCountLabel = new JLabel( "Plant group count: " );
+				this.animalCountLabel = new JLabel( "Animal count: " );
+			// Set color
+				this.groupCountLabel.setForeground( Color.WHITE );
+				this.plantCountLabel.setForeground( Color.WHITE );
+				this.animalCountLabel.setForeground( Color.WHITE );
+			// Add
+				this.add( this.groupCountLabel );
+				this.add( this.plantCountLabel );
+				this.add( this.animalCountLabel );
+				
 		// Notify changes
 		super.revalidate( );
 	}
@@ -97,6 +126,18 @@ public class WorldControlPanel extends JPanel
 	@Override
 	public void paint( Graphics g )
 	{
+		// Update labels
+			// Round count
+				this.roundCountLabel.setText( "Round count (days): "
+					+ this.world.getState( ).getRound( ) );
+			// World state
+				this.groupCountLabel.setText( "Group count: "
+					+ this.world.getGroupCount( ) );
+				this.plantCountLabel.setText( "Plant group count: "
+					+ this.world.getPlantGroupCount( ) );
+				this.animalCountLabel.setText( "Animal count: "
+					+ this.world.getAnimalCount( ) );
+
 		// Paint content
 		super.paint( g );
 		

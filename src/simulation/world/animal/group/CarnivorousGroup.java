@@ -5,8 +5,6 @@ import java.util.Iterator;
 import simulation.constant.SimulationConstant;
 import simulation.gui.object.Hexagon;
 import simulation.math.angle.AngleMovement;
-import simulation.math.circle.Circle;
-import simulation.math.point.Point;
 import simulation.world.animal.move.AimedPosition;
 import simulation.world.animal.species.AbstractAnimal;
 import simulation.world.animal.species.state.AnimalState;
@@ -96,34 +94,45 @@ public class CarnivorousGroup extends Group
 				this.aimedPosition.removeAim( );
 			}
 			else
+			{
+				// Aim
 				super.aimPosition( this.aimedPosition.getPosition( ) );
+
+				// Start moving
+				super.startMoving( );
+			}
 		}
 		
 		// Hunt herbivorous
 		if( this.aimedGroup == null )
 		{
-			// Look for herbivorous
-			for( Iterator<Group> it = super.getMap( ).getState( ).getAnimalGroup( ); it.hasNext( ); )
+			// Check population
+			if( super.getMap( ).getState( ).getHerbivorousGroupCount( ) >= SimulationConstant.MINIMUM_GROUP_COUNT_MAP )
 			{
-				// Get group
-				Group group = it.next( );
-				
-				// Check if herbivorous
-				if( group instanceof HerbivorousGroup )
-					if( group.getGroupRange( ) != null )
-						if( group.getGroupRange( ).intersects( super.getGroupRange( ) ) )
-						{
-							// Remember this group
-							this.aimedGroup = (HerbivorousGroup)group;
-							
-							// Remove random aim
-							this.aimedPosition.removeAim( );
-							// Aim the group
-							super.aimAnimalGroup( group );
-							
-							// Start moving
-							super.startMoving( );
-						}
+				// Look for herbivorous
+				for( Iterator<Group> it = super.getMap( ).getState( ).getAnimalGroup( ); it.hasNext( ); )
+				{
+					// Get group
+					Group group = it.next( );
+					
+					// Check if herbivorous
+					if( group instanceof HerbivorousGroup )
+						if( group.getGroupRange( ) != null )
+							if( group.getGroupRange( ).intersects( super.getGroupRange( ) ) )
+							{
+								// Remember this group
+								this.aimedGroup = (HerbivorousGroup)group;
+								
+								// Remove random aim
+								this.aimedPosition.removeAim( );
+
+								// Aim the group
+								super.aimAnimalGroup( group );
+								
+								// Start moving
+								super.startMoving( );
+							}
+				}
 			}
 			
 			// If nothing found
@@ -134,18 +143,17 @@ public class CarnivorousGroup extends Group
 					// Remember the aim
 					this.aimedPosition.setNewAimedPoint( Hexagon.getRandomPosition( Map.SIZE_PIXEL_BY_SIZE_UNIT ) );
 	
-					// Aim
-					super.aimPosition( this.aimedPosition.getPosition( ) );
-					
-					// Start moving
-					super.startMoving( );
+					// Remove aim on object
+					super.removeAimOnObject( );
 				}
-			}				
+			}
 		}
 		else
 		{
-			// Check if group still exists
-			if( this.aimedGroup.getAnimalState( ).size( ) > 0 )
+			// Check if hunted group still exists
+			if( this.aimedGroup.getAnimalState( ).size( ) > 0
+				// Check if it still enough groups on map
+				&& super.getMap( ).getState( ).getHerbivorousGroupCount( ) >= SimulationConstant.MINIMUM_GROUP_COUNT_MAP )
 			{
 				// Choose animal to hunt
 				for( Iterator<AnimalState> it = super.getAnimalState( ).iterator( ); it.hasNext( ); )
@@ -153,35 +161,36 @@ public class CarnivorousGroup extends Group
 					// Get animal
 					CarnivorousState carnivorous = (CarnivorousState)it.next( );
 					
-					// It carnivorous isn't hunting for now
+					// If carnivorous isn't hunting for now
 					if( !carnivorous.isHunting( ) )
 					{
-						// Create range
-						Circle carnivorousRange = new Circle( new Point<Double>( carnivorous.getPosition( ).getX( ) + super.getPosition( ).getX( ) + (double)super.getRangeDiameter( ) / 2.0d,
-								carnivorous.getPosition( ).getY( ) + super.getPosition( ).getY( ) + (double)super.getRangeDiameter( ) / 2.0d ),
-							SimulationConstant.POSITION_AIMING_PRECISION );
-						
 						// Check for herbivorous meeting
 						for( Iterator<AnimalState> it2 = this.aimedGroup.getAnimalState( ).iterator( ); it2.hasNext( ); )
 						{
-							// Get animal
-							AnimalState animal = it2.next( );
-							
-							if( carnivorousRange.contains( new Point<Double>( animal.getPosition( ).getX( ) + animal.getGroup( ).getPosition( ).getX( ) + (double)animal.getGroup( ).getRangeDiameter( ) / 2.0d,
-								animal.getPosition( ).getY( ) + animal.getGroup( ).getPosition( ).getY( ) + (double)animal.getGroup( ).getRangeDiameter( ) / 2.0d ) ) )
-								carnivorous.hunt( animal );
+							// Get herbivorous
+							AnimalState huntedAnimal = it2.next( );
+
+							// If found herbivorous
+							if( carnivorous.getRange( ).contains( huntedAnimal.getRange( ).getPosition( ) ) )
+								carnivorous.hunt( huntedAnimal );
 						}
 					}
 				}
 			}
 			else
 			{
+				// Remove aim
+				this.aimedPosition.removeAim( );
+
 				// Remove aim of carnivorous on herbivorous
 				for( Iterator<AnimalState> it = super.getAnimalState( ).iterator( ); it.hasNext( ); )
 				{
 					// Get animal
 					CarnivorousState animal = (CarnivorousState)it.next( );
 
+					// Stop moving
+					animal.stopMoving( );
+					
 					// Stop hunting
 					animal.removeAimHunting( );
 				}

@@ -5,21 +5,55 @@ import java.awt.event.MouseListener;
 import java.util.concurrent.Semaphore;
 
 import simulation.ViewState;
+import simulation.gui.panels.simulation.mapControl.MapControlPanel;
 import simulation.world.World;
 import simulation.world.environment.hexagonalMap.UnitHexagonalMap;
 
+/**
+ * Mouse select one map
+ * 
+ * @author SOARES Lucas
+ */
 public class MouseMapSelectAction extends MouseAction implements MouseListener
 {
+	/**
+	 * The map control panel
+	 */
+	private MapControlPanel mapControlPanel;
+
+	/**
+	 * Construct the mouse select action
+	 * 
+	 * @param viewState
+	 * 		The current viewstate
+	 * @param world
+	 * 		The current world
+	 * @param semaphore
+	 * 		The world update semaphore
+	 * @param mapControlPanel
+	 * 		The map control panel
+	 */
 	public MouseMapSelectAction( ViewState viewState,
 		World world,
-		Semaphore semaphore )
+		Semaphore semaphore,
+		MapControlPanel mapControlPanel )
 	{
 		// Parent construct
 		super( viewState,
 			world,
 			semaphore );
+		
+		// Save
+		this.mapControlPanel = mapControlPanel;
 	}
 	
+	/**
+	 * Mouse CLICKED (which means pressed/released on the
+	 * same pixel
+	 * 
+	 * @param e
+	 * 		The mouse event
+	 */
 	@Override
 	public void mouseClicked( MouseEvent e )
 	{
@@ -33,6 +67,9 @@ public class MouseMapSelectAction extends MouseAction implements MouseListener
 			{
 				// Change selected map
 				super.getViewState( ).setSelectedMap( it.getMap( ) );
+				
+				// Change selected map
+				this.mapControlPanel.setMap( super.getViewState( ).getSelectedMap( ) );
 				
 				// Quit
 				break;
@@ -62,5 +99,4 @@ public class MouseMapSelectAction extends MouseAction implements MouseListener
 	{
 		
 	}
-
 }

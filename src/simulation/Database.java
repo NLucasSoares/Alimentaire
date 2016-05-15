@@ -169,6 +169,24 @@ public class Database {
 	}
 	
 	/**
+	 * @return a random herbivorous animal
+	 */
+	public Herbivorous getRandomHerbivorousAnimal( )
+	{
+		return this.getHerbivorousAnimals( )[ (int)simulation.math.probability.Operation.random( 0,
+			this.getHerbivorousAnimals( ).length ) ];
+	}
+	
+	/**
+	 * @return a random carnivorous animal
+	 */
+	public Carnivorous getRandomCarnivorousAnimal( )
+	{
+		return this.getCarnivorousAnimals( )[ (int)simulation.math.probability.Operation.random( 0,
+			this.getHerbivorousAnimals( ).length ) ];
+	}
+	
+	/**
 	 * @return the herbivirous animals
 	 */
 	public Herbivorous[ ] getHerbivorousAnimals( )

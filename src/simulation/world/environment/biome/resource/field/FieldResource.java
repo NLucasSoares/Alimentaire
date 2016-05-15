@@ -1,13 +1,11 @@
 package simulation.world.environment.biome.resource.field;
 
 import java.awt.Shape;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 
 import simulation.ViewState;
 import simulation.constant.SimulationConstant;
 import simulation.gui.object.Hexagon;
-import simulation.math.circle.Circle;
 import simulation.math.point.Point;
 import simulation.math.rectangle.Rectangle;
 import simulation.world.aim.AimedObject;

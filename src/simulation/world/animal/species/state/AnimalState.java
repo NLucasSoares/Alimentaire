@@ -10,7 +10,9 @@ import simulation.math.angle.AngleMovement;
 import simulation.math.circle.Circle;
 import simulation.math.point.Point;
 import simulation.world.animal.AnimalHelper;
+import simulation.world.animal.group.CarnivorousGroup;
 import simulation.world.animal.group.Group;
+import simulation.world.animal.group.HerbivorousGroup;
 import simulation.world.animal.move.AimedPosition;
 import simulation.world.animal.species.AbstractAnimal;
 
@@ -75,6 +77,11 @@ public abstract class AnimalState {
 	 * The painting shape
 	 */
 	private Shape shape;
+	
+	/**
+	 * The animal range
+	 */
+	private Circle range;
 
 	/**
 	 * Construct the animal state
@@ -106,6 +113,9 @@ public abstract class AnimalState {
 		this.animalToReproduceWith = null;
 		this.lifeTimeModulated = (long)( (double)animal.getLifeTime( ) * simulation.math.probability.Operation.random( SimulationConstant.ANIMAL_LIFE_TIME_REDUCTION_FACTOR_MIN,
 			SimulationConstant.ANIMAL_LIFE_TIME_REDUCTION_FACTOR_MAX ) );
+		this.range = new Circle( new Point<Double>( 0.0d,
+				0.0d ),
+			1 );
 	}
 	
 	/**
@@ -195,6 +205,14 @@ public abstract class AnimalState {
 	{
 		return this.lastRoundGivenBirth;
 	}
+	
+	/**
+	 * @return the range
+	 */
+	public Circle getRange( )
+	{
+		return this.range;
+	}
 
 	/**
 	 * Update view
@@ -218,7 +236,18 @@ public abstract class AnimalState {
 			ellipseSize,
 			ellipseSize );
 	}
-	
+
+	/**
+	 * Create the range
+	 */
+	private void createRange( )
+	{
+		// Create range
+		this.range = new Circle( this.groupReference.getGroupRange( ).getPosition( ).getX( ) + this.position.getPosition( ).getX( ) - this.groupReference.getRangeDiameter( ) / 2,
+			this.groupReference.getGroupRange( ).getPosition( ).getY( ) + this.position.getPosition( ).getY( ) - this.groupReference.getRangeDiameter( ) / 2,
+			SimulationConstant.POSITION_AIMING_PRECISION );
+	}
+
 	/**
 	 * Aim a position
 	 * 
@@ -236,7 +265,7 @@ public abstract class AnimalState {
 		// Reset random move
 		this.isRandomMoveActive = false;
 	}
-	
+
 	/**
 	 * Activate random move
 	 */
@@ -286,6 +315,17 @@ public abstract class AnimalState {
 	}
 	
 	/**
+	 * Be attacked
+	 * 
+	 * @param healthLost
+	 * 		The health lost
+	 */
+	public void beAttacked( int healthLost )
+	{
+		this.healthState.loseHealth( healthLost );
+	}
+	
+	/**
 	 * Update
 	 */
 	public void update( )
@@ -293,6 +333,9 @@ public abstract class AnimalState {
 		// Check if alive
 		if( !this.isAlive( ) )
 			return;
+		
+		// Create the range
+		this.createRange( );
 		
 		// Check if animal doesn't exit his range
 		if( !this.groupReference.getGroupRange( ).contains( new Point<Double>( this.groupReference.getGroupRange( ).getPosition( ).getX( ) - this.groupReference.getRangeDiameter( ) / 2.0d + this.getPosition( ).getX( ),
@@ -436,7 +479,10 @@ public abstract class AnimalState {
 					this.healthState.addProteinConsumption( 1 );
 		
 		// Update needs
-		this.healthState.update( );
+		this.healthState.update( ( this.groupReference instanceof HerbivorousGroup
+				&& this.groupReference.getMap( ).getState( ).getHerbivorousGroupCount( ) >= SimulationConstant.MINIMUM_GROUP_COUNT_MAP )
+				|| ( this.groupReference instanceof CarnivorousGroup
+						&& this.groupReference.getMap( ).getState( ).getCarnivorousGroupCount( ) >= SimulationConstant.MINIMUM_GROUP_COUNT_MAP ) );
 		
 		// Update position
 		this.position.update( );

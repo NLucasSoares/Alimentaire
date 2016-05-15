@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.security.InvalidParameterException;
 
 import simulation.gui.panels.menus.main.MainMenu;
-import simulation.gui.panels.menus.option.OptionMenu;
 import simulation.gui.panels.menus.split.ScrollingBackground;
 import simulation.gui.panels.menus.split.SplitMenu;
 
@@ -48,9 +47,6 @@ public class PanelRepository
 					break;
 				case PANEL_MAIN_MENU:
 					this.panels[ pd.ordinal( ) ] = new MainMenu( this.scrollingBackground );
-					break;
-				case PANEL_OPTIONS_MENU:
-					this.panels[ pd.ordinal( ) ] = new OptionMenu( this.scrollingBackground );
 					break;
 					
 				default:

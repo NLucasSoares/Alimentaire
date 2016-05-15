@@ -13,6 +13,7 @@ import simulation.gui.panels.simulation.map.action.MouseDragMapAction;
 import simulation.gui.panels.simulation.map.action.MouseMapSelectAction;
 import simulation.gui.panels.simulation.map.action.MouseViewResetAction;
 import simulation.gui.panels.simulation.map.action.MouseWheelAction;
+import simulation.gui.panels.simulation.mapControl.MapControlPanel;
 import simulation.gui.panels.simulation.worldControl.WorldControlPanel;
 import simulation.gui.panels.simulation.map.MapPanel;
 import simulation.world.World;
@@ -121,8 +122,8 @@ public class SimulationFrame
 						5 );
 			// Instruments container
 				// Panel
-					this.instrumentsContainer = new JPanel( );
-					this.instrumentsContainer.setBackground( Color.BLUE );
+					this.instrumentsContainer = new MapControlPanel( world.getState( ).getViewState( ).getSelectedMap( ) );
+					this.instrumentsContainer.setBackground( Color.BLACK );
 					this.instrumentsContainer.setPreferredSize( new Dimension( SimulationFrame.RIGHT_DISPLAY_WIDTH,
 						window.getHeight( ) - SimulationFrame.BIOME_DISPLAY_HEIGHT ) );
 					this.instrumentsContainer.setMinimumSize( new Dimension( SimulationFrame.RIGHT_DISPLAY_WIDTH,
@@ -165,7 +166,8 @@ public class SimulationFrame
 				// Mouse left click to select map
 					this.mapContainer.addMouseListener( new MouseMapSelectAction( world.getState( ).getViewState( ),
 						world,
-						this.semaphore ) );
+						this.semaphore,
+						(MapControlPanel)this.instrumentsContainer ) );
 				
 
 		// Start simulation
@@ -202,6 +204,7 @@ public class SimulationFrame
 	public void activatePainting( )
 	{
 		((MapPanel)this.mapContainer).setPaintReady( true );
+		((MapControlPanel)this.instrumentsContainer).setPaintReady( true );
 	}
 	
 	/**

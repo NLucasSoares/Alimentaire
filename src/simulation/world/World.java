@@ -277,6 +277,46 @@ public class World
 	}
 	
 	/**
+	 * @return the total animal count
+	 */
+	public long getAnimalCount( )
+	{
+		return this.hexagonalMap.getAnimalCount( );
+	}
+	
+	/**
+	 * @return the group count
+	 */
+	public long getGroupCount( )
+	{
+		return this.hexagonalMap.getGroupCount( );
+	}
+	
+	/**
+	 * @return the plant group count
+	 */
+	public long getPlantGroupCount( )
+	{
+		return this.hexagonalMap.getPlantGroupCount( );
+	}
+	
+	/**
+	 * @return the herbivorous group count
+	 */
+	public long getHerbivorousGroupCount( )
+	{
+		return this.hexagonalMap.getHerbivorousGroupCount( );
+	}
+	
+	/**
+	 * @return this carnivorous group count
+	 */
+	public long getCarnivorousGroupCount( )
+	{
+		return this.hexagonalMap.getCarnivorousGroupCount( );
+	}
+	
+	/**
 	 * @return a hexagonal map visitor
 	 * for this world
 	 */

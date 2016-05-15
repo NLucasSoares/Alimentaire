@@ -25,6 +25,11 @@ public class SimulationConstant
 	public static final int MAXIMUM_ANIMAL_HEALTH_POINT = 100;
 	
 	/**
+	 * Maximum group on one map
+	 */
+	public static final int MAXIMUM_GROUP_BY_MAP = 50;
+	
+	/**
 	 * Turn count before losing life due to low feeding
 	 */
 	public static final int TURN_BEFORE_LOSING_HEALTH = 5;
@@ -95,12 +100,12 @@ public class SimulationConstant
 	/**
 	 * Maximum plant group on one single map
 	 */
-	public static final int MAXIMUM_PLANT_GROUP_COUNT_MAP = 5;
+	public static final int MAXIMUM_PLANT_GROUP_COUNT_MAP = 3;
 	
 	/**
 	 * Minimum plant group count at start
 	 */
-	public static final int MINIMUM_PLANT_GROUP_COUNT_MAP_START = 5;
+	public static final int MINIMUM_PLANT_GROUP_COUNT_MAP_START = 1;
 	
 	/**
 	 * Maximum plant group count at start
@@ -115,7 +120,7 @@ public class SimulationConstant
 	/**
 	 * Maximum diameter for plant group
 	 */
-	public static final int MAXIMUM_PLANT_GROUP_DIAMETER = 30;
+	public static final int MAXIMUM_PLANT_GROUP_DIAMETER = 5;
 	
 	// Decomposer
 	/**
@@ -126,7 +131,7 @@ public class SimulationConstant
 	/**
 	 * Minimum nitrogen generated on each turn
 	 */
-	public static final double MINIMUM_NITROGEN_ADD_EACH_TURN = 0.1d;
+	public static final double MINIMUM_NITROGEN_ADD_EACH_TURN = 0.01d;
 	
 	// Simulation
 	/**
@@ -143,6 +148,11 @@ public class SimulationConstant
 	 * Maximum animal group count on a map at start
 	 */
 	public final static int MAXIMUM_ANIMAL_GROUP_COUNT_MAP_START = 8;
+	
+	/**
+	 * Minimum group count for each type on one map
+	 */
+	public final static int MINIMUM_GROUP_COUNT_MAP = 3;
 	
 	/**
 	 * Initial minimum animals by group at world creation
@@ -164,7 +174,7 @@ public class SimulationConstant
 	 * The precision for position aiming
 	 * (more = less precision)
 	 */
-	public final static int POSITION_AIMING_PRECISION = 2;
+	public final static int POSITION_AIMING_PRECISION = 10;
 	
 	/**
 	 * The stock capacity which much be reached to reproduce (%)
@@ -241,5 +251,13 @@ public class SimulationConstant
 	public final static int[ ] HERBIVOROUS_STOP_MOVING_PLANT_CENTER_PROBABILITY = {
 		1,
 		80
+	};
+	
+	/**
+	 * Probability for carnivorous to start hunting herbivorous
+	 */
+	public final static int[ ] CARNIVOROUS_START_HUNTING_HERBIVOROUS_PROBABILITY = {
+		1,
+		30
 	};
 }

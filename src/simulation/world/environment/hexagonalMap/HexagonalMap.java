@@ -1,10 +1,10 @@
 package simulation.world.environment.hexagonalMap;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.Shape;
 import java.security.InvalidParameterException;
 import java.util.Iterator;
 
@@ -29,6 +29,7 @@ import simulation.world.animal.species.AbstractAnimal;
 import simulation.world.animal.species.Carnivorous;
 import simulation.world.animal.species.Herbivorous;
 import simulation.world.animal.species.state.AnimalState;
+import simulation.world.animal.species.state.CarnivorousState;
 import simulation.world.environment.Map;
 import simulation.world.environment.biome.Biome;
 import simulation.world.environment.biome.resource.field.FieldResource;
@@ -220,6 +221,87 @@ public class HexagonalMap
 	public Map getCenterMap( )
 	{
 		return this.centerMap;
+	}
+	
+	/**
+	 * @return the total animal count
+	 */
+	public long getAnimalCount( )
+	{
+		// Output
+		long output = 0;
+		
+		// Calculate
+		for( UnitHexagonalMap uhm : this.hexagons )
+			output += uhm.getMap( ).getState( ).getAnimalCount( );
+		
+		// OK
+		return output;
+	}
+	
+	/**
+	 * @return the group count
+	 */
+	public long getGroupCount( )
+	{
+		// Output
+		long output = 0;
+		
+		// Calculate
+		for( UnitHexagonalMap uhm : this.hexagons )
+			output += uhm.getMap( ).getState( ).getGroupCount( );
+		
+		// OK
+		return output;
+	}
+	
+	/**
+	 * @return the plant group count
+	 */
+	public long getPlantGroupCount( )
+	{
+		// Output
+		long output = 0;
+		
+		// Calculate
+		for( UnitHexagonalMap uhm : this.hexagons )
+			if( uhm.getMap( ).getState( ) != null )
+				output += uhm.getMap( ).getState( ).getPlantGroupCount( );
+		
+		// OK
+		return output;
+	}
+	
+	/**
+	 * @return the herbivorous group count
+	 */
+	public long getHerbivorousGroupCount( )
+	{
+		// Output
+		long output = 0;
+		
+		// Calculate
+		for( UnitHexagonalMap uhm : this.hexagons )
+			output += uhm.getMap( ).getState( ).getHerbivorousGroupCount( );
+		
+		// OK
+		return output;
+	}
+	
+	/**
+	 * @return this carnivorous group count
+	 */
+	public long getCarnivorousGroupCount( )
+	{
+		// Output
+		long output = 0;
+		
+		// Calculate
+		for( UnitHexagonalMap uhm : this.hexagons )
+			output += uhm.getMap( ).getState( ).getCarnivorousGroupCount( );
+		
+		// OK
+		return output;
 	}
 	
 	/**
@@ -508,6 +590,9 @@ public class HexagonalMap
 		// Anti Aliasing
 		((Graphics2D)g).setRenderingHint( RenderingHints.KEY_ANTIALIASING,
 			RenderingHints.VALUE_ANTIALIAS_ON );
+		
+		// Border width to 2
+		( (Graphics2D)g ).setStroke( new BasicStroke( 2 ) );
 				
 		// View point
 		Rectangle viewPoint = new Rectangle( width + (int)this.hexagons[ 0 ].getWidthConstant( ),
@@ -567,7 +652,7 @@ public class HexagonalMap
 						// Fill
 							((Graphics2D)g).fill( f.getShape( ) );
 				}
-				
+
 				// Plant group
 				for( Iterator<PlantGroup> it = this.hexagons[ i ].getMap( ).getState( ).getPlantGroup( ); it.hasNext( ); )
 				{
@@ -588,6 +673,7 @@ public class HexagonalMap
 						{
 							// Set color
 								g.setColor( Color.WHITE );
+								
 							// Draw
 								((Graphics2D)g).draw( pg.getShape( ) );
 								
@@ -610,32 +696,38 @@ public class HexagonalMap
 									SimulationConstant.HERBIVOROUS_ANIMAL_COLOR
 									: SimulationConstant.CARNIVOROUS_ANIMAL_COLOR );
 							// Fill
-								((Graphics2D)g).fill( group.getShape( ) );
+								((Graphics2D)g).draw( group.getShape( ) );
 
 						// Draw border
 						if( viewState.getZoomLevel( ) > 1 )
 						{
 							// Set color
-								g.setColor( Color.WHITE );
+								//g.setColor( Color.WHITE );
 							// Draw
-								((Graphics2D)g).draw( group.getShape( ) );
+								//((Graphics2D)g).draw( group.getShape( ) );
 						}
 								
 						// Paint animals
 						for( Iterator<AnimalState> ait = group.getAnimalState( ).iterator( ); ait.hasNext( ); )
 						{
 							// Get state
-							Shape animalEllipse = ait.next( ).getShape( );
+							//Shape animalEllipse = ait.next( ).getShape( );
+							AnimalState s = ait.next( );
 							
 							// Fill
-							g.setColor( Color.YELLOW );
-							((Graphics2D)g).fill( animalEllipse );
+								// Change color
+									if( s instanceof CarnivorousState
+										&& ((CarnivorousState)s).isHunting( ) )
+										g.setColor( Color.WHITE );
+									else
+										g.setColor( Color.YELLOW );
+									((Graphics2D)g).fill( s.getShape( ) );
 							
 							// Border
 							if( viewState.getZoomLevel( ) > 1 )
 							{
 								g.setColor( Color.WHITE );
-								((Graphics2D)g).draw( animalEllipse );
+								((Graphics2D)g).draw( s.getShape( ) );
 							}
 						}
 					}
@@ -674,8 +766,23 @@ public class HexagonalMap
 			// Populate with animals
 			for( int i = 0; i < groupCount; i++ )
 			{
-				// Choose animal
-				AbstractAnimal animal = database.getRandomAnimal( );
+				// The animal
+				AbstractAnimal animal;
+				
+				// Choose animal (we want at less 1 herbivorous/1 carnivorous)
+				switch( i )
+				{
+					case 0:
+						animal = database.getRandomHerbivorousAnimal( );
+						break;
+					case 1:
+						animal = database.getRandomCarnivorousAnimal( );
+						break;
+						
+					default:
+						animal = database.getRandomAnimal( );
+						break;
+				}
 				
 				// Create the group
 				if( animal instanceof Carnivorous )
@@ -710,13 +817,10 @@ public class HexagonalMap
 			
 			// Populate with plants
 			for( int i = 0; i < groupCount; i++ )
-			{
-				// Plant group
 				uhm.getMap( ).getState( ).addPlantGroup( new PlantGroup( Hexagon.getRandomPosition( (double)Map.SIZE_PIXEL_BY_SIZE_UNIT ),
-					new Need( 1, // TODO
-						1,
-						1 ) ) );
-			}
+						new Need( 1,
+							1,
+							1 ) ) );
 		}
 	}
 	

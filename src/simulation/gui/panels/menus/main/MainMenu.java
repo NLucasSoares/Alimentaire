@@ -90,10 +90,12 @@ public class MainMenu extends Panel
 		this.buttons = new RectangleButton[ ButtonProperty.values( ).length ];
 		for( int i = 0; i < ButtonProperty.values( ).length; i++ )
 		{
+			// Allocate
 			this.buttons[ i ] = new RectangleButton( );
 			
+			// Init
 			this.buttons[ i ].setSize( new Point<Integer>( WIDTH_BUTTON,
-					 HEIGHT_BUTTON ) );
+				HEIGHT_BUTTON ) );
 		}
 		
 		// Add listener
@@ -284,12 +286,6 @@ public class MainMenu extends Panel
 						{
 							case BUTTON_NEW_WORLD:
 								this.quitMenu( ReturnCode.RETURN_CODE_NEW );
-								break;
-							case BUTTON_LOAD_WORLD:
-								this.quitMenu( ReturnCode.RETURN_CODE_LOAD );
-								break;
-							case BUTTON_OPTION:
-								this.quitMenu( ReturnCode.RETURN_CODE_OPTIONS );
 								break;
 							case BUTTON_QUIT:
 								// Open confirm dialog

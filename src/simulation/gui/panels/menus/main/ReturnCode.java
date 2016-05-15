@@ -10,7 +10,5 @@ package simulation.gui.panels.menus.main;
 public enum ReturnCode
 {
 	RETURN_CODE_NEW,
-	RETURN_CODE_LOAD,
-	RETURN_CODE_OPTIONS,
 	RETURN_CODE_QUIT;
 }

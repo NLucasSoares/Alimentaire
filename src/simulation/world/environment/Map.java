@@ -17,7 +17,7 @@ public class Map
 	 * instead of HEXAGON_UNIT_PAINT_RADIUS
 	 * which is only for painting)
 	 */
-	public static final int SIZE_PIXEL_BY_SIZE_UNIT = 100;
+	public static final int SIZE_PIXEL_BY_SIZE_UNIT = 20;
 	
 	/**
 	 * Map's name
@@ -59,7 +59,7 @@ public class Map
 			this.edgeMap[ he.ordinal( ) ] = null;
 		
 		// Create map state
-		this.state = new MapState( this );
+		this.state = new MapState( );
 
 		// Save
 		this.name = name;

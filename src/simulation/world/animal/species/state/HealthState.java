@@ -102,6 +102,14 @@ public class HealthState
 	}
 	
 	/**
+	 * Reset the protein consumption
+	 */
+	public void resetProteinConsumption( )
+	{
+		this.proteinConsumption = 0;
+	}
+	
+	/**
 	 * Kill
 	 */
 	public void kill( )
@@ -110,24 +118,47 @@ public class HealthState
 	}
 	
 	/**
+	 * Lose health
+	 * 
+	 * @param healthLost
+	 * 		The health point to be lost
+	 */
+	public void loseHealth( int healthLost )
+	{
+		this.healthPoint -= healthLost;
+	}
+	
+	/**
 	 * Eat
 	 * 
 	 * @param leavesCount
 	 * 		The count of leaves eaten
 	 */
-	public void eat( int leavesCount )
+	public void eatPlant( int leavesCount )
 	{
 		// Increase protein quantity
 		this.protein += SimulationConstant.PROTEIN_BY_LEAF * leavesCount;
 	}
 	
 	/**
+	 * Eat
+	 * 
+	 * @param protein
+	 * 		The protein eaten
+	 */
+	public void eatAnimal( int protein )
+	{
+		this.protein += protein;
+	}
+	
+	/**
 	 * Update the state
 	 */
-	public void update( )
+	public void update( boolean allowDecreasingLife )
 	{
 		// Reduce protein quantity
-		this.protein -= this.proteinConsumption;
+		if( allowDecreasingLife )
+			this.protein -= this.proteinConsumption;
 		
 		// Reset the protein consumption gesture
 		this.proteinConsumption = 0;
@@ -143,11 +174,14 @@ public class HealthState
 				this.healthDecreaseController++;
 			else
 			{
-				// Health point decrease
-				this.healthPoint--;
-				
-				// Controller reset
-				this.healthDecreaseController = 0;
+				if( allowDecreasingLife )
+				{
+					// Health point decrease
+					this.healthPoint--;
+					
+					// Controller reset
+					this.healthDecreaseController = 0;
+				}
 			}
 		}
 		// Good nutrition
