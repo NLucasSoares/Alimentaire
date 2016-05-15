@@ -25,6 +25,16 @@ public class SimulationConstant
 	public static final int MAXIMUM_ANIMAL_HEALTH_POINT = 100;
 	
 	/**
+	 * Minimum range for an animal group
+	 */
+	public static final int MINIMUM_RANGE_ANIMAL_GROUP = 3;
+	
+	/**
+	 * Maximum range for an animal group
+	 */
+	public static final int MAXIMUM_RANGE_ANIMAL_GROUP = 10;
+	
+	/**
 	 * Maximum group on one map
 	 */
 	public static final int MAXIMUM_GROUP_BY_MAP = 50;
@@ -174,7 +184,7 @@ public class SimulationConstant
 	 * The precision for position aiming
 	 * (more = less precision)
 	 */
-	public final static int POSITION_AIMING_PRECISION = 10;
+	public final static int POSITION_AIMING_PRECISION = 5;
 	
 	/**
 	 * The stock capacity which much be reached to reproduce (%)
@@ -242,7 +252,7 @@ public class SimulationConstant
 	 */
 	public final static int[ ] HERBIVOROUS_STOP_MOVING_EATING_AREA_PROBABILITY = {
 		1,
-		100 };
+		60 };
 	
 	/**
 	 * Probability for the herbivorous group to stop on a
@@ -251,13 +261,5 @@ public class SimulationConstant
 	public final static int[ ] HERBIVOROUS_STOP_MOVING_PLANT_CENTER_PROBABILITY = {
 		1,
 		80
-	};
-	
-	/**
-	 * Probability for carnivorous to start hunting herbivorous
-	 */
-	public final static int[ ] CARNIVOROUS_START_HUNTING_HERBIVOROUS_PROBABILITY = {
-		1,
-		30
 	};
 }

@@ -44,9 +44,18 @@ public class WorldControlPanel extends JPanel
 		// Save
 		this.world = world;
 		
+		// World name
+			// Label
+				JLabel label = new JLabel( "World name: "
+					+ world.getName( ) );
+			// Set color
+				label.setForeground( Color.WHITE );
+			// Add
+				super.add( label );
+
 		// Delay between frames control
 			// Label
-				JLabel label = new JLabel( "Simulation speed" );
+				label = new JLabel( "Simulation speed" );
 				label.setForeground( Color.WHITE );
 			// Add label
 				super.add( label );

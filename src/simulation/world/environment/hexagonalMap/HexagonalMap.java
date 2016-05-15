@@ -832,9 +832,6 @@ public class HexagonalMap
 		// Update map state
 		for( UnitHexagonalMap uhm : this.hexagons )
 			uhm.getMap( ).getState( ).update( );
-
-		// Update weathers
-		
 	}
 	
 	/**

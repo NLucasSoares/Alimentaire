@@ -94,9 +94,9 @@ public class MapControlPanel extends JPanel
 		String output = "<html>";
 		
 		// Map name
-		output += "<h1 style=\"text-align: center;\">"
+		output += "<h1 style=\"text-align: center; text-decoration: underline;\"><em>"
 			+ this.map.getName( )
-			+ "</h1>";
+			+ "</em></h1>";
 		
 		// Animal state
 		output += "<p style=\"text-align: center\">Group state ("
@@ -123,10 +123,12 @@ public class MapControlPanel extends JPanel
 				AnimalState animal = it2.next( );
 				
 				// Details
-				output += "<li>Born on round "
+				output += "<li>Born on round <em>"
 					+ animal.getBirthDate( )
-					+ ", "
+					+ "</em>, "
+					+ ( ( animal.getHealthState( ).getHealthPoint( ) < 20 ) ? "<span style=\"color: red;\">" : "<span style=\"color: green;\">" )
 					+ animal.getHealthState( ).getHealthPoint( )
+					+ "</span>"
 					+ "/"
 					+ SimulationConstant.MAXIMUM_ANIMAL_HEALTH_POINT
 					+ "</li>";

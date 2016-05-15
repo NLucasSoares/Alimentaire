@@ -237,7 +237,16 @@ public abstract class Group implements AimedObject
 	 */
 	private void updateRangeDiameter( int fellowCount )
 	{
-		this.rangeDiameter = fellowCount * ( this.animalDefinition.getSize( ) * this.animalDefinition.getAgility( ) ) / SimulationConstant.GROUP_RANGE_BY_FACTOR;
+		// Range
+		int range = fellowCount * ( this.animalDefinition.getSize( ) * this.animalDefinition.getAgility( ) ) / SimulationConstant.GROUP_RANGE_BY_FACTOR;
+		
+		// Check minimum
+		range = range < SimulationConstant.MINIMUM_RANGE_ANIMAL_GROUP ? SimulationConstant.MINIMUM_RANGE_ANIMAL_GROUP : range;
+		
+		// Set range
+		this.rangeDiameter = ( range >= SimulationConstant.MAXIMUM_RANGE_ANIMAL_GROUP ) ?
+				SimulationConstant.MAXIMUM_RANGE_ANIMAL_GROUP
+				: range;
 	}
 	
 	/**
@@ -404,7 +413,13 @@ public abstract class Group implements AimedObject
 		// Check if group is full
 		if( this.animals.size( ) >= this.animalDefinition.getMaximumDensity( ) )
 		{
-			if( this.getMap( ).getState( ).getGroupCount( ) < SimulationConstant.MAXIMUM_GROUP_BY_MAP )
+			if( this.getMap( ).getState( ).getGroupCount( ) < SimulationConstant.MAXIMUM_GROUP_BY_MAP
+				&& ( this instanceof HerbivorousGroup ?
+						this.getMap( ).getState( ).getHerbivorousGroupCount( ) < ( SimulationConstant.MAXIMUM_GROUP_BY_MAP / 2 )
+						: true )
+				&& ( this instanceof CarnivorousGroup ?
+						this.getMap( ).getState( ).getCarnivorousGroupCount( ) < ( SimulationConstant.MAXIMUM_GROUP_BY_MAP / 10 )
+						: true ) )
 			{
 				// New group size
 				int newGroupSize = this.animals.size( ) / 2;

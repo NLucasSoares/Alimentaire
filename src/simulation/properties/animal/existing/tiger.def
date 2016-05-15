@@ -1,0 +1,10 @@
+animal.name=tiger
+animal.weight=60
+animal.size=110
+animal.agility=50
+animal.diet=carnivorous
+animal.maximumDensity=4
+animal.lifeTime=6000
+animal.reproduceTime=800
+
+animal.need.protein=6000

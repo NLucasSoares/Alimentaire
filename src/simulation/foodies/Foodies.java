@@ -8,6 +8,7 @@ import simulation.gui.configuration.Configuration;
 import simulation.gui.panels.Panel;
 import simulation.gui.panels.PanelDefinition;
 import simulation.world.World;
+import simulation.world.environment.nameGenerator.MapNameGenerator;
 
 /**
  * 	The main function is here
@@ -41,6 +42,11 @@ public class Foodies
 	 * User didn't ask to quit yet...
 	 */
 	private boolean isContinue = true;
+	
+	/**
+	 * World size
+	 */
+	private static final int WORLD_SIZE = 20;
 	
 	/**
 	 * Create the instance
@@ -94,8 +100,8 @@ public class Foodies
 				{
 					case RETURN_CODE_NEW:
 						// Create a new world
-						foodies.world = new World( "Test",
-							new simulation.world.Configuration( 20,
+						foodies.world = new World( MapNameGenerator.generate( ),
+							new simulation.world.Configuration( Foodies.WORLD_SIZE,
 								true,
 								100,
 								foodies.database.getBiomeFromName( "jungle" ) ),

@@ -1,0 +1,10 @@
+animal.name=wolf
+animal.weight=15
+animal.size=60
+animal.agility=70
+animal.diet=carnivorous
+animal.maximumDensity=12
+animal.lifeTime=5500
+animal.reproduceTime=350
+
+animal.need.protein=3000

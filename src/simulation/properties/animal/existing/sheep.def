@@ -1,0 +1,10 @@
+animal.name=sheep
+animal.weight=10
+animal.size=60
+animal.agility=30
+animal.diet=herbivorous
+animal.maximumDensity=30
+animal.lifeTime=8000
+animal.reproduceTime=300
+
+animal.need.protein=8000

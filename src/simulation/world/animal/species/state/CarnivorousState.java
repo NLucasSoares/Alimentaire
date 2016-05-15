@@ -64,8 +64,13 @@ public class CarnivorousState extends AnimalState
 	{
 		// Check if animal hunted is alived
 		if( !this.huntedAnimal.isAlive( ) )
+		{
+			// Eat
+			this.getHealthState( ).eatAnimal( ( this.huntedAnimal.getAnimal( ).getWeight( ) * this.huntedAnimal.getAnimal( ).getSize( ) ) );
+			
 			// Stop hunt
 			this.stopHunt( );
+		}
 		else
 		{
 			// If reached, attack
