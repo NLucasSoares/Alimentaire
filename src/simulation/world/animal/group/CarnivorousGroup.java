@@ -162,7 +162,8 @@ public class CarnivorousGroup extends Group
 					CarnivorousState carnivorous = (CarnivorousState)it.next( );
 					
 					// If carnivorous isn't hunting for now
-					if( !carnivorous.isHunting( ) )
+					if( !carnivorous.isHunting( )
+						&& ( ( ( carnivorous.getHealthState( ).getProtein( ) / carnivorous.getAnimal( ).getNeedDefinition( ).getProtein( ) ) * 100.0d ) <= SimulationConstant.FLOOR_FOR_CARNIVOROUS_START_HUNT ) )
 					{
 						// Check for herbivorous meeting
 						for( Iterator<AnimalState> it2 = this.aimedGroup.getAnimalState( ).iterator( ); it2.hasNext( ); )

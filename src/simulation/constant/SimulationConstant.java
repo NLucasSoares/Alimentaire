@@ -60,6 +60,10 @@ public class SimulationConstant
 	public static final int ROUND_GOOD_SHAPE_BEFORE_GAINING_HEALTH_POINT_ANIMAL = 15;
 	
 	/**
+	 * Floor for carnivorous to start hunting
+	 */
+	public static final double FLOOR_FOR_CARNIVOROUS_START_HUNT = 50.0d;
+	/**
 	 * Life time reduction factor min
 	 */
 	public static final double ANIMAL_LIFE_TIME_REDUCTION_FACTOR_MIN = 0.9d;
